@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ngày 1 — Camunda 8 Architecture | dev.anhkn</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="../index.html" class="nav-logo">dev<span>.</span>anhkn</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="index.html" class="active">Camunda</a></li>
+      <li><a href="../about.html">About</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+
+  <div class="article-header container">
+    <span class="article-day">Ngày 1 / 30</span>
+    <h1>Camunda 8 Architecture — Hiểu từ gốc rễ</h1>
+    <p class="meta">19/08/2026 · 5 phút đọc · <a href="index.html">← Quay lại series</a></p>
+  </div>
+
+  <div class="article-body">
+
+    <blockquote>
+      <strong>Mục tiêu:</strong> Hiểu tổng quan kiến trúc Camunda 8, các component chính và sự khác biệt cốt lõi so với Camunda 7.
+    </blockquote>
+
+    <h2>Camunda 7 vs Camunda 8 — Không phải nâng cấp, là viết lại</h2>
+
+    <p>Đây là điều đầu tiên cần nắm rõ vì phần lớn tài liệu trên internet vẫn là Camunda 7. API khác hoàn toàn, đừng học lẫn.</p>
+
+    <table>
+      <tr><th>Điểm khác biệt</th><th>Camunda 7</th><th>Camunda 8</th></tr>
+      <tr><td>Process engine</td><td>Internal (embedded)</td><td><strong>Zeebe</strong> (distributed)</td></tr>
+      <tr><td>Database</td><td>MySQL, PostgreSQL...</td><td><strong>Elasticsearch</strong></td></tr>
+      <tr><td>Java API</td><td>ProcessEngine, RuntimeService</td><td><strong>Job Worker</strong></td></tr>
+      <tr><td>Deploy</td><td>WAR, embedded JAR</td><td><strong>gRPC to Zeebe</strong></td></tr>
+    </table>
+
+    <h2>Các component trong Self-managed</h2>
+
+    <pre>┌─────────────────────────────────────────┐
+│            CAMUNDA 8 SELF-MANAGED        │
+│                                          │
+│  ┌─────────┐  ┌─────────┐  ┌─────────┐  │
+│  │  Zeebe  │  │ Operate │  │Tasklist │  │
+│  │(engine) │  │(monitor)│  │(UI task)│  │
+│  └────┬────┘  └────┬────┘  └────┬────┘  │
+│       └────────────┴────────────┘        │
+│              Elasticsearch               │
+│                                          │
+│  ┌─────────┐  ┌───────────┐             │
+│  │Identity │  │Connectors │             │
+│  └─────────┘  └───────────┘             │
+└─────────────────────────────────────────┘</pre>
+
+    <h3>Zeebe</h3>
+    <p>Process engine chính — nhận, thực thi, lưu trạng thái process. Giao tiếp với Spring Boot qua <strong>gRPC</strong> port <code>26500</code>.</p>
+
+    <h3>Operate</h3>
+    <p>UI để monitor process đang chạy — xem variables, trace lỗi, resolve incident. Chạy tại <code>localhost:8081</code>.</p>
+
+    <h3>Tasklist</h3>
+    <p>UI cho User Task — người dùng claim và complete task thủ công. Chạy tại <code>localhost:8082</code>.</p>
+
+    <h3>Elasticsearch</h3>
+    <p>Không phải database truyền thống — lưu <strong>event log</strong> của tất cả process instance. Operate và Tasklist đọc từ đây.</p>
+
+    <h2>Token flow — khái niệm cốt lõi</h2>
+
+    <p>Trong BPMN, mỗi process instance có một <strong>token</strong> di chuyển qua các element:</p>
+
+    <pre>Start Event → Service Task → Gateway → End Event
+     ●  ───────────────────────────────────────▶</pre>
+
+    <ul>
+      <li>Token đến đâu → element đó <strong>active</strong></li>
+      <li>Job Worker nhận job khi token đến <strong>Service Task</strong></li>
+      <li>Token tiếp tục khi job được <strong>complete</strong></li>
+    </ul>
+
+    <h2>Tóm tắt</h2>
+    <ul>
+      <li>Camunda 8 dùng <strong>Zeebe</strong> engine, khác hoàn toàn C7</li>
+      <li>Self-managed gồm: Zeebe + Operate + Tasklist + Elasticsearch + Identity</li>
+      <li>Giao tiếp qua <strong>gRPC port 26500</strong>, không phải REST như C7</li>
+      <li><strong>Token</strong> là đơn vị thực thi trong BPMN</li>
+    </ul>
+
+  </div>
+
+  <!-- Navigation -->
+  <div class="article-nav">
+    <span></span>
+    <a href="day04.html" class="next">
+      <span class="nav-label">Tiếp theo →</span>
+      <strong>Ngày 4 — Setup Docker Compose</strong>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026 dev.anhkn · <a href="https://github.com/dev-anhkn" target="_blank">GitHub</a></p>
+</footer>
+
+</body>
+</html>
