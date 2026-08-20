@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Camunda 8 — Overview | dev.anhkn</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="../index.html" class="nav-logo">dev<span>.</span>anhkn</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="index.html" class="active">Camunda</a></li>
+      <li><a href="../about.html">About</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+
+  <div class="article-header container">
+    <span class="article-day">Architecture</span>
+    <h1>Camunda 8 — Overview</h1>
+    <p class="meta">19/08/2026 · 10 phút đọc · <a href="index.html">← Quay lại series</a></p>
+  </div>
+
+  <div class="article-body">
+
+    <blockquote>
+      <strong>Mục tiêu:</strong> Hiểu Camunda 8 là gì, nó đứng ở vị trí nào trong kiến trúc hệ thống, các thành phần cốt lõi làm gì, và luồng vận hành tổng quát từ lúc vẽ process đến lúc chạy xong.
+    </blockquote>
+
+    <h2>1. Camunda 8 là gì?</h2>
+
+    <p>Camunda 8 là một <strong>distributed workflow & decision orchestration engine</strong> — nói dễ hiểu: bạn vẽ quy trình nghiệp vụ (đặt hàng, duyệt nghỉ phép, xử lý claim bảo hiểm...) dưới dạng sơ đồ <strong>BPMN</strong>, rồi Camunda sẽ "chạy" sơ đồ đó thay vì bạn phải viết logic điều phối bằng tay bằng vô số <code>if/else</code> rải rác trong code.</p>
+
+    <p>Khác biệt lớn nhất so với Camunda 7: C7 là <strong>embedded engine</strong> — nhúng thẳng vào JVM app của bạn, chạy chung process với ứng dụng. C8 tách engine ra thành một <strong>hệ thống phân tán độc lập</strong> (Zeebe), giao tiếp với app qua gRPC. Đổi lại sự phức tạp khi phải quản lý thêm một cluster, bạn có khả năng scale ngang và chịu lỗi tốt hơn nhiều.</p>
+
+    <h2>2. Vai trò trong kiến trúc: orchestrator trung tâm</h2>
+
+    <p>Ví dụ một hệ thống e-commerce có <code>order-service</code>, <code>payment-service</code>, <code>inventory-service</code>, <code>notification-service</code>. Không có orchestrator, các service này phải tự gọi lẫn nhau: order gọi payment, payment gọi inventory... Logic điều phối bị rải rác khắp nơi, rất khó nhìn ra toàn cảnh quy trình, và càng khó xử lý khi một bước fail giữa chừng.</p>
+
+    <p>Với Camunda 8, bạn vẽ một BPMN process duy nhất, ví dụ <strong>"Xử lý đơn hàng"</strong>:</p>
+
+    <pre>Start → Service Task "Thanh toán" → Gateway (thành công / thất bại)
+                                          │                    │
+                              Service Task "Trừ kho"    Service Task "Hoàn tiền"
+                                          │                    │
+                              Service Task "Gửi email"        End
+                                          │
+                                         End</pre>
+
+    <p>Zeebe cầm trịch toàn bộ luồng này. Mỗi service không cần biết về các service khác — nó chỉ cần là một <strong>Job Worker</strong> lắng nghe đúng loại job của mình (ví dụ <code>payment-service</code> chỉ quan tâm job <code>process-payment</code>) và trả kết quả về cho Zeebe.</p>
+
+    <h2>3. Orchestration vs Choreography — khi nào dùng cái nào</h2>
+
+    <table>
+      <tr><th></th><th>Orchestration</th><th>Choreography</th></tr>
+      <tr><td>Điều phối</td><td>Có một "nhạc trưởng" trung tâm (Zeebe) ra lệnh từng bước</td><td>Không có nhạc trưởng, service tự lắng nghe event của nhau</td></tr>
+      <tr><td>Ví dụ</td><td>BPMN process gọi lần lượt Payment → Inventory → Notification</td><td>Order publish event <code>OrderCreated</code>, các service tự subscribe và tự xử lý (thường qua Kafka)</td></tr>
+      <tr><td>Nhìn toàn cảnh</td><td>Dễ — cả luồng nằm trong 1 diagram</td><td>Khó — logic nằm rải rác ở nhiều service</td></tr>
+      <tr><td>Hợp với</td><td>Quy trình nhiều bước, cần retry/compensate rõ ràng (đặt hàng, duyệt hồ sơ)</td><td>Hệ thống cần service độc lập cao, event đơn giản (audit log, thông báo)</td></tr>
+    </table>
+
+    <p>Trong thực tế, nhiều hệ thống dùng kết hợp cả hai: Camunda orchestrate luồng nghiệp vụ chính, nhưng bên trong từng service vẫn có thể tự phát event kiểu choreography cho các mục đích phụ như logging hay analytics.</p>
+
+    <h2>4. Các thành phần cốt lõi</h2>
+
+    <table>
+      <tr><th>Thành phần</th><th>Vai trò</th></tr>
+      <tr><td><strong>Zeebe</strong></td><td>Stream-processing broker — lưu trữ và thực thi process. Dùng Raft consensus, dữ liệu chia thành partitioned log để chạy dạng cluster nhiều broker.</td></tr>
+      <tr><td><strong>Operate</strong></td><td>UI giám sát process đang chạy — xem variables, tìm và xử lý incident (lỗi).</td></tr>
+      <tr><td><strong>Tasklist</strong></td><td>UI cho human task — người dùng claim/complete task thủ công, ví dụ duyệt đơn nghỉ phép.</td></tr>
+      <tr><td><strong>Optimize</strong></td><td>Phân tích process & KPI — thời gian xử lý trung bình, bottleneck nằm ở đâu (thường dùng ở enterprise, không bắt buộc).</td></tr>
+      <tr><td><strong>Identity</strong></td><td>Auth/authz — quản lý user, role, tenant, ai được làm gì trong hệ thống.</td></tr>
+      <tr><td><strong>Connectors</strong></td><td>Adapter có sẵn để gọi hệ thống ngoài (REST, email, Slack...) mà không cần tự viết worker.</td></tr>
+      <tr><td><strong>Web Modeler</strong></td><td>Công cụ vẽ BPMN/DMN trên trình duyệt, hỗ trợ cộng tác nhiều người cùng lúc.</td></tr>
+      <tr><td><strong>Desktop Modeler</strong></td><td>Bản desktop offline của Modeler — dùng khi không cần cộng tác online.</td></tr>
+    </table>
+
+    <h2>5. Luồng triển khai tổng quát</h2>
+
+    <pre>Model (vẽ BPMN) → Deploy process definition → Create instance
+        → Worker nhận & xử lý job → Complete / Fail job
+        → Operate quan sát toàn bộ</pre>
+
+    <ul>
+      <li><strong>Model</strong>: vẽ quy trình bằng Web/Desktop Modeler, xuất ra file <code>.bpmn</code>.</li>
+      <li><strong>Deploy</strong>: đẩy file này lên Zeebe — trở thành một "process definition" mà hệ thống biết cách chạy.</li>
+      <li><strong>Create instance</strong>: mỗi lần có nghiệp vụ thực tế xảy ra (một đơn hàng mới), tạo một "process instance" — một lần chạy cụ thể của definition đó.</li>
+      <li><strong>Worker xử lý job</strong>: khi instance đi tới một Service Task, Zeebe phát sinh job; worker tương ứng nhận job này và xử lý logic thật (gọi API thanh toán, trừ kho...).</li>
+      <li><strong>Complete/Fail</strong>: worker báo kết quả về, instance đi tiếp hoặc rơi vào trạng thái incident nếu fail.</li>
+      <li><strong>Operate quan sát</strong>: bất kỳ lúc nào cũng có thể mở Operate để xem instance đang ở bước nào, biến gì, lỗi gì.</li>
+    </ul>
+
+    <h2>6. SaaS (Camunda Cloud) vs Self-Managed</h2>
+
+    <p><strong>SaaS</strong>: Camunda quản lý cluster, network, upgrade — bạn chỉ cần trỏ worker tới một endpoint và tập trung viết logic nghiệp vụ. Không cần lo hạ tầng, nhưng dữ liệu process nằm trên cloud của Camunda và chi phí tính theo usage.</p>
+
+    <p><strong>Self-Managed</strong>: bạn tự deploy Zeebe, Operate, Tasklist... (thường bằng Docker/Kubernetes), tự quản lý network, backup, upgrade, và cả Identity (auth). Đổi lại, bạn có toàn quyền kiểm soát dữ liệu — phù hợp với yêu cầu compliance hoặc chạy on-premise.</p>
+
+    <p>Series này đi theo hướng <strong>Self-managed</strong>, vì đó là lựa chọn phổ biến khi công ty cần kiểm soát hạ tầng và dữ liệu.</p>
+
+    <h2>7. Tools for the Process Application Development Lifecycle</h2>
+
+    <p>Phần 4 đã liệt kê từng component làm gì. Ở đây nhìn theo lifecycle chính thức của Camunda Academy — 5 giai đoạn: <strong>Design and implement</strong>, <strong>Test and deploy</strong>, <strong>Automate</strong>, <strong>Improve</strong>, <strong>Manage</strong>. Nhớ theo giai đoạn dễ hơn nhớ một danh sách tên rời rạc — mỗi lần cần làm gì, chỉ cần hỏi "đang ở giai đoạn nào" là biết mở tool nào.</p>
+
+    <h3>Design and implement</h3>
+    <p>Vẽ process bằng <strong>Web Modeler</strong> (cộng tác, chạy trên trình duyệt) hoặc <strong>Desktop Modeler</strong> (offline), rồi implement worker thật bằng client SDK — Spring Zeebe SDK cho Java, hoặc viết <strong>Connector</strong> nếu một tác vụ lặp lại giữa nhiều process (gọi Slack, gửi email, gọi REST API chuẩn).</p>
+
+    <h3>Test and deploy</h3>
+    <p>Test worker và chạy thử process trên Zeebe local (Docker Compose) trước khi đụng tới production. Deploy là bước tách biệt: đẩy file <code>.bpmn</code> lên Zeebe qua CLI/CI pipeline, khác với việc đẩy hạ tầng Zeebe/Operate/Tasklist lên môi trường chạy (Helm chart cho Self-managed).</p>
+
+    <h3>Automate</h3>
+    <p>Process chạy thật — Zeebe điều phối, worker xử lý job, Connector tự động gọi hệ thống ngoài. Giai đoạn này không cần người can thiệp, trừ khi có human task chờ duyệt hoặc incident cần resolve.</p>
+
+    <h3>Improve</h3>
+    <p><strong>Optimize</strong> phân tích dữ liệu process đã chạy — thời gian xử lý trung bình, bước nào hay nghẽn — để cải thiện quy trình dựa trên dữ liệu thật thay vì đoán.</p>
+
+    <h3>Manage</h3>
+    <p><strong>Operate</strong> theo dõi/resolve incident, <strong>Tasklist</strong> quản lý human task, <strong>Identity</strong> quản lý user/role/tenant — ba tool này chạy song song suốt vòng đời vận hành, không phải một bước làm xong rồi thôi như 4 giai đoạn trên.</p>
+
+    <h2>Tóm tắt</h2>
+    <ul>
+      <li>Camunda 8 là engine orchestration phân tán, tách rời khỏi app qua gRPC — khác hoàn toàn kiến trúc embedded của C7</li>
+      <li>Đóng vai trò "nhạc trưởng" điều phối service, human task, decision — thay vì để các service tự gọi lẫn nhau</li>
+      <li>Orchestration hợp với quy trình nhiều bước cần nhìn thấy toàn cảnh; choreography hợp với hệ thống cần service độc lập cao</li>
+      <li>8 thành phần cốt lõi: Zeebe, Operate, Tasklist, Optimize, Identity, Connectors, Web Modeler, Desktop Modeler</li>
+      <li>Luồng chuẩn: model → deploy → create instance → worker xử lý job → complete/fail → Operate quan sát</li>
+      <li>SaaS tiện lợi, không lo hạ tầng; Self-managed toàn quyền kiểm soát dữ liệu — series này chọn Self-managed</li>
+      <li>Lifecycle 5 giai đoạn: Design and implement → Test and deploy → Automate → Improve → Manage, mỗi giai đoạn ứng với tool riêng</li>
+    </ul>
+
+  </div>
+
+  <!-- Navigation -->
+  <div class="article-nav">
+    <a href="introduction.html" class="prev">
+      <span class="nav-label">← Trước đó</span>
+      <strong>Giới thiệu về Camunda</strong>
+    </a>
+    <a href="day04.html" class="next">
+      <span class="nav-label">Tiếp theo →</span>
+      <strong>Setup Self-managed với Docker Compose</strong>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026 dev.anhkn · <a href="https://github.com/dev-anhkn" target="_blank">GitHub</a></p>
+</footer>
+
+</body>
+</html>
