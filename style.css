@@ -63,18 +63,21 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  /* Anti-copy disabled — was blocking text selection site-wide.
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
+  */
 }
 
-/* Code is meant to be copied — keep it selectable even though the rest of the site isn't. */
+/* Code is meant to be copied — keep it selectable even though the rest of the site isn't.
 .article-body pre,
 .article-body code {
   -webkit-user-select: text;
   -moz-user-select: text;
   user-select: text;
 }
+*/
 
 a { color: var(--amber); text-decoration: none; }
 a:hover { text-decoration: underline; color: var(--amber-light); }
@@ -381,6 +384,25 @@ nav {
   display: block;
 }
 
+.article-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.article-columns img {
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  display: block;
+}
+
+.article-columns h3 { margin-top: 0; }
+.article-columns p { margin-bottom: 0; }
+
 .article-body p {
   margin-bottom: 24px;
   color: var(--text);
@@ -589,4 +611,5 @@ footer a { color: var(--amber); }
   .about-content { text-align: center; }
   .skills-grid { justify-content: center; }
   .article-nav { flex-direction: column; }
+  .article-columns { grid-template-columns: 1fr; }
 }

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DMN — Overview | dev.anhkn</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="../index.html" class="nav-logo">dev<span>.</span>anhkn</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="index.html" class="active">Camunda</a></li>
+      <li><a href="../about.html">About</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+
+  <div class="article-header container">
+    <span class="article-day">DMN</span>
+    <h1>DMN — Overview</h1>
+    <p class="meta">25/08/2026 · 14 phút đọc · <a href="index.html">← Quay lại series</a></p>
+  </div>
+
+  <div class="article-body">
+
+    <h2>Giới thiệu về DMN</h2>
+    <p class="lead"><strong>D</strong>ecision <strong>M</strong>odel and <strong>N</strong>otation.</p>
+    <p>Ra quyết định rõ ràng và nhất quán là chìa khóa để có quy trình nghiệp vụ hiệu quả. DMN giúp bạn làm điều đó bằng cách cung cấp một cách chuẩn hóa để mô hình hóa decision logic, dễ chia sẻ và dễ hiểu giữa các team.</p>
+
+    <h3>Vì sao dùng DMN?</h3>
+    <p><strong>Transparency:</strong> DMN làm cho decision logic của bạn trở nên tường minh.</p>
+    <ul>
+      <li>Business analyst có thể viết, hoặc ít nhất là review decision logic và rules</li>
+      <li>Bạn có thể phát hiện decision logic hoặc rules bị thiếu hoặc mâu thuẫn bất cứ lúc nào</li>
+      <li>Bạn có thể tách decision logic ra khỏi code</li>
+    </ul>
+    <p><strong>Efficiency:</strong> DMN cho phép bạn tự động hóa decision nếu có thể.</p>
+    <p><strong>Agility:</strong> DMN cho phép bạn triển khai decision logic mới hoặc thay đổi một cách dễ dàng.</p>
+
+    <h3>DMN hoạt động thế nào?</h3>
+    <p>DMN specification bao gồm một mô tả chi tiết bằng lời cho notation, cũng như một <strong>formal metamodel dựa trên XML</strong>, giúp decision engine có thể thực thi các decision bạn mô hình hóa.</p>
+    <p>Trong DMN, bạn có thể biểu diễn decision logic thông qua <strong>decision table</strong> và <strong>Decision Requirements Diagram (DRD)</strong>.</p>
+
+    <blockquote>💡 Theo DMN, một <strong>decision</strong> là việc suy ra một kết quả (output) từ những fact cho trước (inputs), dựa trên các tiêu chí (criteria) đã thiết lập.</blockquote>
+
+    <h3>Ai duy trì DMN?</h3>
+    <p>DMN được phát triển và duy trì bởi <strong>Object Management Group (OMG)</strong>, một tổ chức tiêu chuẩn hóa toàn cầu. OMG đảm bảo DMN vẫn là một standard được áp dụng rộng rãi và đáng tin cậy trong nhiều ngành.</p>
+
+    <h2>Các use case của DMN</h2>
+    <p>DMN tập trung vào <strong>operational decisions</strong>, không phải strategic decisions. Dùng DMN cho các quyết định thường nhật mà bạn phải đưa ra lặp lại mỗi ngày.</p>
+    <p>Strategic decisions — ví dụ công ty có nên áp dụng BPMN hay DMN — là những quyết định đơn lẻ (unique). Chúng hiếm khi theo một bộ rule cố định, nên mô hình hóa bằng DMN không đáng để đầu tư.</p>
+    <p>Dưới đây là các ví dụ điển hình về operational decisions bạn có thể mô hình hóa bằng DMN.</p>
+    <ul>
+      <li><strong>Eligibility / Approval:</strong> ví dụ, xác định một khách hàng có đủ điều kiện cho một sản phẩm hay không, hoặc một claim có thể được xử lý tự động hay không.</li>
+      <li><strong>Validation:</strong> ví dụ, kiểm tra một application hoặc một notification of a claim có đầy đủ và nội dung có hợp lệ hay không.</li>
+      <li><strong>Fraud:</strong> ví dụ, phát hiện một giao dịch thẻ tín dụng hoặc một notification of a claim có đáng nghi hay không.</li>
+      <li><strong>Risk:</strong> ví dụ, xác định rủi ro cho việc duyệt tín dụng, một hạn mức tín dụng có bị vượt quá hay không, hoặc một invoice amount có được phép hay không.</li>
+      <li><strong>Calculation:</strong> ví dụ, ước tính phí vận chuyển hoặc xác định mức giảm giá.</li>
+      <li><strong>Assignment:</strong> ví dụ, xác định ai nên hoàn thành một task trong process dựa trên kỹ năng.</li>
+      <li><strong>Maximizing:</strong> ví dụ, xác định priority phù hợp nhất hoặc phân loại khách hàng phù hợp nhất (đánh giá business value của một assignment).</li>
+      <li><strong>Targeting:</strong> ví dụ, xác định sản phẩm hoặc banner quảng cáo có thể khiến một user quan tâm (nhắm tới target group).</li>
+    </ul>
+
+    <h2>Các thành phần của DMN</h2>
+
+    <h3>Một decision trong DMN</h3>
+    <img src="../images/DMN%20-%20Overview/A%20decision%20in%20DMN.png" alt="Sơ đồ minh họa một decision trong DMN" class="article-hero-img">
+
+    <p><strong>Decision requirements:</strong> được visualize trong một <strong>Decision Requirements Diagram (DRD)</strong>. Khi bắt đầu mô hình hóa một decision, bạn thường sẽ bắt đầu với DRD, vì nó định nghĩa cấu trúc tổng quát của decision.</p>
+    <img src="../images/DMN%20-%20Overview/Decision%20requirements.png" alt="Ví dụ một Decision Requirements Diagram (DRD)" class="article-hero-img">
+
+    <p><strong>Decision logic:</strong> định nghĩa các rule của một decision. Cách phổ biến nhất để mô hình hóa decision logic là dùng <strong>decision table</strong> với <strong>FEEL</strong> expression language.</p>
+    <img src="../images/DMN%20-%20Overview/Decision%20logic.png" alt="Ví dụ decision logic dạng decision table" class="article-hero-img">
+
+    <p>Bạn cũng có thể mô hình hóa decision logic bằng <strong>literal expression</strong> với FEEL.</p>
+
+    <blockquote>💡 DMN đi kèm với expression language riêng gọi là <strong>FEEL</strong> — viết tắt của Friendly Enough Expression Language. Bạn sẽ dùng FEEL để viết rule trong decision table hoặc literal expression.</blockquote>
+
+    <h2>Decision Requirements Diagram (DRD)</h2>
+    <p>Một DRD bao gồm <strong>decision box</strong> và <strong>input data</strong>.</p>
+
+    <h3>Decision box</h3>
+    <p>Bạn dùng decision box để xác định một output cụ thể từ một input cho trước.</p>
+    <p>Decision box có thể được biểu diễn bằng <strong>decision table</strong> (như loan approval hay Risk box) hoặc <strong>literal expression</strong> (như Profitability box).</p>
+    <img src="../images/DMN%20-%20Overview/Decision%C2%A0box.png" alt="Ví dụ decision box trong một DRD" class="article-hero-img">
+
+    <h3>Input data</h3>
+    <p>Input data có thể là một value hoặc kết quả của một decision khác.</p>
+    <p>Trong ví dụ này, ba value được dùng làm input data cho Profitability và Risk decision: interest rate, requested loan, và monthly income. Profitability và Risk decision đóng vai trò input data cho decision cuối cùng (loan approval).</p>
+    <img src="../images/DMN%20-%20Overview/Input%20data.png" alt="Ví dụ input data trong một DRD" class="article-hero-img">
+
+    <h3>Decision requirements</h3>
+    <p>Các mũi tên giữa input và decision được gọi là <strong>decision requirements</strong>, vì input được nối tới là bắt buộc (required) cho decision đó.</p>
+    <img src="../images/DMN%20-%20Overview/Decision%20requirements%202.png" alt="Mũi tên decision requirements nối input data và decision box" class="article-hero-img">
+
+    <h2>Decision table</h2>
+    <p>Decision table là một cách biểu diễn có cấu trúc của decision logic, dưới dạng bảng.</p>
+    <img src="../images/DMN%20-%20Overview/Decision%20table%201.png" alt="Ví dụ tổng quan một decision table" class="article-hero-img">
+
+    <div class="article-columns">
+      <img src="../images/DMN%20-%20Overview/Label%20your%20decision%20table.png" alt="Ví dụ label của một decision table">
+      <div>
+        <h3>Label your decision table</h3>
+        <p>Thông thường, một decision table được đặt tên (label) theo kết quả mà nó biểu diễn. Label này chỉ rõ decision cụ thể mà table đó cung cấp logic.</p>
+      </div>
+    </div>
+
+    <div class="article-columns">
+      <img src="../images/DMN%20-%20Overview/Rules.png" alt="Các rule trong một decision table">
+      <div>
+        <h3>Rules</h3>
+        <p>Mỗi row trong table tương ứng với một rule chi phối decision. Rules được viết bằng FEEL.</p>
+      </div>
+    </div>
+
+    <div class="article-columns">
+      <img src="../images/DMN%20-%20Overview/Inputs.png" alt="Các cột input trong một decision table">
+      <div>
+        <h3>Inputs</h3>
+        <p>Inputs là thiết yếu để đưa ra decision. Mỗi input có một type (number, boolean, string, v.v.).</p>
+      </div>
+    </div>
+
+    <div class="article-columns">
+      <img src="../images/DMN%20-%20Overview/Outputs.png" alt="Cột output trong một decision table">
+      <div>
+        <h3>Outputs</h3>
+        <p>Output đại diện cho kết quả của decision và cũng có một type cụ thể (trong ví dụ này là string). Một decision table có thể chứa nhiều outputs.</p>
+      </div>
+    </div>
+
+    <blockquote>💡 Các column được liên kết bằng logical operator <strong>And</strong>, nghĩa là điều kiện trong mỗi column phải evaluate thành true. Một <strong>empty cell</strong> sẽ luôn evaluate thành true.</blockquote>
+
+    <div class="article-columns">
+      <img src="../images/DMN%20-%20Overview/Annotations.png" alt="Cột annotation trong một decision table">
+      <div>
+        <h3>Annotations</h3>
+        <p>Annotations có thể lưu thông tin bổ sung hoặc justification cho các rule cụ thể.</p>
+      </div>
+    </div>
+
+    <div class="article-columns">
+      <img src="../images/DMN%20-%20Overview/Decision%20table%202.png" alt="Ví dụ hit policy trong một decision table">
+      <div>
+        <h3>Hit policy</h3>
+        <p>Hit policy xác định có bao nhiêu rule có thể áp dụng cùng lúc, và hành động nào xảy ra nếu nhiều rule cùng được trigger. Hit policy phổ biến nhất là <strong>Unique</strong>, đảm bảo chỉ một rule áp dụng tại một thời điểm.</p>
+      </div>
+    </div>
+
+    <blockquote>💡 Việc cân nhắc hit policy khi định nghĩa rule là rất quan trọng.</blockquote>
+
+    <h2>Friendly Enough Expression Language (FEEL)</h2>
+    <p>FEEL giúp bạn viết expression cho decision table và literal expression. Ngôn ngữ này rõ ràng và dễ hiểu cho cả business professional lẫn developer.</p>
+
+    <h3>Ví dụ về FEEL data type</h3>
+    <ul>
+      <li><strong>String:</strong> giá trị dạng text, một chuỗi ký tự nằm trong dấu ngoặc kép. Ví dụ: một loại xe (a car type).</li>
+      <li><strong>Number:</strong> có thể là số nguyên (integer, ví dụ 1) hoặc số thực (float, ví dụ 2.34). Number có thể âm.</li>
+      <li><strong>Boolean:</strong> chỉ có hai giá trị true hoặc false.</li>
+    </ul>
+
+    <h2>Tóm tắt</h2>
+    <ul>
+      <li>DMN là một notation chuẩn hóa để mô hình hóa business decision một cách trực quan, trực tiếp bên trong BPMN process của bạn.</li>
+      <li>DMN phù hợp cho <strong>operational decisions</strong> cần thực thi hằng ngày, không phải cho strategic decisions mang tính đơn lẻ.</li>
+      <li>Với DMN, bạn có thể <strong>biểu diễn trực quan decision logic</strong> thông qua decision table và Decision Requirements Diagram (DRD).</li>
+      <li>Bạn có thể <strong>viết expression</strong> cho decision table và literal expression bằng FEEL.</li>
+      <li>Một decision table biểu diễn decision logic và <strong>bao gồm inputs, outputs, và rules</strong>. Thông thường decision table được đặt tên (label) theo kết quả của decision.</li>
+      <li><strong>Hit policy</strong> xác định có bao nhiêu rule có thể áp dụng và điều gì xảy ra nếu nhiều rule cùng áp dụng.</li>
+    </ul>
+
+  </div>
+
+  <!-- Navigation -->
+  <div class="article-nav">
+    <span></span>
+    <span></span>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026 dev.anhkn · <a href="https://github.com/dev-anhkn" target="_blank">GitHub</a></p>
+</footer>
+
+</body>
+</html>

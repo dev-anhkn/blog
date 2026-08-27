@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/2.0" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Definitions_0o9am5x" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.8.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.1.0">
+  <decision id="Decision_0bsc7n7" name="Loan Approval">
+    <informationRequirement id="InformationRequirement_0ksmvnl">
+      <requiredDecision href="#Decision_0f59956" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_1brodtr">
+      <requiredDecision href="#Decision_1psg8w8" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_0swm2i1" biodi:annotationsWidth="400">
+      <input id="Input_1" label="Profitability">
+        <inputExpression id="InputExpression_1" typeRef="string">
+          <text></text>
+        </inputExpression>
+        <inputValues id="UnaryTests_1031wvl">
+          <text>"high","medium","low"</text>
+        </inputValues>
+      </input>
+      <input id="InputClause_1ncwqsx" label="Risk">
+        <inputExpression id="LiteralExpression_1ufo57c" typeRef="string">
+          <text></text>
+        </inputExpression>
+        <inputValues id="UnaryTests_1um9ayt">
+          <text>"high","medium","low"</text>
+        </inputValues>
+      </input>
+      <output id="Output_1" label="Approve Loan?" typeRef="boolean" />
+      <rule id="DecisionRule_0yrifyp">
+        <inputEntry id="UnaryTests_068q9j2">
+          <text>"low"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_16nno8j">
+          <text>not("low")</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_032ocit">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1s3ubsl">
+        <inputEntry id="UnaryTests_0dvgtjj">
+          <text>"low"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1psnwc2">
+          <text>"low"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1wddcoo">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0wwefoh">
+        <inputEntry id="UnaryTests_01rdxef">
+          <text>"medium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1o5gw4d">
+          <text>"high"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0ctc0qa">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1tg8w0w">
+        <inputEntry id="UnaryTests_1lqk601">
+          <text>"medium"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ttvj78">
+          <text>not("high")</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1t09f9b">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0vkg75k">
+        <inputEntry id="UnaryTests_0j2cj7w">
+          <text>"high"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0eoo41y">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_14edvfg">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <inputData id="InputData_0is3h3o" name="monthly income" />
+  <inputData id="InputData_1all1os" name="requested loan" />
+  <inputData id="InputData_0zmaavg" name="interest rate" />
+  <decision id="Decision_1psg8w8" name="Profitability">
+    <informationRequirement id="InformationRequirement_0qosgzr">
+      <requiredInput href="#InputData_1all1os" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_066qxp8">
+      <requiredInput href="#InputData_0zmaavg" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_14feftp">
+      <input id="InputClause_0t3r9yl" label="Interest rate">
+        <inputExpression id="LiteralExpression_0o572f8" typeRef="number" />
+      </input>
+      <input id="InputClause_1nc2v4j" label="Requested loan">
+        <inputExpression id="LiteralExpression_0sia3by" typeRef="number">
+          <text></text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0v5vend" label="Profitability" typeRef="string">
+        <outputValues id="UnaryTests_04h66o9">
+          <text>"high","medium","low"</text>
+        </outputValues>
+      </output>
+      <rule id="DecisionRule_11yjb25">
+        <inputEntry id="UnaryTests_1s9l17x">
+          <text>&lt;2.0</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_03vs1ux">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0ghd8nq">
+          <text>"low"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_15rudod">
+        <inputEntry id="UnaryTests_0byagqc">
+          <text>&gt;=5.0</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1qusalx">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0yozqml">
+          <text>"high"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_062dy2e">
+        <inputEntry id="UnaryTests_1uo9qd3">
+          <text>[2..5[</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1jr7xbk">
+          <text>&lt;10000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1a1gatf">
+          <text>"low"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0sc48qt">
+        <inputEntry id="UnaryTests_1lyatpf">
+          <text>[2..5[</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0r2qfsr">
+          <text>[10000..100000]</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1esnqes">
+          <text>"medium"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0s1l9zs">
+        <inputEntry id="UnaryTests_109kw8s">
+          <text>[2..5[</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1xzez4a">
+          <text>&gt;100000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0a3tjxd">
+          <text>"high"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_0f59956" name="Risk">
+    <informationRequirement id="InformationRequirement_1uunbyf">
+      <requiredInput href="#InputData_1all1os" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_1yzabqi">
+      <requiredInput href="#InputData_0is3h3o" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_1rk6n5p">
+      <input id="InputClause_079ad7n" label="Requested loan" biodi:width="192">
+        <inputExpression id="LiteralExpression_04z0zob" typeRef="number">
+          <text></text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_09jitw5" label="Monthly income">
+        <inputExpression id="LiteralExpression_1hdz1cc" typeRef="number" />
+      </input>
+      <output id="OutputClause_02mmd8n" label="Risk" typeRef="string">
+        <outputValues id="UnaryTests_131eeem">
+          <text>"high","medium","low"</text>
+        </outputValues>
+      </output>
+      <rule id="DecisionRule_0i2t7t0">
+        <inputEntry id="UnaryTests_1lrn5tl">
+          <text>&lt;10000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ltpti6">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1rkkjk7">
+          <text>"low"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_19zspng">
+        <inputEntry id="UnaryTests_1073se8">
+          <text>[10000..100000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ue8ubh">
+          <text>&lt;5000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0auhfh7">
+          <text>"medium"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1wfaews">
+        <inputEntry id="UnaryTests_07rwvcs">
+          <text>[10000..100000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ab6r5k">
+          <text>&gt;=5000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0bve6en">
+          <text>"low"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0c83hyr">
+        <inputEntry id="UnaryTests_17qinsq">
+          <text>&gt;100000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1qefw2g">
+          <text>&lt;5000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1yv3fib">
+          <text>"high"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_11u3s95">
+        <inputEntry id="UnaryTests_03tql5h">
+          <text>&gt;100000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0dt0r61">
+          <text>[5000..10000]</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_16xo5ps">
+          <text>"medium"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0664r5r">
+        <inputEntry id="UnaryTests_1vzkrmk">
+          <text>&gt;100000</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1j4seoi">
+          <text>&gt;=10000</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_19035h9">
+          <text>"low"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape dmnElementRef="Decision_0bsc7n7">
+        <dc:Bounds height="80" width="180" x="410" y="80" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_17ifuql" dmnElementRef="InputData_0is3h3o">
+        <dc:Bounds height="45" width="125" x="717" y="377" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_0qecfiu" dmnElementRef="InputData_1all1os">
+        <dc:Bounds height="45" width="125" x="437" y="377" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_0d41ock" dmnElementRef="InformationRequirement_0ksmvnl">
+        <di:waypoint x="640" y="230" />
+        <di:waypoint x="530" y="180" />
+        <di:waypoint x="530" y="160" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_17xw06y" dmnElementRef="InformationRequirement_1uunbyf">
+        <di:waypoint x="500" y="377" />
+        <di:waypoint x="610" y="330" />
+        <di:waypoint x="610" y="310" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0urym7n" dmnElementRef="InformationRequirement_1yzabqi">
+        <di:waypoint x="780" y="377" />
+        <di:waypoint x="670" y="330" />
+        <di:waypoint x="670" y="310" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_1u7cy4j" dmnElementRef="InputData_0zmaavg">
+        <dc:Bounds height="45" width="125" x="157" y="377" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_0wavc7i" dmnElementRef="InformationRequirement_0qosgzr">
+        <di:waypoint x="500" y="377" />
+        <di:waypoint x="390" y="330" />
+        <di:waypoint x="390" y="310" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_1vf9zjl" dmnElementRef="InformationRequirement_066qxp8">
+        <di:waypoint x="220" y="377" />
+        <di:waypoint x="330" y="330" />
+        <di:waypoint x="330" y="310" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0pxk9rm" dmnElementRef="InformationRequirement_1brodtr">
+        <di:waypoint x="360" y="230" />
+        <di:waypoint x="470" y="180" />
+        <di:waypoint x="470" y="160" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_0anzo5g" dmnElementRef="Decision_1psg8w8">
+        <dc:Bounds height="80" width="180" x="270" y="230" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_0nx9hki" dmnElementRef="Decision_0f59956">
+        <dc:Bounds height="80" width="180" x="550" y="230" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

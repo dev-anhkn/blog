@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Camunda 8 — Zeebe Architecture Overview | dev.anhkn</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="../index.html" class="nav-logo">dev<span>.</span>anhkn</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="index.html" class="active">Camunda</a></li>
+      <li><a href="../about.html">About</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+
+  <div class="article-header container">
+    <span class="article-day">Zeebe</span>
+    <h1>Camunda 8 — Zeebe Architecture Overview</h1>
+    <p class="meta">21/08/2026 · 12 phút đọc · <a href="index.html">← Quay lại series</a></p>
+  </div>
+
+  <div class="article-body">
+
+    <blockquote>
+      <strong>Mục tiêu:</strong> Đào sâu vào kiến trúc nội bộ của Zeebe — engine đứng sau Camunda 8 — để hiểu vì sao nó scale ngang được, chịu lỗi ra sao, và dữ liệu quy trình thật sự đi đâu khi một process instance chạy.
+    </blockquote>
+
+    <h2>1. Điều gì làm nên sự khác biệt của Zeebe?</h2>
+
+    <p>Bài <a href="overview.html">Overview</a> đã liệt kê Zeebe là một trong các thành phần cốt lõi của Camunda 8. Ở bài này, đào sâu riêng vào Zeebe — vì nó là phần quyết định khả năng scale và chịu lỗi của toàn hệ thống.</p>
+
+    <p>Khác với các workflow engine truyền thống dựa trên relational database, Zeebe dùng kiến trúc <strong>phân tán, dựa trên nhật ký (log-based)</strong>. Nó không phụ thuộc vào một database tập trung để lưu trạng thái — dữ liệu được ghi trực tiếp vào local disk của từng broker, và việc xử lý được phân phối trên nhiều broker. Đổi lại, Zeebe đạt được thông lượng cao, độ trễ thấp ở quy mô lớn, và cơ chế sao chép (replication) giữa các broker đảm bảo dữ liệu không mất khi một node chết.</p>
+
+    <ul>
+      <li><strong>Stateless Gateways</strong> — cổng kết nối client với cluster để deploy process và quản lý task, bản thân gateway không giữ trạng thái.</li>
+      <li><strong>Clustered Brokers</strong> — quản lý trạng thái, xử lý luồng dữ liệu, đảm bảo chịu lỗi và khả năng mở rộng.</li>
+      <li><strong>Exporters</strong> — đẩy các thay đổi trạng thái ra ngoài để theo dõi/phân tích, không chặn luồng xử lý chính.</li>
+      <li><strong>Clients</strong> — SDK hoặc API client, kết nối qua gateway để deploy process, tạo instance, xử lý task.</li>
+      <li><strong>Horizontal Scalability</strong> — scale bằng cách thêm broker, không phải scale-up một node duy nhất.</li>
+      <li><strong>Append-Only Audit Trail</strong> — mọi sự kiện liên quan tới process được ghi vào log chỉ-thêm (append-only), không sửa/xóa ngược.</li>
+    </ul>
+
+    <blockquote>
+      💡 Zeebe dùng <strong>phân cụm (clustering)</strong> và <strong>phân vùng (partitioning)</strong> để đạt tính khả dụng cao và mở rộng ngang. <strong>Raft</strong> đảm bảo mỗi partition luôn có một leader sẵn sàng xử lý.
+    </blockquote>
+
+    <h2>2. Các thành phần của Zeebe</h2>
+
+    <table>
+      <tr><th>Thành phần</th><th>Vai trò</th></tr>
+      <tr>
+        <td><strong>Gateway</strong></td>
+        <td>Điểm vào duy nhất của cluster. Xử lý toàn bộ giao tiếp từ client, cân bằng tải request và định tuyến tới đúng partition/broker. Client <strong>không bao giờ</strong> kết nối trực tiếp tới broker — chỉ qua gateway. Gateway không lưu trạng thái nên scale ngang tự do, hỗ trợ cả gRPC và REST.</td>
+      </tr>
+      <tr>
+        <td><strong>Broker</strong></td>
+        <td>Node xử lý workflow thật sự. Mỗi broker phục vụ một hoặc nhiều partition, thực thi các bước trong process, dùng <strong>Raft consensus</strong> để bầu leader/follower và replicate log. Một broker có thể là leader của partition này và follower của partition khác cùng lúc.</td>
+      </tr>
+      <tr>
+        <td><strong>Client</strong></td>
+        <td>Ứng dụng khởi tạo và tương tác với process instance — implement business logic thật (service worker). Logic này nằm hoàn toàn bên ngoài Zeebe engine.</td>
+      </tr>
+      <tr>
+        <td><strong>Exporter</strong></td>
+        <td>Zeebe theo mô hình <strong>CQRS</strong>: ghi (command) đi qua broker, đọc (query) được tách riêng sang một storage khác. Exporter là cầu nối đẩy stream thay đổi trạng thái sang storage đó — mặc định là Elasticsearch, nhưng có thể tự viết exporter cho Redis, OpenSearch, hay RDBMS.</td>
+      </tr>
+    </table>
+
+    <p><strong>Lưu ý quan trọng về CQRS:</strong> Operate, Optimize, Tasklist <strong>không</strong> query trực tiếp vào broker — chúng đọc dữ liệu đã export. Nghĩa là luôn có một độ trễ nhỏ giữa lúc process thật sự chạy và lúc UI hiển thị được trạng thái đó. Đây không phải bug, mà là đánh đổi có chủ đích để giữ broker tập trung vào việc xử lý (write path), không bị query path làm chậm.</p>
+
+    <h2>3. Zeebe cluster — clustering & partitioning</h2>
+
+    <p>Zeebe phân phối công việc trên nhiều broker để đạt chịu lỗi và mở rộng ngang, bằng hai cơ chế: tổ chức broker thành <strong>cluster</strong>, và chia dữ liệu thành <strong>partition</strong>.</p>
+
+    <h3>Vì sao cần cả cluster lẫn partition</h3>
+
+    <ul>
+      <li><strong>Cluster</strong> — các broker hoạt động ngang hàng (peer), chia sẻ trách nhiệm: không có single point of failure, cân bằng tải và hiệu năng tốt hơn.</li>
+      <li><strong>Partition</strong> — dữ liệu được chia nhỏ, mỗi partition có một broker giữ vai trò <strong>leader</strong>; các broker khác giữ partition đó ở vai trò <strong>follower</strong>, replicate lại state của leader để đảm bảo dự phòng.</li>
+    </ul>
+
+    <p>Ví dụ minh họa cách phân bổ với 5 broker, 5 partition, hệ số sao chép (replication factor) = 3 — mỗi partition có 1 leader (L) và 2 follower (F), rải đều để không broker nào ôm toàn bộ leader:</p>
+
+    <img src="../images/camunda/partitions.png" alt="Sơ đồ 5 broker xếp vòng tròn, mỗi broker giữ leader một partition và follower hai partition khác, replicate qua Raft" class="article-hero-img">
+    <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; margin-top: -20px;">5 broker · 5 partition · replication factor 3 · L = Leader, F = Follower</p>
+
+    <p>Mỗi broker vừa là leader của một partition, vừa là follower của hai partition khác — không broker nào là điểm chịu lỗi duy nhất cho toàn cluster.</p>
+
+    <h2>4. Raft — cơ chế đồng thuận đứng sau replication</h2>
+
+    <p>Để đảm bảo chịu lỗi, Zeebe replicate dữ liệu giữa các broker bằng giao thức <strong>Raft</strong> (Reliable, Replicated, Redundant, and Fault-Tolerant) — xương sống cho clustering và high availability trong Zeebe.</p>
+
+    <h3>Raft hoạt động thế nào</h3>
+
+    <ul>
+      <li><strong>Bầu leader</strong> — mỗi partition, trong mỗi nhiệm kỳ (term), chỉ bầu ra đúng một broker có log cập nhật nhất làm leader.</li>
+      <li><strong>Replicate log</strong> — lệnh được ghi vào log của leader trước, sau đó replicate sang các follower.</li>
+      <li><strong>Đảm bảo an toàn</strong> — một lệnh chỉ được commit khi đa số (majority) follower đã xác nhận. Kết quả: mỗi term chỉ có một leader, log bền (durable), và trạng thái nhất quán giữa các broker.</li>
+    </ul>
+
+    <h3>Luồng process instance đi qua các partition ra sao</h3>
+
+    <ul>
+      <li><strong>Deploy process</strong> — deploy trước tiên vào partition 1, sau đó phân phối tới tất cả partition khác, giữ cùng key/version ở mọi nơi để dễ nhận diện.</li>
+      <li><strong>Create instance</strong> — request tạo instance được route theo kiểu round-robin qua các partition để cân bằng tải.</li>
+      <li><strong>Running instance</strong> — sau khi khởi tạo, toàn bộ các bước tiếp theo của instance đó xử lý trên <strong>cùng một partition</strong> cho tới khi hoàn tất.</li>
+      <li><strong>Message event</strong> — khi client gửi message có correlation key, message được route thẳng tới partition tương ứng với key đó.</li>
+      <li><strong>Timer/start event</strong> — instance được kích hoạt bởi timer start event luôn được tạo trên partition 1.</li>
+    </ul>
+
+    <h3>Failover</h3>
+
+    <p>Khi leader của một partition chết, một follower được <strong>promote</strong> lên làm leader mới ngay — xử lý tiếp tục mà không gián đoạn. Khi broker cũ hồi phục, nó tham gia lại cluster với vai trò follower, không tự động lấy lại vị trí leader.</p>
+
+    <h2>5. Scale cluster & backpressure</h2>
+
+    <p>Thêm broker và partition giúp Zeebe đạt khả năng mở rộng gần như tuyến tính. Bảng dưới là một lần benchmark thực tế với 3 broker / 3 partition, quan sát điểm CPU bắt đầu bão hòa và backpressure xuất hiện:</p>
+
+    <table>
+      <tr><th>Thời gian</th><th>Broker</th><th>Partition</th><th>Thông lượng</th><th>CPU</th><th>Backpressure</th></tr>
+      <tr><td>09:30</td><td>3</td><td>3</td><td>150 PI/s</td><td>~1.3 / 1.4 / 1.0</td><td>0</td></tr>
+      <tr><td>09:49</td><td>3</td><td>3</td><td>180 PI/s</td><td>~1.3 / 1.5 / 1.1</td><td>0</td></tr>
+      <tr><td>10:00</td><td>3</td><td>3</td><td>210 PI/s</td><td>~1.8 / 1.6 / 1.3</td><td>0</td></tr>
+      <tr><td>10:12</td><td>3</td><td>3</td><td>240 PI/s</td><td>~1.8 / 2.0 / 1.6</td><td>bắt đầu xuất hiện</td></tr>
+    </table>
+
+    <p>Từ ~240 process instance/giây trở lên với cấu hình 3 broker/3 partition, CPU bắt đầu bão hòa và Zeebe kích hoạt <strong>backpressure</strong> — cơ chế bảo vệ khi broker quá tải:</p>
+
+    <ul>
+      <li>Từ chối các request mới, <strong>ngoại trừ</strong> <code>CompleteJob</code> và <code>FailJob</code> — hai RPC này luôn được chấp nhận kể cả khi broker đang quá tải, để không làm kẹt các job đang chạy dở.</li>
+      <li>Các request bị từ chối trả về exception phía client — xử lý bằng retry strategy phù hợp (backoff), không phải lỗi cần panic.</li>
+    </ul>
+
+    <p>Nói cách khác: khi thấy throughput chững lại và exception tăng ở phía client, việc đầu tiên cần kiểm tra không phải là code worker, mà là CPU của broker — rất có thể cluster đang cần thêm broker/partition chứ không phải bug.</p>
+
+    <h2>6. Xử lý nội bộ — deterministic & log-based</h2>
+
+    <p>Bên trong mỗi partition, Zeebe xử lý lệnh theo mô hình <strong>event sourcing</strong>: mọi thay đổi trạng thái là kết quả của việc áp dụng tuần tự các sự kiện trong log, theo đúng thứ tự đã ghi. Vì log là append-only và xử lý có tính <strong>xác định (deterministic)</strong> — cùng input, cùng thứ tự sự kiện luôn cho ra cùng trạng thái — nên khi một follower replay lại log của leader, nó tái tạo được đúng trạng thái đó, không cần đồng bộ theo cách nào khác.</p>
+
+    <p>Cụ thể một lệnh (ví dụ <code>completeJob</code>) đi qua broker theo 6 bước sau, từ lúc client gửi tới lúc nhận phản hồi:</p>
+
+    <ol>
+      <li><strong>Sự kiện / Lệnh (Command)</strong> — trạng thái process chỉ thay đổi khi broker nhận một lệnh. Lệnh đến từ client (deploy process, start instance, <code>completeJob</code>...) hoặc từ chính broker (ví dụ tự lock một job để xử lý độc quyền).</li>
+      <li><strong>Partition — append-only log</strong> — partition là luồng sự kiện liên tục, chỉ ghi thêm. Mỗi lệnh được ghi thành một entry mới ở cuối log, với offset duy nhất và thứ tự tuyệt đối. Không ghi đè, không xóa.</li>
+      <li><strong>Replicate & commit — Raft quorum</strong> — trước khi entry có hiệu lực, đa số broker follower phải sao chép thành công (Raft quorum). Sau khi commit, dữ liệu không mất kể cả khi leader crash ngay sau đó.</li>
+      <li><strong>Stream processor — đọc log</strong> — đọc từng entry trong partition theo đúng thứ tự, kiểm tra lệnh có hợp lệ với vòng đời hiện tại của entity hay không — hợp lệ thì áp dụng, không thì từ chối.</li>
+      <li><strong>State machine — decide & apply</strong> — processor chuyển entity qua các trạng thái xác định bằng state machine, ví dụ Job: <code>Created</code> → <code>Activated</code> → <code>Completed</code>. State lưu local trong broker, kiểm soát hành vi và side effect tiếp theo.</li>
+      <li><strong>Phản hồi (Response)</strong> — sau khi mọi bước hoàn tất, broker gửi phản hồi xác nhận về client đã khởi tạo lệnh, chứa kết quả (key, trạng thái mới, hoặc error nếu lệnh bị từ chối).</li>
+    </ol>
+
+    <h2>Tóm tắt</h2>
+    <ul>
+      <li>Zeebe là kiến trúc phân tán, dựa trên log, không phụ thuộc central database — ghi trực tiếp vào local disk của broker</li>
+      <li>4 thành phần chính: <strong>Gateway</strong> (stateless, entry point), <strong>Broker</strong> (giữ state, thực thi), <strong>Client</strong> (business logic), <strong>Exporter</strong> (CQRS read path)</li>
+      <li>Operate/Optimize/Tasklist đọc dữ liệu qua exporter, không query trực tiếp broker — luôn có độ trễ nhỏ giữa lúc chạy và lúc thấy trên UI</li>
+      <li>Cluster = broker ngang hàng, không single point of failure; Partition = đơn vị chia dữ liệu, mỗi partition có 1 leader + N follower</li>
+      <li>Raft đảm bảo mỗi partition có đúng một leader mỗi term, log replicate tới đa số follower mới được commit</li>
+      <li>Một process instance chạy trọn đời trên cùng một partition sau khi khởi tạo; timer/start event luôn tạo trên partition 1</li>
+      <li>Backpressure là cơ chế bảo vệ khi broker quá tải — luôn ưu tiên chấp nhận CompleteJob/FailJob, các request khác cần retry với backoff</li>
+      <li>Xử lý nội bộ deterministic + log-based giúp follower replay log để đồng bộ trạng thái với leader mà không cần cơ chế đồng bộ riêng</li>
+    </ul>
+
+  </div>
+
+  <!-- Navigation -->
+  <div class="article-nav">
+    <a href="overview.html" class="prev">
+      <span class="nav-label">← Trước đó</span>
+      <strong>Camunda 8 — Overview</strong>
+    </a>
+    <a href="day04.html" class="next">
+      <span class="nav-label">Tiếp theo →</span>
+      <strong>Setup Self-managed với Docker Compose</strong>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026 dev.anhkn · <a href="https://github.com/dev-anhkn" target="_blank">GitHub</a></p>
+</footer>
+
+</body>
+</html>
