@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BPMN — Task Types | dev.anhkn</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="../index.html" class="nav-logo">dev<span>.</span>anhkn</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="index.html" class="active">Camunda</a></li>
+      <li><a href="../about.html">About</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+
+  <div class="article-header container">
+    <span class="article-day">Task Types</span>
+    <h1>BPMN — Task Types</h1>
+    <p class="meta">29/08/2026 · 10 phút đọc · <a href="index.html">← Quay lại series</a></p>
+  </div>
+
+  <div class="article-body">
+
+    <h2>Định nghĩa task type</h2>
+    <p class="lead">Đặt tên rõ ràng cho task thôi là chưa đủ để process chạy được — bạn còn phải nói rõ <strong>ai, hay cái gì, sẽ thực hiện task đó.</strong></p>
+    <img src="../images/BPMN%20Task%20Types/Label%20your%20BPMN%20elements.png" alt="Đặt label rõ ràng cho các BPMN element" class="article-hero-img is-native">
+    <p>Thử tưởng tượng bạn đang vẽ một quy trình xử lý đơn hàng rất đơn giản: nhận đơn → kiểm tra tồn kho → gửi email xác nhận. Trong Camunda Modeler, bạn kéo hai ô task vào canvas và đặt tên cho chúng, kiểu như "Check product availability" và "Send order confirmation". Nhìn vào diagram này, ai cũng đọc hiểu ngay quy trình đang làm gì — nhưng nếu deploy nguyên xi lên Camunda, process sẽ không chạy được. Vì cái label đó chỉ có ý nghĩa với người đọc, chứ engine thì chịu — nó chưa biết phải "thực hiện" task này bằng cách nào.</p>
+
+    <img src="../images/BPMN%20Task%20Types/How%20will%20this%20task%20be%20completed%3F.png" alt="Task này sẽ được hoàn thành như thế nào?" class="article-hero-img is-native">
+    <p>Để engine hiểu được, mỗi task cần thêm một thông tin nữa gọi là <strong>type</strong>. Type trả lời đúng câu hỏi "task này được hoàn thành như thế nào?" — do một người thật sự thao tác, hay do một hệ thống khác (gọi service, gửi message, chạy script...) tự xử lý? Biết được type, bạn (hay developer) mới biết mình cần chuẩn bị phần nào: viết một job worker, dựng form cho người dùng điền, hay thậm chí chẳng cần code gì cả vì engine tự lo hết.</p>
+
+    <h2>Các loại task</h2>
+    <p>Camunda 8 hỗ trợ khá nhiều loại task, mỗi loại ứng với một cách khác nhau để hoàn thành công việc — có loại cần con người bấm tay, có loại engine tự chạy toàn bộ. Nếu bạn mới học BPMN thì đừng cố nhớ hết một lần; cứ bấm vào từng mục bên dưới, đọc phần "Hành vi khi chạy" để hình dung engine xử lý task đó ra sao.</p>
+
+    <div class="task-card-grid">
+
+      <details class="task-card">
+        <summary class="task-card-head">
+          <img src="../images/BPMN%20Task%20Types/User%20task.png" alt="Icon user task trong BPMN" class="task-card-icon">
+          <h3>User task</h3>
+          <span class="task-card-toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="task-card-body">
+          <p><strong>Mô tả:</strong> dùng cho công việc cần một người thật sự thao tác mới xong — ví dụ nhân viên bấm duyệt đơn hàng.</p>
+          <p><strong>Hành vi khi chạy:</strong> khi process instance chạy tới đây, Camunda tạo ra một user task instance rồi dừng lại chờ, giống như vừa có một việc mới xuất hiện trong hộp thư công việc của ai đó. Task này có thể hiện lên trong Tasklist (giao diện có sẵn của Camunda) hoặc một ứng dụng bạn tự viết, tùy vào cách bạn config.</p>
+        </div>
+      </details>
+
+      <details class="task-card">
+        <summary class="task-card-head">
+          <img src="../images/BPMN%20Task%20Types/Business%20rule%20task.png" alt="Icon business rule task trong BPMN" class="task-card-icon">
+          <h3>Business rule task</h3>
+          <span class="task-card-toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="task-card-body">
+          <p><strong>Mô tả:</strong> dùng khi cần áp dụng một quy tắc nghiệp vụ để ra quyết định — ví dụ tính mức giảm giá theo hạng thành viên. Quy tắc này thường được mô hình hóa bằng <strong>DMN</strong> (Decision Model and Notation) thay vì viết code.</p>
+          <p><strong>Hành vi khi chạy:</strong> khi token tới business rule task, decision engine nội bộ tự evaluate decision đó. Có kết quả xong là process instance đi tiếp ngay, không cần chờ ai cả.</p>
+        </div>
+      </details>
+
+      <details class="task-card">
+        <summary class="task-card-head">
+          <img src="../images/BPMN%20Task%20Types/Manual%20task.png" alt="Icon manual task trong BPMN" class="task-card-icon">
+          <h3>Manual task</h3>
+          <span class="task-card-toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="task-card-body">
+          <p><strong>Mô tả:</strong> dùng cho công việc con người làm nhưng nằm ngoài tầm với của engine — ví dụ nhân viên gọi điện xác nhận với khách qua điện thoại bàn. Engine không cần biết ai làm, cũng chẳng có form hay hệ thống nào gắn với nó cả.</p>
+          <p><strong>Hành vi khi chạy:</strong> khi token tới manual task, process instance tự động đi tiếp ngay, không dừng lại chờ gì hết. Với engine, manual task chỉ là một pass-through activity — một trạm đi ngang qua — nên thường được dùng làm placeholder trong lúc implement process.</p>
+        </div>
+      </details>
+
+      <details class="task-card">
+        <summary class="task-card-head">
+          <img src="../images/BPMN%20Task%20Types/Service%20task.png" alt="Icon service task trong BPMN" class="task-card-icon">
+          <h3>Service task</h3>
+          <span class="task-card-toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="task-card-body">
+          <p><strong>Mô tả:</strong> dùng cho việc engine tự động giao cho một hệ thống khác xử lý — ví dụ gọi API kiểm tra tồn kho trong kho hàng. Engine không tự làm việc đó, mà delegate cho một IT system khác — có thể là messaging service như Slack, CRM như Salesforce, hoặc một hệ thống bạn tự viết.</p>
+          <p><strong>Hành vi khi chạy:</strong> khi token tới service task, process dừng lại chờ hệ thống bên ngoài xử lý xong rồi mới đi tiếp.</p>
+        </div>
+      </details>
+
+      <details class="task-card">
+        <summary class="task-card-head">
+          <img src="../images/BPMN%20Task%20Types/Script%20task.png" alt="Icon script task trong BPMN" class="task-card-icon">
+          <h3>Script task</h3>
+          <span class="task-card-toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="task-card-body">
+          <p><strong>Mô tả:</strong> dùng khi chỉ cần chạy một đoạn logic tính toán nhỏ, không cần gọi hệ thống bên ngoài — ví dụ tính lại tổng tiền đơn hàng sau khi áp mã giảm giá.</p>
+          <p><strong>Hành vi khi chạy:</strong> khi process instance tới script task, Camunda 8 có thể tự evaluate trực tiếp một FEEL expression, không cần code riêng. Nếu logic phức tạp hơn, bạn vẫn có thể dùng job worker cho script task — lúc đó nó hoạt động y hệt service task.</p>
+        </div>
+      </details>
+
+      <details class="task-card">
+        <summary class="task-card-head">
+          <img src="../images/BPMN%20Task%20Types/Send%20task.png" alt="Icon send task trong BPMN" class="task-card-icon">
+          <h3>Send task</h3>
+          <span class="task-card-toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="task-card-body">
+          <p><strong>Mô tả:</strong> dùng khi việc cần làm là gửi một message ra ngoài — ví dụ gửi email xác nhận đơn hàng cho khách.</p>
+          <p><strong>Hành vi khi chạy:</strong> khi token tới send task, process instance gửi một message tới hệ thống bên ngoài rồi đi tiếp. Về mặt kỹ thuật, cách implement giống hệt service task.</p>
+        </div>
+      </details>
+
+      <details class="task-card">
+        <summary class="task-card-head">
+          <img src="../images/BPMN%20Task%20Types/Receive%20task.png" alt="Icon receive task trong BPMN" class="task-card-icon">
+          <h3>Receive task</h3>
+          <span class="task-card-toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="task-card-body">
+          <p><strong>Mô tả:</strong> ngược lại với send task — dùng khi process cần dừng lại chờ nhận một message cụ thể, ví dụ chờ webhook báo khách đã thanh toán thành công.</p>
+          <p><strong>Hành vi khi chạy:</strong> receive task tham chiếu tới một message cụ thể, nên process instance sẽ đứng yên tại đây cho tới khi message mong đợi được nhận thì mới đi tiếp.</p>
+        </div>
+      </details>
+
+    </div>
+
+    <blockquote>💡 Bài này chưa nói tới <strong>call activity</strong> và <strong>sub-process</strong> — hai loại activity phức tạp hơn hẳn, xứng đáng có một bài riêng.</blockquote>
+
+    <h2>Undefined task</h2>
+    <p>Có một loại "task type" đặc biệt bạn sẽ gặp ngay từ giây phút đầu tiên mở Camunda Modeler: kéo một task mới vào canvas, mặc định nó chưa được gán type nào cả — Camunda gọi đây là <strong>undefined task</strong> (hay abstract task). Nói cách khác, bạn mới đặt xong cái tên, còn "ai làm, làm như thế nào" thì vẫn để ngỏ.</p>
+    <ul>
+      <li>Dùng để vẽ ra công việc do ai đó làm, nhưng nằm ngoài phạm vi mà engine cần quan tâm tới.</li>
+      <li>Không gắn với bất kỳ system hay UI nào cả.</li>
+      <li>Phù hợp khi bạn đang mô hình hóa một process chưa được tự động hóa, hoặc chưa muốn tự động hóa ngay.</li>
+      <li>Có thể dùng tạm như một chỗ giữ vị trí, trong lúc phần automation vẫn đang được xây dựng dần.</li>
+    </ul>
+    <p>Nhìn vào một undefined task, bạn vẫn đọc được nó đang mô tả việc gì qua cái label — chỉ là chưa biết nó sẽ hoàn thành ra sao, vì type chưa được định nghĩa.</p>
+
+    <h3>Vậy undefined task để làm gì?</h3>
+    <p>Nghe qua có vẻ vô dụng — vì engine sẽ bỏ qua nó khi chạy thật — nhưng nó lại khá hữu ích ở giai đoạn đầu, khi bạn mới phác thảo quy trình. Undefined task giúp bạn nhìn thấy rõ những công việc nằm ngoài phạm vi tự động hóa của process engine, thay vì bị ép phải chốt type ngay từ những bước vẽ đầu tiên.</p>
+
+    <h3>Vậy có phải lúc nào cũng cần gán type ngay không?</h3>
+    <ul>
+      <li>Không nhất thiết.</li>
+      <li>Với một process model mang tính chiến lược (strategic) — tức là vẽ ra chủ yếu để bàn bạc, thống nhất ý tưởng — undefined task xuất hiện khá thường xuyên và hoàn toàn bình thường.</li>
+      <li>Undefined task vẫn có thể tồn tại trong model; engine chỉ đơn giản bỏ qua chúng khi thực thi.</li>
+      <li>Chúng thường được dùng làm placeholder trong lúc bạn triển khai automation dần từng phần.</li>
+    </ul>
+
+    <h2>Tóm tắt</h2>
+    <ul>
+      <li>Chỉ đặt label thôi thì chưa đủ — muốn process chạy được (executable), bạn phải gán type cho từng task.</li>
+      <li>Về mặt kỹ thuật, <strong>service task</strong> và <strong>send task</strong> hoạt động giống hệt nhau — cả hai đều implement bằng job worker.</li>
+      <li><strong>Manual task</strong> và <strong>undefined task</strong> đều được engine coi là pass-through activity — không làm gì cả, chỉ đi tiếp — nên thường dùng làm placeholder trong lúc implement process.</li>
+    </ul>
+
+  </div>
+
+  <!-- Navigation -->
+  <div class="article-nav">
+    <a href="bpmn-overview.html">← BPMN — Overview</a>
+    <span></span>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026 dev.anhkn · <a href="https://github.com/dev-anhkn" target="_blank">GitHub</a></p>
+</footer>
+
+</body>
+</html>

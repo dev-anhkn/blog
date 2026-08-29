@@ -384,6 +384,23 @@ nav {
   display: block;
 }
 
+.article-hero-img.is-native {
+  width: auto;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.article-task-icon {
+  width: 220px;
+  max-width: 100%;
+  border-radius: var(--radius-chip);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  display: block;
+  margin-bottom: 16px;
+}
+
 .article-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -402,6 +419,97 @@ nav {
 
 .article-columns h3 { margin-top: 0; }
 .article-columns p { margin-bottom: 0; }
+
+.task-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin: 24px 0 32px;
+}
+
+.task-card {
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.task-card:hover {
+  border-color: var(--amber-border-hover);
+  box-shadow: var(--shadow-hover);
+}
+
+.task-card[open] {
+  border-color: var(--amber-border);
+}
+
+.task-card summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.task-card summary::-webkit-details-marker,
+.task-card summary::marker {
+  display: none;
+  content: "";
+}
+
+.task-card-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.task-card-icon {
+  width: 44px;
+  height: auto;
+  flex-shrink: 0;
+  border-radius: var(--radius-tag);
+  border: 1px solid var(--border);
+  transition: width 0.2s ease;
+}
+
+.task-card[open] .task-card-icon {
+  width: 110px;
+}
+
+.task-card h3 {
+  margin: 0;
+  flex: 1;
+}
+
+.task-card-toggle {
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  border-right: 2px solid var(--amber);
+  border-bottom: 2px solid var(--amber);
+  transform: rotate(-45deg);
+  transition: transform 0.2s ease;
+  margin-right: 2px;
+}
+
+.task-card[open] .task-card-toggle {
+  transform: rotate(45deg);
+}
+
+.task-card-body {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.task-card-body p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.task-card-body p:last-child {
+  margin-bottom: 0;
+}
 
 .article-body p {
   margin-bottom: 24px;
