@@ -31,10 +31,10 @@
 
     <h2>Định nghĩa task type</h2>
     <p class="lead">Đặt tên rõ ràng cho task thôi là chưa đủ để process chạy được — bạn còn phải nói rõ <strong>ai, hay cái gì, sẽ thực hiện task đó.</strong></p>
-    <img src="../images/BPMN%20Task%20Types/Label%20your%20BPMN%20elements.png" alt="Đặt label rõ ràng cho các BPMN element" class="article-hero-img is-native">
+    <img src="images/bpmn-task-types/label-your-bpmn-elements.png" alt="Đặt label rõ ràng cho các BPMN element" class="article-hero-img is-native">
     <p>Thử tưởng tượng bạn đang vẽ một quy trình xử lý đơn hàng rất đơn giản: nhận đơn → kiểm tra tồn kho → gửi email xác nhận. Trong Camunda Modeler, bạn kéo hai ô task vào canvas và đặt tên cho chúng, kiểu như "Check product availability" và "Send order confirmation". Nhìn vào diagram này, ai cũng đọc hiểu ngay quy trình đang làm gì — nhưng nếu deploy nguyên xi lên Camunda, process sẽ không chạy được. Vì cái label đó chỉ có ý nghĩa với người đọc, chứ engine thì chịu — nó chưa biết phải "thực hiện" task này bằng cách nào.</p>
 
-    <img src="../images/BPMN%20Task%20Types/How%20will%20this%20task%20be%20completed%3F.png" alt="Task này sẽ được hoàn thành như thế nào?" class="article-hero-img is-native">
+    <img src="images/bpmn-task-types/how-will-this-task-be-completed.png" alt="Task này sẽ được hoàn thành như thế nào?" class="article-hero-img is-native">
     <p>Để engine hiểu được, mỗi task cần thêm một thông tin nữa gọi là <strong>type</strong>. Type trả lời đúng câu hỏi "task này được hoàn thành như thế nào?" — do một người thật sự thao tác, hay do một hệ thống khác (gọi service, gửi message, chạy script...) tự xử lý? Biết được type, bạn (hay developer) mới biết mình cần chuẩn bị phần nào: viết một job worker, dựng form cho người dùng điền, hay thậm chí chẳng cần code gì cả vì engine tự lo hết.</p>
 
     <h2>Các loại task</h2>
@@ -44,7 +44,7 @@
 
       <details class="task-card">
         <summary class="task-card-head">
-          <img src="../images/BPMN%20Task%20Types/User%20task.png" alt="Icon user task trong BPMN" class="task-card-icon">
+          <img src="images/bpmn-task-types/user-task.png" alt="Icon user task trong BPMN" class="task-card-icon">
           <h3>User task</h3>
           <span class="task-card-toggle" aria-hidden="true"></span>
         </summary>
@@ -56,7 +56,7 @@
 
       <details class="task-card">
         <summary class="task-card-head">
-          <img src="../images/BPMN%20Task%20Types/Business%20rule%20task.png" alt="Icon business rule task trong BPMN" class="task-card-icon">
+          <img src="images/bpmn-task-types/business-rule-task.png" alt="Icon business rule task trong BPMN" class="task-card-icon">
           <h3>Business rule task</h3>
           <span class="task-card-toggle" aria-hidden="true"></span>
         </summary>
@@ -68,7 +68,7 @@
 
       <details class="task-card">
         <summary class="task-card-head">
-          <img src="../images/BPMN%20Task%20Types/Manual%20task.png" alt="Icon manual task trong BPMN" class="task-card-icon">
+          <img src="images/bpmn-task-types/manual-task.png" alt="Icon manual task trong BPMN" class="task-card-icon">
           <h3>Manual task</h3>
           <span class="task-card-toggle" aria-hidden="true"></span>
         </summary>
@@ -80,7 +80,7 @@
 
       <details class="task-card">
         <summary class="task-card-head">
-          <img src="../images/BPMN%20Task%20Types/Service%20task.png" alt="Icon service task trong BPMN" class="task-card-icon">
+          <img src="images/bpmn-task-types/service-task.png" alt="Icon service task trong BPMN" class="task-card-icon">
           <h3>Service task</h3>
           <span class="task-card-toggle" aria-hidden="true"></span>
         </summary>
@@ -92,7 +92,7 @@
 
       <details class="task-card">
         <summary class="task-card-head">
-          <img src="../images/BPMN%20Task%20Types/Script%20task.png" alt="Icon script task trong BPMN" class="task-card-icon">
+          <img src="images/bpmn-task-types/script-task.png" alt="Icon script task trong BPMN" class="task-card-icon">
           <h3>Script task</h3>
           <span class="task-card-toggle" aria-hidden="true"></span>
         </summary>
@@ -104,7 +104,7 @@
 
       <details class="task-card">
         <summary class="task-card-head">
-          <img src="../images/BPMN%20Task%20Types/Send%20task.png" alt="Icon send task trong BPMN" class="task-card-icon">
+          <img src="images/bpmn-task-types/send-task.png" alt="Icon send task trong BPMN" class="task-card-icon">
           <h3>Send task</h3>
           <span class="task-card-toggle" aria-hidden="true"></span>
         </summary>
@@ -116,7 +116,7 @@
 
       <details class="task-card">
         <summary class="task-card-head">
-          <img src="../images/BPMN%20Task%20Types/Receive%20task.png" alt="Icon receive task trong BPMN" class="task-card-icon">
+          <img src="images/bpmn-task-types/receive-task.png" alt="Icon receive task trong BPMN" class="task-card-icon">
           <h3>Receive task</h3>
           <span class="task-card-toggle" aria-hidden="true"></span>
         </summary>

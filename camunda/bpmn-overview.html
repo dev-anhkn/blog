@@ -75,7 +75,7 @@
     <p>Sequence flow (mũi tên) thể hiện thứ tự của các element trong một process và cách chúng kết nối với nhau.</p>
 
     <div class="article-columns">
-      <img src="../images/BPMN%20Overview/Sequence%20flows.png" alt="Ví dụ một BPMN process diagram với sequence flow">
+      <img src="images/bpmn-overview/sequence-flows.png" alt="Ví dụ một BPMN process diagram với sequence flow">
       <div>
         <h3>BPMN process diagram</h3>
         <p>Bất kỳ BPMN process nào cũng bao gồm nhiều bước, có thể thực hiện sequentially hoặc parallel tùy theo business rule. Điều này được minh họa qua diagram, giúp mọi người dễ dàng hiểu cách process hoạt động.</p>
@@ -104,22 +104,22 @@
     <h3>Splitting gateway</h3>
     <p>Gateway này có hai outgoing sequence flow: một để skip insurance và một để add insurance.</p>
     <p>Gateway này được label là <strong>"Insurance required?"</strong> vì nó evaluate data từ task <strong>"Check insurance requirements"</strong>.</p>
-    <img src="../images/BPMN%20Overview/Splitting%20gateway.png" alt="Ví dụ splitting gateway trong exclusive gateway" class="article-hero-img">
+    <img src="images/bpmn-overview/splitting-gateway.png" alt="Ví dụ splitting gateway trong exclusive gateway" class="article-hero-img">
 
     <h3>Merging gateway</h3>
     <p>Gateway này có hai incoming sequence flow, merge chúng lại sau bước insurance check vì bạn chỉ gửi item một lần.</p>
     <p>Gateway này không cần label, vì nó chỉ đơn giản merge các flow mà không evaluate data nào. Nó chỉ đang direct token đang tới.</p>
-    <img src="../images/BPMN%20Overview/This%20gateway%20doesn't%20need%20a%20label,.png" alt="Ví dụ merging gateway không cần label" class="article-hero-img">
+    <img src="images/bpmn-overview/this-gateway-doesnt-need-a-label.png" alt="Ví dụ merging gateway không cần label" class="article-hero-img">
 
     <blockquote>Lưu ý: việc đặt một decision task trước gateway như trong ví dụ vừa xem là phổ biến.</blockquote>
 
     <h3>✅ Best practice — dùng gateway riêng biệt cho splitting và merging flow</h3>
     <p>Dù có thể dùng một gateway duy nhất cho cả splitting và merging, thiết kế này khó đọc hơn và dễ gây lỗi hơn. Tốt nhất nên tránh vừa splitting vừa merging trong cùng một gateway.</p>
-    <img src="../images/BPMN%20Overview/Best%20practice%20.png" alt="Best practice: dùng gateway riêng biệt cho splitting và merging" class="article-hero-img">
+    <img src="images/bpmn-overview/best-practice.png" alt="Best practice: dùng gateway riêng biệt cho splitting và merging" class="article-hero-img">
 
     <h3>⚠️ Tránh cách làm này — kết hợp splitting và merging trong một gateway</h3>
     <p>Trong model này, gateway thứ hai kết hợp cả splitting và merging: cả incoming flow lẫn outgoing flow đều đi vào và ra khỏi nó. Điều này khiến diagram khó đọc.</p>
-    <img src="../images/BPMN%20Overview/Avoid%20this%20approach%20.png" alt="Ví dụ nên tránh: kết hợp splitting và merging trong một gateway" class="article-hero-img">
+    <img src="images/bpmn-overview/avoid-this-approach.png" alt="Ví dụ nên tránh: kết hợp splitting và merging trong một gateway" class="article-hero-img">
 
     <h2>Parallel gateway</h2>
     <p>Parallel gateway không cần label, vì nó không dựa trên quyết định.</p>
@@ -127,11 +127,11 @@
 
     <h3>Parallelization</h3>
     <p>Với một incoming và hai hoặc nhiều outgoing flow, gateway activate tất cả outgoing path và generate một token cho mỗi outgoing path.</p>
-    <img src="../images/BPMN%20Overview/Parallelization.png" alt="Ví dụ parallelization trong parallel gateway" class="article-hero-img">
+    <img src="images/bpmn-overview/parallelization.png" alt="Ví dụ parallelization trong parallel gateway" class="article-hero-img">
 
     <h3>Synchronization</h3>
     <p>Với hai hoặc nhiều incoming và một outgoing flow, gateway chờ tất cả incoming token đến trước khi merge chúng thành một để tiếp tục.</p>
-    <img src="../images/BPMN%20Overview/Synchronization.png" alt="Ví dụ synchronization trong parallel gateway" class="article-hero-img">
+    <img src="images/bpmn-overview/synchronization.png" alt="Ví dụ synchronization trong parallel gateway" class="article-hero-img">
 
     <blockquote>💡 <strong>Tip:</strong> Bạn có thể dùng nhiều exclusive gateway và parallel gateway để model của bạn dễ đọc hơn.</blockquote>
 

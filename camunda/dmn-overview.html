@@ -70,13 +70,13 @@
     <h2>Các thành phần của DMN</h2>
 
     <h3>Một decision trong DMN</h3>
-    <img src="../images/DMN%20-%20Overview/A%20decision%20in%20DMN.png" alt="Sơ đồ minh họa một decision trong DMN" class="article-hero-img">
+    <img src="images/dmn-overview/a-decision-in-dmn.png" alt="Sơ đồ minh họa một decision trong DMN" class="article-hero-img">
 
     <p><strong>Decision requirements:</strong> được visualize trong một <strong>Decision Requirements Diagram (DRD)</strong>. Khi bắt đầu mô hình hóa một decision, bạn thường sẽ bắt đầu với DRD, vì nó định nghĩa cấu trúc tổng quát của decision.</p>
-    <img src="../images/DMN%20-%20Overview/Decision%20requirements.png" alt="Ví dụ một Decision Requirements Diagram (DRD)" class="article-hero-img">
+    <img src="images/dmn-overview/decision-requirements.png" alt="Ví dụ một Decision Requirements Diagram (DRD)" class="article-hero-img">
 
     <p><strong>Decision logic:</strong> định nghĩa các rule của một decision. Cách phổ biến nhất để mô hình hóa decision logic là dùng <strong>decision table</strong> với <strong>FEEL</strong> expression language.</p>
-    <img src="../images/DMN%20-%20Overview/Decision%20logic.png" alt="Ví dụ decision logic dạng decision table" class="article-hero-img">
+    <img src="images/dmn-overview/decision-logic.png" alt="Ví dụ decision logic dạng decision table" class="article-hero-img">
 
     <p>Bạn cũng có thể mô hình hóa decision logic bằng <strong>literal expression</strong> với FEEL.</p>
 
@@ -88,23 +88,23 @@
     <h3>Decision box</h3>
     <p>Bạn dùng decision box để xác định một output cụ thể từ một input cho trước.</p>
     <p>Decision box có thể được biểu diễn bằng <strong>decision table</strong> (như loan approval hay Risk box) hoặc <strong>literal expression</strong> (như Profitability box).</p>
-    <img src="../images/DMN%20-%20Overview/Decision%C2%A0box.png" alt="Ví dụ decision box trong một DRD" class="article-hero-img">
+    <img src="images/dmn-overview/decision-box.png" alt="Ví dụ decision box trong một DRD" class="article-hero-img">
 
     <h3>Input data</h3>
     <p>Input data có thể là một value hoặc kết quả của một decision khác.</p>
     <p>Trong ví dụ này, ba value được dùng làm input data cho Profitability và Risk decision: interest rate, requested loan, và monthly income. Profitability và Risk decision đóng vai trò input data cho decision cuối cùng (loan approval).</p>
-    <img src="../images/DMN%20-%20Overview/Input%20data.png" alt="Ví dụ input data trong một DRD" class="article-hero-img">
+    <img src="images/dmn-overview/input-data.png" alt="Ví dụ input data trong một DRD" class="article-hero-img">
 
     <h3>Decision requirements</h3>
     <p>Các mũi tên giữa input và decision được gọi là <strong>decision requirements</strong>, vì input được nối tới là bắt buộc (required) cho decision đó.</p>
-    <img src="../images/DMN%20-%20Overview/Decision%20requirements%202.png" alt="Mũi tên decision requirements nối input data và decision box" class="article-hero-img">
+    <img src="images/dmn-overview/decision-requirements-2.png" alt="Mũi tên decision requirements nối input data và decision box" class="article-hero-img">
 
     <h2>Decision table</h2>
     <p>Decision table là một cách biểu diễn có cấu trúc của decision logic, dưới dạng bảng.</p>
-    <img src="../images/DMN%20-%20Overview/Decision%20table%201.png" alt="Ví dụ tổng quan một decision table" class="article-hero-img">
+    <img src="images/dmn-overview/decision-table-1.png" alt="Ví dụ tổng quan một decision table" class="article-hero-img">
 
     <div class="article-columns">
-      <img src="../images/DMN%20-%20Overview/Label%20your%20decision%20table.png" alt="Ví dụ label của một decision table">
+      <img src="images/dmn-overview/label-your-decision-table.png" alt="Ví dụ label của một decision table">
       <div>
         <h3>Label your decision table</h3>
         <p>Thông thường, một decision table được đặt tên (label) theo kết quả mà nó biểu diễn. Label này chỉ rõ decision cụ thể mà table đó cung cấp logic.</p>
@@ -112,7 +112,7 @@
     </div>
 
     <div class="article-columns">
-      <img src="../images/DMN%20-%20Overview/Rules.png" alt="Các rule trong một decision table">
+      <img src="images/dmn-overview/rules.png" alt="Các rule trong một decision table">
       <div>
         <h3>Rules</h3>
         <p>Mỗi row trong table tương ứng với một rule chi phối decision. Rules được viết bằng FEEL.</p>
@@ -120,7 +120,7 @@
     </div>
 
     <div class="article-columns">
-      <img src="../images/DMN%20-%20Overview/Inputs.png" alt="Các cột input trong một decision table">
+      <img src="images/dmn-overview/inputs.png" alt="Các cột input trong một decision table">
       <div>
         <h3>Inputs</h3>
         <p>Inputs là thiết yếu để đưa ra decision. Mỗi input có một type (number, boolean, string, v.v.).</p>
@@ -128,7 +128,7 @@
     </div>
 
     <div class="article-columns">
-      <img src="../images/DMN%20-%20Overview/Outputs.png" alt="Cột output trong một decision table">
+      <img src="images/dmn-overview/outputs.png" alt="Cột output trong một decision table">
       <div>
         <h3>Outputs</h3>
         <p>Output đại diện cho kết quả của decision và cũng có một type cụ thể (trong ví dụ này là string). Một decision table có thể chứa nhiều outputs.</p>
@@ -138,7 +138,7 @@
     <blockquote>💡 Các column được liên kết bằng logical operator <strong>And</strong>, nghĩa là điều kiện trong mỗi column phải evaluate thành true. Một <strong>empty cell</strong> sẽ luôn evaluate thành true.</blockquote>
 
     <div class="article-columns">
-      <img src="../images/DMN%20-%20Overview/Annotations.png" alt="Cột annotation trong một decision table">
+      <img src="images/dmn-overview/annotations.png" alt="Cột annotation trong một decision table">
       <div>
         <h3>Annotations</h3>
         <p>Annotations có thể lưu thông tin bổ sung hoặc justification cho các rule cụ thể.</p>
@@ -146,7 +146,7 @@
     </div>
 
     <div class="article-columns">
-      <img src="../images/DMN%20-%20Overview/Decision%20table%202.png" alt="Ví dụ hit policy trong một decision table">
+      <img src="images/dmn-overview/decision-table-2.png" alt="Ví dụ hit policy trong một decision table">
       <div>
         <h3>Hit policy</h3>
         <p>Hit policy xác định có bao nhiêu rule có thể áp dụng cùng lúc, và hành động nào xảy ra nếu nhiều rule cùng được trigger. Hit policy phổ biến nhất là <strong>Unique</strong>, đảm bảo chỉ một rule áp dụng tại một thời điểm.</p>

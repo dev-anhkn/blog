@@ -89,7 +89,7 @@
 
     <p>Ví dụ minh họa cách phân bổ với 5 broker, 5 partition, hệ số sao chép (replication factor) = 3 — mỗi partition có 1 leader (L) và 2 follower (F), rải đều để không broker nào ôm toàn bộ leader:</p>
 
-    <img src="../images/camunda/partitions.png" alt="Sơ đồ 5 broker xếp vòng tròn, mỗi broker giữ leader một partition và follower hai partition khác, replicate qua Raft" class="article-hero-img">
+    <img src="images/zeebe-architecture/partitions.png" alt="Sơ đồ 5 broker xếp vòng tròn, mỗi broker giữ leader một partition và follower hai partition khác, replicate qua Raft" class="article-hero-img">
     <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; margin-top: -20px;">5 broker · 5 partition · replication factor 3 · L = Leader, F = Follower</p>
 
     <p>Mỗi broker vừa là leader của một partition, vừa là follower của hai partition khác — không broker nào là điểm chịu lỗi duy nhất cho toàn cluster.</p>
