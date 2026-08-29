@@ -4,20 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Camunda 8 — Zeebe Architecture Overview | dev.anhkn</title>
-  <link rel="stylesheet" href="../style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script src="../shared/theme.js"></script>
 </head>
 <body>
 
-<header>
-  <nav>
-    <a href="../index.html" class="nav-logo">dev<span>.</span>anhkn</a>
-    <ul class="nav-links">
-      <li><a href="../index.html">Home</a></li>
-      <li><a href="index.html" class="active">Camunda</a></li>
-      <li><a href="../about.html">About</a></li>
-    </ul>
-  </nav>
-</header>
+<header id="site-header"></header>
 
 <main>
 
@@ -90,7 +82,7 @@
     <p>Ví dụ minh họa cách phân bổ với 5 broker, 5 partition, hệ số sao chép (replication factor) = 3 — mỗi partition có 1 leader (L) và 2 follower (F), rải đều để không broker nào ôm toàn bộ leader:</p>
 
     <img src="images/zeebe-architecture/partitions.png" alt="Sơ đồ 5 broker xếp vòng tròn, mỗi broker giữ leader một partition và follower hai partition khác, replicate qua Raft" class="article-hero-img">
-    <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; margin-top: -20px;">5 broker · 5 partition · replication factor 3 · L = Leader, F = Follower</p>
+    <p class="text-text-muted text-sm text-center -mt-5">5 broker · 5 partition · replication factor 3 · L = Leader, F = Follower</p>
 
     <p>Mỗi broker vừa là leader của một partition, vừa là follower của hai partition khác — không broker nào là điểm chịu lỗi duy nhất cho toàn cluster.</p>
 
@@ -184,9 +176,8 @@
 
 </main>
 
-<footer>
-  <p>© 2026 dev.anhkn · <a href="https://github.com/dev-anhkn" target="_blank">GitHub</a></p>
-</footer>
+<footer id="site-footer"></footer>
 
+<script src="../shared/site.js"></script>
 </body>
 </html>

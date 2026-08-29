@@ -5,21 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>dev.anhkn — Engineering Blog</title>
   <meta name="description" content="Blog kỹ thuật về Java, Spring Boot, Camunda và Backend development.">
-  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script src="shared/theme.js"></script>
 </head>
 <body>
 
-<header>
-  <nav>
-    <span class="nav-logo">dev<span>.</span>anhkn</span>
-    <ul class="nav-links">
-      <li><a href="index.html" class="active">Home</a></li>
-      <li><a href="camunda/index.html">Camunda</a></li>
-      <li><a href="about.html">About</a></li>
-    </ul>
-  </nav>
-</header>
-
+<header id="site-header"></header>
 <main>
 
   <!-- Hero -->
@@ -61,7 +52,7 @@
   </section>
 
   <!-- Latest Posts -->
-  <section class="section" style="background: var(--gray-light);">
+  <section class="section bg-surface-2">
     <div class="container">
       <h2 class="section-title">Bài viết mới nhất</h2>
       <p class="section-sub">Các bài đăng gần đây từ series Camunda.</p>
@@ -86,9 +77,8 @@
 
 </main>
 
-<footer>
-  <p>© 2026 dev.anhkn · Built with ☕ và sự kiên trì · <a href="https://github.com/dev-anhkn" target="_blank">GitHub</a></p>
-</footer>
+<footer id="site-footer" data-tagline="Built with ☕ và sự kiên trì · "></footer>
 
+<script src="shared/site.js"></script>
 </body>
 </html>

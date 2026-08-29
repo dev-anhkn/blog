@@ -4,20 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BPMN — Overview | dev.anhkn</title>
-  <link rel="stylesheet" href="../style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script src="../shared/theme.js"></script>
 </head>
 <body>
 
-<header>
-  <nav>
-    <a href="../index.html" class="nav-logo">dev<span>.</span>anhkn</a>
-    <ul class="nav-links">
-      <li><a href="../index.html">Home</a></li>
-      <li><a href="index.html" class="active">Camunda</a></li>
-      <li><a href="../about.html">About</a></li>
-    </ul>
-  </nav>
-</header>
+<header id="site-header"></header>
 
 <main>
 
@@ -30,116 +22,230 @@
   <div class="article-body">
 
     <h2>Giới thiệu về BPMN</h2>
-    <p class="lead"><strong>B</strong>usiness <strong>P</strong>rocess <strong>M</strong>odel and <strong>N</strong>otation.</p>
-    <p>Mô tả business process của bạn theo một format <strong>chuẩn hóa, rõ ràng,</strong> và <strong>trực quan.</strong></p>
+    <p class="lead"><strong>B</strong>usiness <strong>P</strong>rocess <strong>M</strong>odel and <strong>N</strong>otation — một cách vẽ quy trình nghiệp vụ sao cho <strong>ai nhìn vào cũng hiểu</strong>, không riêng gì dân kỹ thuật.</p>
+    <p>Nếu bạn từng thấy một sơ đồ đầy ô vuông, hình thoi, mũi tên mô tả "khi khách đặt hàng thì tiếp theo làm gì" — rất có thể đó là một diagram được vẽ bằng BPMN.</p>
 
     <h3>BPMN là gì?</h3>
-    <p>BPMN là viết tắt của <strong>Business Process Model and Notation</strong>. Đây là một open standard notation giúp bạn mô hình hóa business process theo một format rõ ràng, trực quan. Nó bao gồm một set of symbols để mô hình hóa cả complex lẫn simple process workflow.</p>
-    <p>Với BPMN, bạn có thể thể hiện task, decision, event, và cách chúng kết nối với nhau, giúp cả business lẫn technical team đều dễ dàng theo dõi.</p>
-    <ul>
-      <li><strong>Start event:</strong> thể hiện điều gì khiến process bắt đầu. Điều này xảy ra bất kể process là gì.</li>
-      <li><strong>Task:</strong> một bước trong process. Task mô tả việc cần làm.</li>
-      <li><strong>Sequence flow:</strong> kết nối các flow element trong một process. Nó đánh dấu hướng đi của process flow.</li>
-      <li><strong>End event:</strong> đại diện cho kết thúc của process. Bạn có thể có một hoặc nhiều end event trong một process.</li>
-    </ul>
+    <p>BPMN là một <strong>open standard</strong> (chuẩn mở, ai cũng dùng được, không thuộc riêng công ty nào) định nghĩa sẵn một bộ ký hiệu để vẽ quy trình nghiệp vụ. Nhờ dùng chung một bộ ký hiệu, dù quy trình đơn giản hay phức tạp, ai đọc diagram cũng hiểu đúng một nghĩa — không cần đoán.</p>
+    <p>Năm viên gạch cơ bản mà gần như diagram BPMN nào cũng có — bấm vào từng mục để xem ví dụ:</p>
+
+    <div class="info-card-grid">
+
+      <details class="info-card">
+        <summary class="info-card-head">
+          <span class="info-card-badge">1</span>
+          <h3>Start event</h3>
+          <span class="info-card-toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="info-card-body">
+          <p>Điểm khởi đầu — thứ gì đó khiến quy trình bắt đầu chạy. Ví dụ: khách vừa đặt hàng.</p>
+        </div>
+      </details>
+
+      <details class="info-card">
+        <summary class="info-card-head">
+          <span class="info-card-badge">2</span>
+          <h3>Task</h3>
+          <span class="info-card-toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="info-card-body">
+          <p>Một bước công việc cụ thể cần làm. Ví dụ: kiểm tra tồn kho.</p>
+        </div>
+      </details>
+
+      <details class="info-card">
+        <summary class="info-card-head">
+          <span class="info-card-badge">3</span>
+          <h3>Gateway</h3>
+          <span class="info-card-toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="info-card-body">
+          <p>Điểm rẽ nhánh — dựa vào điều kiện tại thời điểm đó mà đổi hướng đi tiếp theo của flow. Ví dụ: đơn có cần bảo hiểm hay không sẽ quyết định bước tiếp theo là gì.</p>
+        </div>
+      </details>
+
+      <details class="info-card">
+        <summary class="info-card-head">
+          <span class="info-card-badge">4</span>
+          <h3>Sequence flow</h3>
+          <span class="info-card-toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="info-card-body">
+          <p>Mũi tên nối các bước lại, cho biết bước nào chạy trước, bước nào chạy sau.</p>
+        </div>
+      </details>
+
+      <details class="info-card">
+        <summary class="info-card-head">
+          <span class="info-card-badge">5</span>
+          <h3>End event</h3>
+          <span class="info-card-toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="info-card-body">
+          <p>Điểm kết thúc — một quy trình có thể có nhiều điểm kết thúc khác nhau, tùy kết quả.</p>
+        </div>
+      </details>
+
+    </div>
 
     <h3>Vì sao dùng BPMN?</h3>
-    <p>Vì khi mọi người cùng nói chung một visual language, sẽ dễ dàng hơn để spot inefficiencies, streamline workflow, và improve performance. Nó giúp bạn ngăn ngừa sai sót và chậm trễ, từ đó cải thiện cost-effectiveness, productivity, quan hệ với supplier, và customer satisfaction.</p>
-    <p><strong>Tóm lại:</strong> BPMN giúp thu hẹp khoảng cách giao tiếp giữa business, IT team, và bất kỳ ai khác tham gia vào việc mô hình hóa process trong tổ chức.</p>
+    <p>Vì khi cả team — từ business đến kỹ thuật — cùng nhìn vào một "ngôn ngữ hình ảnh" chung, sẽ dễ nhận ra chỗ nào quy trình đang chậm, đang thừa bước, hay đang thiếu logic. Từ đó dễ tối ưu hơn: ít sai sót, ít chậm trễ, và cuối cùng khách hàng cũng hài lòng hơn.</p>
+    <p><strong>Tóm lại:</strong> BPMN là cầu nối giữa người nghĩ ra quy trình (business) và người hiện thực hóa nó (developer) — cả hai cùng đọc một diagram, cùng hiểu một nghĩa.</p>
 
     <h3>BPMN hoạt động thế nào?</h3>
-    <p>BPMN diagram được biểu diễn dưới dạng <strong>XML</strong>, cho phép process engine thực thi chúng, nhờ đó developer có thể dễ dàng implement và deploy process.</p>
-    <p>Bạn có thể dùng BPMN ở nhiều cấp độ khác nhau trong tổ chức:</p>
+    <p>Đằng sau mỗi diagram BPMN là một file <strong>XML</strong> — nhờ vậy process engine (như Camunda) có thể đọc và thực thi trực tiếp diagram đó, thay vì developer phải code lại từ đầu.</p>
+    <p>Cùng một diagram, nhưng mỗi vai trò trong tổ chức nhìn vào với một mục đích khác nhau:</p>
     <ul>
-      <li><strong>Business analyst:</strong> tạo và cải thiện process diagram.</li>
-      <li><strong>Developer:</strong> chịu trách nhiệm technical implementation của process.</li>
-      <li><strong>Manager:</strong> theo dõi và kiểm soát process.</li>
+      <li><strong>Business analyst:</strong> vẽ và cải tiến quy trình.</li>
+      <li><strong>Developer:</strong> hiện thực hóa phần kỹ thuật của quy trình.</li>
+      <li><strong>Manager:</strong> theo dõi quy trình đang chạy tới đâu, có đúng tiến độ không.</li>
     </ul>
 
     <h3>Ai duy trì BPMN?</h3>
-    <p>Được duy trì bởi <strong>The Object Management Group</strong>, BPMN là một core tool trong <strong>Business Process Management</strong> — hay <strong>BPM</strong> — chuyên về việc tối ưu hóa cách công việc được thực hiện và giúp doanh nghiệp vận hành trơn tru hơn. BPMN vendor-neutral, được áp dụng rộng rãi, và được xây dựng cho long-term success.</p>
+    <p>BPMN được duy trì bởi <strong>The Object Management Group (OMG)</strong> — một tổ chức chuẩn hóa độc lập, không thuộc về Camunda hay bất kỳ vendor nào. Đây cũng là lý do BPMN được dùng rộng rãi: học một lần, áp dụng được ở bất kỳ công cụ hay công ty nào. BPMN là công cụ cốt lõi trong <strong>Business Process Management (BPM)</strong> — lĩnh vực chuyên tối ưu cách công việc được vận hành trong một tổ chức.</p>
 
     <h2>Các thành phần chính của BPMN</h2>
 
-    <h3>Element categories trong BPMN</h3>
-    <p>BPMN phân loại các graphical element theo category để user dễ dàng nhận ra chúng.</p>
+    <h3>Các nhóm element trong BPMN</h3>
+    <p>Để không bị rối giữa hàng chục ký hiệu, BPMN gom các graphical element lại thành vài nhóm chính:</p>
     <ul>
-      <li><strong>Events:</strong> mô tả những gì xảy ra trước, trong, hoặc vào cuối một process. Chúng có thể xảy ra bất kể process, hoặc như kết quả của process. Bạn có thể react to event hoặc trigger event.</li>
-      <li><strong>Tasks:</strong> là các bước trong một process; đây là những activity cần phải được thực hiện.</li>
-      <li><strong>Gateways:</strong> là các element đại diện cho nhiều path khả dĩ trong một process. Sau này trong khóa học, bạn sẽ tìm hiểu thêm về hai loại gateway phổ biến nhất: exclusive gateway và parallel gateway.</li>
+      <li><strong>Events (sự kiện):</strong> đại diện cho điều gì đó xảy ra — trước, trong, hoặc vào cuối process. Có event bạn chủ động kích hoạt, có event bạn chỉ đứng chờ để phản ứng lại.</li>
+      <li><strong>Tasks (công việc):</strong> các bước cụ thể trong process — những activity thật sự cần được thực hiện.</li>
+      <li><strong>Gateways (cổng rẽ nhánh):</strong> đại diện cho việc process có nhiều hướng đi khác nhau. Hai loại phổ biến nhất — exclusive gateway và parallel gateway — sẽ được nói kỹ ở phần sau bài này.</li>
     </ul>
-    <p>Khóa học này tập trung chủ yếu vào flow element. Để tìm hiểu về các loại BPMN symbol khác, xem link trong phần Resources của khóa học.</p>
-    <p>Một category khác được đại diện bởi <strong>connecting element</strong>. Chúng định nghĩa cách các flow element liên hệ với nhau, bao gồm cả sequence flow.</p>
+    <p>Bài này tập trung vào nhóm <strong>flow element</strong> (event, task, gateway) vì đây là nhóm bạn sẽ chạm tới nhiều nhất. Còn một nhóm nữa là <strong>connecting element</strong> — chuyên định nghĩa cách các flow element nối với nhau, mà tiêu biểu nhất chính là sequence flow bên dưới.</p>
 
     <h3>Sequence flow (mũi tên)</h3>
-    <p>Sequence flow (mũi tên) thể hiện thứ tự của các element trong một process và cách chúng kết nối với nhau.</p>
+    <p>Sequence flow — chính là những mũi tên bạn thấy trong diagram — thể hiện thứ tự chạy: bước nào nối tới bước nào, theo hướng nào.</p>
 
     <div class="article-columns">
-      <img src="images/bpmn-overview/sequence-flows.png" alt="Ví dụ một BPMN process diagram với sequence flow">
+      <a href="#lb-sequence-flows" class="lightbox-trigger">
+        <img src="images/bpmn-overview/sequence-flows.png" alt="Ví dụ một BPMN process diagram với sequence flow">
+      </a>
       <div>
-        <h3>BPMN process diagram</h3>
-        <p>Bất kỳ BPMN process nào cũng bao gồm nhiều bước, có thể thực hiện sequentially hoặc parallel tùy theo business rule. Điều này được minh họa qua diagram, giúp mọi người dễ dàng hiểu cách process hoạt động.</p>
+        <h3>Một process trông như thế nào?</h3>
+        <p>Một process BPMN là chuỗi event, task, gateway được nối với nhau bằng sequence flow — có thể chạy tuần tự hoặc song song tùy business rule. Chỉ cần nhìn vào diagram, bạn hình dung ngay được cả quy trình chạy ra sao mà không cần đọc thêm dòng chữ nào.</p>
       </div>
+    </div>
+    <div id="lb-sequence-flows" class="lightbox">
+      <a href="#" class="lightbox-backdrop" aria-label="Đóng"></a>
+      <figure class="lightbox-content">
+        <img src="images/bpmn-overview/sequence-flows.png" alt="Ví dụ một BPMN process diagram với sequence flow">
+        <figcaption>Bấm ra ngoài ảnh để đóng</figcaption>
+      </figure>
     </div>
 
     <h3>Mô phỏng một process: token flow</h3>
-    <p>Trong BPMN, một <strong>token</strong> là một conceptual marker thể hiện luồng chạy của một process.</p>
-    <p>Token bắt đầu tại start event và di chuyển qua task, gateway, và event, mô phỏng cách một process chạy. Nó giúp bạn hình dung path và behavior của một process trong một process instance.</p>
+    <p>Cách dễ nhất để "chạy thử" một diagram bằng mắt là tưởng tượng có một <strong>token</strong> — một dấu chấm vô hình đại diện cho quy trình đang chạy tới đâu.</p>
+    <p>Token xuất phát từ start event, rồi lần lượt đi qua từng task, gateway, event theo chiều mũi tên. Theo dõi đường đi của token giúp bạn hình dung chính xác một process instance sẽ chạy như thế nào trên thực tế.</p>
 
-    <blockquote>💡 <strong>Process instance</strong> là một lần thực thi duy nhất của một process, từ đầu đến cuối.</blockquote>
+    <blockquote>💡 <strong>Process instance</strong> là một lần thực thi duy nhất của một process, từ đầu đến cuối — giống như mỗi đơn hàng của khách là một lần "chạy" của quy trình xử lý đơn hàng.</blockquote>
 
-    <p>Token có thể đi theo một trong nhiều path khả dụng, tùy theo data được evaluate tại gateway.</p>
+    <p>Khi token đi tới một gateway, nó sẽ rẽ theo hướng nào là tùy vào data đang có tại thời điểm đó — đây cũng chính là chủ đề của phần tiếp theo.</p>
 
     <h2>Exclusive gateway</h2>
-    <p>Exclusive gateway là:</p>
+    <p>Lấy luôn ví dụ quen thuộc: quy trình xử lý đơn hàng, tới đoạn cần quyết định <strong>"đơn này có cần mua bảo hiểm vận chuyển không?"</strong> Đây chính xác là tình huống dùng <strong>exclusive gateway</strong> — cổng rẽ nhánh mà process chỉ được đi theo <strong>đúng một</strong> hướng, không đi cùng lúc nhiều hướng.</p>
     <ul>
-      <li>Còn được gọi là <strong>XOR</strong>, viết tắt của "exclusive OR". Nghĩa là process chỉ có thể đi theo một hướng duy nhất, nên chỉ một outgoing sequence flow được chọn.</li>
-      <li><strong>Data-based:</strong> nghĩa là quyết định không xảy ra tại gateway. Nó chỉ evaluate data đã có sẵn. Bạn cần một task để đưa ra quyết định trước khi tới gateway.</li>
+      <li>Còn gọi là <strong>XOR</strong> ("exclusive OR") — nghĩa là: hoặc đi hướng này, hoặc đi hướng kia, không có chuyện đi cả hai.</li>
+      <li><strong>Data-based:</strong> bản thân gateway không "suy nghĩ" hay ra quyết định gì cả — nó chỉ đọc data đã có sẵn để chọn hướng. Quyết định thật sự phải được tính toán ở một task nào đó ngay trước gateway.</li>
     </ul>
 
-    <h3>✅ Best practice — đặt label cho gateway</h3>
-    <p>Đặt label cho gateway bằng một câu hỏi, với các câu trả lời nằm trên các outgoing sequence flow.</p>
-    <p>Exclusive gateway có thể là <strong>splitting</strong> hoặc <strong>merging</strong>, như bạn thấy trong ví dụ dưới đây.</p>
+    <h3>✅ Best practice — đặt label cho gateway bằng một câu hỏi</h3>
+    <p>Cách dễ đọc nhất: đặt tên gateway là một câu hỏi, rồi ghi câu trả lời ngay trên từng outgoing sequence flow tương ứng. Một exclusive gateway có thể đóng vai trò <strong>splitting</strong> (tách một flow thành nhiều hướng) hoặc <strong>merging</strong> (gộp nhiều flow lại một mối) — ví dụ dưới đây cho thấy rõ cả hai.</p>
 
-    <h3>Splitting gateway</h3>
-    <p>Gateway này có hai outgoing sequence flow: một để skip insurance và một để add insurance.</p>
-    <p>Gateway này được label là <strong>"Insurance required?"</strong> vì nó evaluate data từ task <strong>"Check insurance requirements"</strong>.</p>
-    <img src="images/bpmn-overview/splitting-gateway.png" alt="Ví dụ splitting gateway trong exclusive gateway" class="article-hero-img">
+    <h3>Splitting gateway — tách hướng</h3>
+    <p>Sau task <strong>"Check insurance requirements"</strong>, gateway được đặt tên <strong>"Insurance required?"</strong> — đúng câu hỏi mà nó đang trả lời. Từ đây có hai outgoing flow: <strong>yes</strong> đi vào task "Add insurance", <strong>no</strong> đi thẳng bỏ qua bước đó.</p>
+    <a href="#lb-splitting" class="lightbox-trigger">
+      <img src="images/bpmn-overview/splitting-gateway.png" alt="Ví dụ splitting gateway trong exclusive gateway" class="article-hero-img">
+    </a>
+    <div id="lb-splitting" class="lightbox">
+      <a href="#" class="lightbox-backdrop" aria-label="Đóng"></a>
+      <figure class="lightbox-content">
+        <img src="images/bpmn-overview/splitting-gateway.png" alt="Ví dụ splitting gateway trong exclusive gateway">
+        <figcaption>Bấm ra ngoài ảnh để đóng</figcaption>
+      </figure>
+    </div>
 
-    <h3>Merging gateway</h3>
-    <p>Gateway này có hai incoming sequence flow, merge chúng lại sau bước insurance check vì bạn chỉ gửi item một lần.</p>
-    <p>Gateway này không cần label, vì nó chỉ đơn giản merge các flow mà không evaluate data nào. Nó chỉ đang direct token đang tới.</p>
-    <img src="images/bpmn-overview/this-gateway-doesnt-need-a-label.png" alt="Ví dụ merging gateway không cần label" class="article-hero-img">
+    <h3>Merging gateway — gộp hướng</h3>
+    <p>Dù đơn hàng có mua bảo hiểm hay không, cuối cùng nó vẫn phải đi tiếp tới bước "Send items" — chỉ một lần duy nhất. Vì vậy cần thêm một gateway thứ hai để gộp hai nhánh "yes"/"no" lại làm một trước khi đi tiếp.</p>
+    <p>Gateway gộp này không cần đặt label, vì nó không hề evaluate data gì cả — nó chỉ đơn giản "hứng" token từ hướng nào tới trước rồi cho đi tiếp.</p>
+    <a href="#lb-merging" class="lightbox-trigger">
+      <img src="images/bpmn-overview/this-gateway-doesnt-need-a-label.png" alt="Ví dụ merging gateway không cần label" class="article-hero-img">
+    </a>
+    <div id="lb-merging" class="lightbox">
+      <a href="#" class="lightbox-backdrop" aria-label="Đóng"></a>
+      <figure class="lightbox-content">
+        <img src="images/bpmn-overview/this-gateway-doesnt-need-a-label.png" alt="Ví dụ merging gateway không cần label">
+        <figcaption>Bấm ra ngoài ảnh để đóng</figcaption>
+      </figure>
+    </div>
 
-    <blockquote>Lưu ý: việc đặt một decision task trước gateway như trong ví dụ vừa xem là phổ biến.</blockquote>
+    <blockquote>Lưu ý: đặt một task ra quyết định (như "Check insurance requirements") ngay trước gateway, giống ví dụ trên, là cách làm rất phổ biến.</blockquote>
 
-    <h3>✅ Best practice — dùng gateway riêng biệt cho splitting và merging flow</h3>
-    <p>Dù có thể dùng một gateway duy nhất cho cả splitting và merging, thiết kế này khó đọc hơn và dễ gây lỗi hơn. Tốt nhất nên tránh vừa splitting vừa merging trong cùng một gateway.</p>
-    <img src="images/bpmn-overview/best-practice.png" alt="Best practice: dùng gateway riêng biệt cho splitting và merging" class="article-hero-img">
+    <h3>✅ Best practice — tách riêng gateway splitting và merging</h3>
+    <p>Bạn hoàn toàn có thể "tiết kiệm" bằng cách dồn cả splitting lẫn merging vào chung một gateway — nhưng đừng làm vậy. Diagram sẽ khó đọc hơn hẳn vì cùng một ký hiệu vừa phải tách vừa phải gộp flow. Tốt nhất mỗi gateway chỉ nên làm một việc.</p>
+    <a href="#lb-best-practice" class="lightbox-trigger">
+      <img src="images/bpmn-overview/best-practice.png" alt="Best practice: dùng gateway riêng biệt cho splitting và merging" class="article-hero-img">
+    </a>
+    <div id="lb-best-practice" class="lightbox">
+      <a href="#" class="lightbox-backdrop" aria-label="Đóng"></a>
+      <figure class="lightbox-content">
+        <img src="images/bpmn-overview/best-practice.png" alt="Best practice: dùng gateway riêng biệt cho splitting và merging">
+        <figcaption>Bấm ra ngoài ảnh để đóng</figcaption>
+      </figure>
+    </div>
 
-    <h3>⚠️ Tránh cách làm này — kết hợp splitting và merging trong một gateway</h3>
-    <p>Trong model này, gateway thứ hai kết hợp cả splitting và merging: cả incoming flow lẫn outgoing flow đều đi vào và ra khỏi nó. Điều này khiến diagram khó đọc.</p>
-    <img src="images/bpmn-overview/avoid-this-approach.png" alt="Ví dụ nên tránh: kết hợp splitting và merging trong một gateway" class="article-hero-img">
+    <h3>⚠️ Tránh cách làm này</h3>
+    <p>Ở ví dụ dưới, gateway thứ hai bị dồn cả hai việc: vừa nhận incoming flow từ hai nhánh, vừa tự tách thêm một outgoing flow khác. Nhìn vào diagram kiểu này rất dễ hiểu lầm luồng chạy thực tế.</p>
+    <a href="#lb-avoid" class="lightbox-trigger">
+      <img src="images/bpmn-overview/avoid-this-approach.png" alt="Ví dụ nên tránh: kết hợp splitting và merging trong một gateway" class="article-hero-img">
+    </a>
+    <div id="lb-avoid" class="lightbox">
+      <a href="#" class="lightbox-backdrop" aria-label="Đóng"></a>
+      <figure class="lightbox-content">
+        <img src="images/bpmn-overview/avoid-this-approach.png" alt="Ví dụ nên tránh: kết hợp splitting và merging trong một gateway">
+        <figcaption>Bấm ra ngoài ảnh để đóng</figcaption>
+      </figure>
+    </div>
 
     <h2>Parallel gateway</h2>
-    <p>Parallel gateway không cần label, vì nó không dựa trên quyết định.</p>
-    <p>Behavior của nó được xác định bởi incoming và outgoing sequence flow, và nó hỗ trợ <strong>parallelization</strong> và <strong>synchronization</strong>.</p>
+    <p>Khác với exclusive gateway, parallel gateway không cần trả lời câu hỏi nào cả — nên cũng không cần đặt label. Nó không quan tâm data, chỉ đơn thuần dựa vào số lượng incoming/outgoing flow để quyết định hành vi: <strong>parallelization</strong> (tách chạy song song) hoặc <strong>synchronization</strong> (chờ nhau rồi gộp lại).</p>
 
-    <h3>Parallelization</h3>
-    <p>Với một incoming và hai hoặc nhiều outgoing flow, gateway activate tất cả outgoing path và generate một token cho mỗi outgoing path.</p>
-    <img src="images/bpmn-overview/parallelization.png" alt="Ví dụ parallelization trong parallel gateway" class="article-hero-img">
+    <h3>Parallelization — tách chạy song song</h3>
+    <p>Có 1 incoming và từ 2 outgoing flow trở lên: gateway sẽ kích hoạt <strong>tất cả</strong> các hướng cùng lúc, sinh ra một token riêng cho mỗi hướng. Trong ví dụ dưới, Task A và Task B chạy song song với nhau, không phải chờ nhau.</p>
+    <a href="#lb-parallelization" class="lightbox-trigger">
+      <img src="images/bpmn-overview/parallelization.png" alt="Ví dụ parallelization trong parallel gateway" class="article-hero-img">
+    </a>
+    <div id="lb-parallelization" class="lightbox">
+      <a href="#" class="lightbox-backdrop" aria-label="Đóng"></a>
+      <figure class="lightbox-content">
+        <img src="images/bpmn-overview/parallelization.png" alt="Ví dụ parallelization trong parallel gateway">
+        <figcaption>Bấm ra ngoài ảnh để đóng</figcaption>
+      </figure>
+    </div>
 
-    <h3>Synchronization</h3>
-    <p>Với hai hoặc nhiều incoming và một outgoing flow, gateway chờ tất cả incoming token đến trước khi merge chúng thành một để tiếp tục.</p>
-    <img src="images/bpmn-overview/synchronization.png" alt="Ví dụ synchronization trong parallel gateway" class="article-hero-img">
+    <h3>Synchronization — chờ nhau rồi gộp lại</h3>
+    <p>Ngược lại, có từ 2 incoming flow trở lên và chỉ 1 outgoing: gateway sẽ đứng chờ <strong>đủ tất cả</strong> token từ các nhánh đi vào, rồi mới gộp lại thành một token duy nhất để đi tiếp. Nói cách khác, Task C chỉ bắt đầu khi cả Task A lẫn Task B đã hoàn thành.</p>
+    <a href="#lb-synchronization" class="lightbox-trigger">
+      <img src="images/bpmn-overview/synchronization.png" alt="Ví dụ synchronization trong parallel gateway" class="article-hero-img">
+    </a>
+    <div id="lb-synchronization" class="lightbox">
+      <a href="#" class="lightbox-backdrop" aria-label="Đóng"></a>
+      <figure class="lightbox-content">
+        <img src="images/bpmn-overview/synchronization.png" alt="Ví dụ synchronization trong parallel gateway">
+        <figcaption>Bấm ra ngoài ảnh để đóng</figcaption>
+      </figure>
+    </div>
 
-    <blockquote>💡 <strong>Tip:</strong> Bạn có thể dùng nhiều exclusive gateway và parallel gateway để model của bạn dễ đọc hơn.</blockquote>
+    <blockquote>💡 <strong>Tip:</strong> Đừng ngại dùng nhiều exclusive gateway và parallel gateway trong cùng một diagram — chia nhỏ logic ra từng gateway giúp model dễ đọc hơn nhiều so với việc gộp chung.</blockquote>
 
     <h2>Tóm tắt</h2>
     <ul>
-      <li>BPMN dễ hiểu với mọi stakeholder, dù họ có nền tảng kỹ thuật hay không. Các thành phần chính bạn học hôm nay là nền tảng giúp bạn hiểu nhiều process diagram.</li>
-      <li>Best practice: bạn phải label các element trong một process, để đảm bảo nó rõ ràng và dễ hiểu.</li>
-      <li>Tận dụng gateway giúp process của bạn rõ ràng hơn, tránh rối rắm, và đơn giản hóa việc đọc hiểu.</li>
+      <li>BPMN là một bộ ký hiệu chuẩn, giúp cả business lẫn kỹ thuật cùng đọc hiểu một diagram theo đúng một nghĩa.</li>
+      <li>Năm viên gạch nền tảng: start event, task, gateway, sequence flow, end event — hầu hết diagram nào cũng xoay quanh năm thứ này.</li>
+      <li>Luôn đặt label rõ ràng cho element, đặc biệt là gateway — nên đặt dưới dạng câu hỏi để dễ theo dõi hướng đi của flow.</li>
+      <li><strong>Exclusive gateway</strong> (XOR): chọn đúng một hướng dựa trên data. <strong>Parallel gateway</strong>: chạy song song hoặc chờ nhau, không dựa trên data.</li>
+      <li>Tách riêng gateway splitting và merging, tránh dồn nhiều việc vào một gateway duy nhất — diagram sẽ dễ đọc và ít lỗi hơn.</li>
     </ul>
 
   </div>
@@ -152,9 +258,8 @@
 
 </main>
 
-<footer>
-  <p>© 2026 dev.anhkn · <a href="https://github.com/dev-anhkn" target="_blank">GitHub</a></p>
-</footer>
+<footer id="site-footer"></footer>
 
+<script src="../shared/site.js"></script>
 </body>
 </html>
