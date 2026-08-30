@@ -2,10 +2,10 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
+  <script>try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light")}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DMN — Overview | dev.anhkn</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-<script src="../shared/theme.js"></script>
+  <title>DMN - Overview | dev.anhkn</title>
+  <link rel="stylesheet" href="../shared/theme.css">
 </head>
 <body>
 
@@ -15,7 +15,7 @@
 
   <div class="article-header container">
     <span class="article-day">DMN</span>
-    <h1>DMN — Overview</h1>
+    <h1>DMN - Overview</h1>
     <p class="meta">25/08/2026 · 14 phút đọc · <a href="index.html">← Quay lại series</a></p>
   </div>
 
@@ -46,7 +46,7 @@
 
     <h2>Các use case của DMN</h2>
     <p>DMN tập trung vào <strong>operational decisions</strong>, không phải strategic decisions. Dùng DMN cho các quyết định thường nhật mà bạn phải đưa ra lặp lại mỗi ngày.</p>
-    <p>Strategic decisions — ví dụ công ty có nên áp dụng BPMN hay DMN — là những quyết định đơn lẻ (unique). Chúng hiếm khi theo một bộ rule cố định, nên mô hình hóa bằng DMN không đáng để đầu tư.</p>
+    <p>Strategic decisions - ví dụ công ty có nên áp dụng BPMN hay DMN - là những quyết định đơn lẻ (unique). Chúng hiếm khi theo một bộ rule cố định, nên mô hình hóa bằng DMN không đáng để đầu tư.</p>
     <p>Dưới đây là các ví dụ điển hình về operational decisions bạn có thể mô hình hóa bằng DMN.</p>
     <ul>
       <li><strong>Eligibility / Approval:</strong> ví dụ, xác định một khách hàng có đủ điều kiện cho một sản phẩm hay không, hoặc một claim có thể được xử lý tự động hay không.</li>
@@ -72,7 +72,7 @@
 
     <p>Bạn cũng có thể mô hình hóa decision logic bằng <strong>literal expression</strong> với FEEL.</p>
 
-    <blockquote>💡 DMN đi kèm với expression language riêng gọi là <strong>FEEL</strong> — viết tắt của Friendly Enough Expression Language. Bạn sẽ dùng FEEL để viết rule trong decision table hoặc literal expression.</blockquote>
+    <blockquote>💡 DMN đi kèm với expression language riêng gọi là <strong>FEEL</strong> - viết tắt của Friendly Enough Expression Language. Bạn sẽ dùng FEEL để viết rule trong decision table hoặc literal expression.</blockquote>
 
     <h2>Decision Requirements Diagram (DRD)</h2>
     <p>Một DRD bao gồm <strong>decision box</strong> và <strong>input data</strong>.</p>

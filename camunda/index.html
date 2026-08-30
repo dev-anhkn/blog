@@ -2,11 +2,11 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
+  <script>try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light")}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>What I Learned From Course Camunda Academy — dev.anhkn</title>
-  <meta name="description" content="Ghi chú cá nhân từ khóa học Camunda Academy — Java, Spring Boot, Camunda 8 Self-managed.">
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-<script src="../shared/theme.js"></script>
+  <title>What I Learned From Course Camunda Academy - dev.anhkn</title>
+  <meta name="description" content="Ghi chú cá nhân từ khóa học Camunda Academy - Java, Spring Boot, Camunda 8 Self-managed.">
+  <link rel="stylesheet" href="../shared/theme.css">
 </head>
 <body>
 
@@ -31,7 +31,7 @@
 
         <a href="introduction.html" class="card">
           <span class="card-day">Giới thiệu</span>
-          <h3>Giới thiệu về Camunda — vì sao cần orchestration</h3>
+          <h3>Giới thiệu về Camunda - vì sao cần orchestration</h3>
           <p>BOAT, Gartner, và góc nhìn kỹ thuật: vì sao nhiệm vụ đơn lẻ khác quy trình đầu-cuối.</p>
           <div class="card-meta"><span>8 phút</span><span class="tag">Introduction</span></div>
         </a>
@@ -45,15 +45,15 @@
 
         <a href="overview.html" class="card">
           <span class="card-day">Architecture</span>
-          <h3>Camunda 8 — Overview</h3>
-          <p>Zeebe, Operate, Tasklist, Elasticsearch — component nào làm gì?</p>
+          <h3>Camunda 8 - Overview</h3>
+          <p>Zeebe, Operate, Tasklist, Elasticsearch - component nào làm gì?</p>
           <div class="card-meta"><span>10 phút</span><span class="tag">Architecture</span></div>
         </a>
 
         <a href="zeebe-architecture.html" class="card">
           <span class="card-day">Zeebe</span>
-          <h3>Camunda 8 — Zeebe Architecture Overview</h3>
-          <p>Gateway, Broker, Exporter, Raft, partition — bên trong Zeebe hoạt động thế nào.</p>
+          <h3>Camunda 8 - Zeebe Architecture Overview</h3>
+          <p>Gateway, Broker, Exporter, Raft, partition - bên trong Zeebe hoạt động thế nào.</p>
           <div class="card-meta"><span>12 phút</span><span class="tag">Zeebe</span></div>
         </a>
 
@@ -86,16 +86,23 @@
 
         <a href="bpmn-overview.html" class="card">
           <span class="card-day">BPMN</span>
-          <h3>BPMN — Overview</h3>
-          <p>Event, task, sequence flow, exclusive & parallel gateway — nền tảng để đọc mọi process diagram.</p>
+          <h3>BPMN - Overview</h3>
+          <p>Event, task, sequence flow, exclusive & parallel gateway - nền tảng để đọc mọi process diagram.</p>
           <div class="card-meta"><span>12 phút</span><span class="tag">BPMN</span></div>
         </a>
 
         <a href="bpmn-task-types.html" class="card">
           <span class="card-day">Task Types</span>
-          <h3>BPMN — Task Types</h3>
-          <p>User task, service task, business rule task, script task... — khi nào dùng loại nào và task chạy ra sao.</p>
+          <h3>BPMN - Task Types</h3>
+          <p>User task, service task, business rule task, script task... - khi nào dùng loại nào và task chạy ra sao.</p>
           <div class="card-meta"><span>10 phút</span><span class="tag">BPMN</span></div>
+        </a>
+
+        <a href="bpmn-events.html" class="card">
+          <span class="card-day">Events</span>
+          <h3>BPMN - Events</h3>
+          <p>Catching, throwing, timer, conditional, message, boundary event, event-based gateway - khi nào dùng loại nào.</p>
+          <div class="card-meta"><span>14 phút</span><span class="tag">BPMN</span></div>
         </a>
 
         <div class="card" style="opacity:0.5; cursor:default; pointer-events:none;">
@@ -113,8 +120,8 @@
 
         <a href="dmn-overview.html" class="card">
           <span class="card-day">DMN</span>
-          <h3>DMN — Overview</h3>
-          <p>Decision table, DRD, FEEL — mô hình hóa decision logic bên cạnh BPMN process.</p>
+          <h3>DMN - Overview</h3>
+          <p>Decision table, DRD, FEEL - mô hình hóa decision logic bên cạnh BPMN process.</p>
           <div class="card-meta"><span>14 phút</span><span class="tag">DMN</span></div>
         </a>
 

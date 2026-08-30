@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <script>try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light")}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BPMN - Events | dev.anhkn</title>
+  <link rel="stylesheet" href="../shared/theme.css">
+</head>
+<body>
+
+<header id="site-header"></header>
+
+<main>
+
+  <div class="article-header container">
+    <span class="article-day">Events</span>
+    <h1>BPMN - Events</h1>
+    <p class="meta">30/08/2026 · 14 phút đọc · <a href="index.html">← Quay lại series</a></p>
+  </div>
+
+  <div class="article-body">
+
+    <h2>BPMN events là gì?</h2>
+    <p class="definition">Event là một loại flow element trong BPMN - nó đại diện cho <strong>điều gì đó xảy ra</strong>. Bạn dùng event để khiến token dừng lại chờ tại một điểm nào đó, hoặc để cắt ngang tiến trình của token.</p>
+    <p>Ngoài event, BPMN còn có hai loại flow element khác mà bài <a href="bpmn-overview.html">BPMN - Overview</a> đã nói qua: task (công việc cần làm) và gateway (điểm rẽ nhánh của flow).</p>
+
+    <div class="flow-tabs">
+
+      <input type="radio" name="flow-element" id="fe-task" checked>
+      <label for="fe-task" class="flow-tab-label">Task</label>
+
+      <input type="radio" name="flow-element" id="fe-gateway">
+      <label for="fe-gateway" class="flow-tab-label">Gateway</label>
+
+      <input type="radio" name="flow-element" id="fe-event">
+      <label for="fe-event" class="flow-tab-label">Event</label>
+
+      <div class="flow-tab-panel" data-tab-panel="task">
+        <p class="mb-4">Task là một việc cần phải làm trong process - ví dụ: chọn loại pizza, đặt pizza, ăn pizza.</p>
+        <img src="images/bpmn-events/task.png" alt="Ví dụ task trong BPMN" class="w-auto max-w-full mx-auto rounded border border-border">
+      </div>
+      <div class="flow-tab-panel" data-tab-panel="gateway">
+        <p class="mb-4">Gateway là điểm rẽ nhánh, dẫn process đi theo một hướng khác trong flow - ví dụ: chọn pizza loại pepperoni hay pineapple.</p>
+        <img src="images/bpmn-events/gateways.png" alt="Ví dụ gateway trong BPMN" class="w-auto max-w-full mx-auto rounded border border-border">
+      </div>
+      <div class="flow-tab-panel" data-tab-panel="event">
+        <p class="mb-4">Event là điều gì đó được cho là sẽ xảy ra - ví dụ: nhận thấy đói bụng, chờ tới lượt, món ăn đã sẵn sàng, cơn đói được thỏa mãn.</p>
+        <img src="images/bpmn-events/events.png" alt="Ví dụ event trong BPMN" class="w-auto max-w-full mx-auto rounded border border-border">
+      </div>
+
+    </div>
+
+    <blockquote>💡 BPMN có rất nhiều loại event. Khóa học này chủ yếu xoay quanh <strong>timer event</strong>, <strong>conditional event</strong>, và <strong>message event</strong> - nhưng bạn có thể tìm hiểu thêm các loại khác tại <a href="https://docs.camunda.io/docs/components/modeler/bpmn/events/" target="_blank" rel="noopener">Camunda Documentation</a>.</blockquote>
+
+    <h2>Event đặt ở đâu trong process?</h2>
+    <p>Một event có thể là <strong>start event</strong>, <strong>intermediate event</strong>, hoặc <strong>end event</strong>, tùy vào vị trí nó nằm trong process.</p>
+
+    <div class="article-columns">
+      <img src="images/bpmn-events/end-event.png" alt="Ba loại ký hiệu event: start, intermediate, end">
+      <div>
+        <h3>Ba loại ký hiệu</h3>
+        <p>Viền mỏng là <strong>start event</strong>, viền đôi là <strong>intermediate event</strong>, viền đậm là <strong>end event</strong> - chỉ cần nhìn độ đậm của viền là biết ngay event đó nằm ở đâu trong process.</p>
+      </div>
+    </div>
+
+    <ul>
+      <li><strong>Start event:</strong> là event khiến process bắt đầu chạy - process instance (hay sub-process) được khởi tạo khi event này được activate. Một process chỉ có thể có <strong>một</strong> none start event. Start event luôn luôn là <strong>catching</strong> event.</li>
+      <li><strong>Intermediate event:</strong>
+        <ul>
+          <li>Cho biết process đã đạt tới một trạng thái nhất định.</li>
+          <li>Hữu ích để theo dõi process đang chạy tới đâu - ví dụ để bám các milestone hay KPI.</li>
+          <li>Có thể là <strong>catching</strong> hoặc <strong>throwing</strong>, tùy loại - riêng none intermediate event thì không có wait state, nên luôn luôn là <strong>throwing</strong>.</li>
+        </ul>
+      </li>
+      <li><strong>End event:</strong> tiêu thụ (consume) một token. Khi process instance (hay sub-process) không còn token nào đang active, process kết thúc. Một process có thể có nhiều end event. End event luôn luôn là <strong>throwing</strong>.</li>
+    </ul>
+
+    <blockquote>💡 <strong>Biết chưa?</strong> Khi bạn thả một event vào Camunda Modeler, mặc định nó là <strong>none event</strong> - loại event chưa xác định, còn gọi là event "trắng".</blockquote>
+
+    <p>(*) Một event cũng có thể được đặt trên một task - gọi là <strong>boundary event</strong>, sẽ nói kỹ hơn ở phần sau bài này.</p>
+
+    <h2>Catching event & throwing event</h2>
+
+    <h3>Catching event là gì?</h3>
+    <div class="article-columns">
+      <img src="images/bpmn-events/what-are-catching-events.png" alt="Các loại catching event: message, timer, conditional">
+      <div>
+        <p>Catching event là event <strong>bị động</strong> (passive), có một trigger xác định trước. Nó:</p>
+        <ul class="mb-0">
+          <li>Xảy ra khi có điều gì đó xảy đến <strong>độc lập với process</strong>.</li>
+          <li>Ảnh hưởng tới đường đi của process, nên <strong>bắt buộc phải được model</strong>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <blockquote>
+      <strong>Catching event có thể dẫn tới...</strong><br>
+      🟢 <strong>Bắt đầu một process</strong> - ví dụ: catch event "nhận thấy đói bụng" kích hoạt process đặt pizza.<br>
+      ➡️ <strong>Tiếp tục process hoặc một nhánh của process</strong> - ví dụ: timer catch event được trigger khi pizza chưa tới sau 60 phút.<br>
+      🚫 <strong>Hủy một task hoặc sub-process</strong> - ví dụ: bạn của bạn mang đồ ăn tới (message catch event), khiến task đặt pizza bị hủy.<br>
+      🔀 <strong>Kích hoạt một nhánh khác trong khi task/sub-process khác vẫn đang chạy</strong> - ví dụ: trong lúc chờ pizza, nếu đã 60 phút trôi qua, bạn gọi điện hỏi thăm trong khi vẫn tiếp tục chờ giao hàng (non-interrupting timer event).
+    </blockquote>
+
+    <h3>Throwing event là gì?</h3>
+    <div class="article-columns">
+      <img src="images/bpmn-events/timer-events.png" alt="Các loại throwing event: message, signal, none">
+      <div>
+        <p>Ngược lại, throwing event là event <strong>chủ động</strong> (active) - được trigger hoặc gây ra bởi chính process. Nó:</p>
+        <ul class="mb-0">
+          <li>Có thể đánh dấu một <strong>trạng thái đã đạt được</strong>.</li>
+          <li>Có thể được trigger <strong>trong lúc</strong> hoặc <strong>vào cuối</strong> process.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>Vậy khi nào dùng loại nào?</p>
+    <ul>
+      <li><strong>Catching event:</strong> process đứng chờ khách gửi đơn hàng - đây chính là catching event khiến process bắt đầu chạy. <strong>Start event luôn luôn là catching event.</strong></li>
+      <li><strong>Catching hoặc throwing:</strong> intermediate event có thể là catching hoặc throwing, tùy loại (none intermediate event thì luôn luôn throwing, vì không có wait state).</li>
+      <li><strong>Throwing event:</strong> end event được kích hoạt khi process hoàn tất - trong ví dụ này là khi đơn hàng được xử lý xong. <strong>End event luôn luôn là throwing event.</strong></li>
+    </ul>
+
+    <h2>Timer events</h2>
+    <p>Timer event là event được trigger bởi một timer đã định nghĩa sẵn. Gồm có <strong>timer start event</strong> và <strong>intermediate timer catch event</strong>.</p>
+
+    <h3>Timer start event</h3>
+    <ul>
+      <li>Một process có thể có <strong>một hoặc nhiều</strong> timer start event (bên cạnh các loại start event khác).</li>
+      <li>Phải có một trong ba định nghĩa: <strong>time</strong> (thời điểm), <strong>date</strong> (ngày), hoặc <strong>time cycle</strong> (chu kỳ lặp).</li>
+      <li>Khi bị trigger, một process instance mới được tạo ra và timer start event tương ứng được activate.</li>
+    </ul>
+    <p><strong>Ví dụ:</strong> timer start event dùng để trigger process theo chu kỳ hàng tháng. Vào cuối mỗi tháng, lương được trả.</p>
+    <img src="images/bpmn-events/timer-start-events.png" alt="Ví dụ timer start event: cuối tháng thì trả lương" class="article-hero-img is-native">
+
+    <h3>Intermediate timer catch event</h3>
+    <p>Intermediate timer catch event phải có định nghĩa <strong>time duration</strong> (khoảng thời gian) - xác định khi nào nó được trigger.</p>
+    <p><strong>Ví dụ:</strong> timer phản ứng theo một thời điểm cụ thể. Ở đây, khi có bài tập cần làm, không có gì xảy ra cho tới một tiếng trước hạn nộp - lúc đó bài tập mới được làm.</p>
+    <img src="images/bpmn-events/intermediate-timer-catch-events.png" alt="Ví dụ intermediate timer catch event: 1 tiếng trước hạn nộp thì làm bài" class="article-hero-img is-native">
+
+    <h2>Conditional events</h2>
+    <ul>
+      <li>Được trigger nếu một điều kiện cho trước được đánh giá là <strong>true</strong>.</li>
+      <li>Điều kiện độc lập với process, và gần như bất kỳ thứ gì cũng có thể trở thành điều kiện. Đây cũng là lý do vì sao conditional event (giống timer event) chỉ có thể tồn tại dưới dạng catching event.</li>
+    </ul>
+    <p><strong>Ví dụ:</strong> sau khi để rau củ lên vỉ nướng, bạn phải chờ chúng chín mới ăn được. Tùy loại rau, loại lò nướng và nhiều yếu tố khác, việc này có thể mất vài phút hoặc lâu hơn. Bạn không thể dùng timer event vì không biết chính xác cần bao lâu - thay vào đó, bạn chờ điều kiện (rau đã chín) trở thành true.</p>
+    <img src="images/bpmn-events/conditional-event.png" alt="Ví dụ conditional event: chờ rau nướng chín rồi mới ăn" class="article-hero-img is-native">
+
+    <h2>Message events</h2>
+    <p>Message event dùng để <strong>gửi hoặc nhận message</strong>. Có hai loại:</p>
+    <ul>
+      <li><strong>Message start event</strong></li>
+      <li><strong>Intermediate message throw event</strong> và <strong>catch event</strong>
+        <ul>
+          <li>Message <strong>throw</strong> event gửi đi một message.</li>
+          <li>Message <strong>catch</strong> event phụ thuộc vào bên gửi, nên nó phải chờ cho tới khi message được nhận.</li>
+        </ul>
+      </li>
+    </ul>
+    <p><strong>Ví dụ:</strong> sau khi chọn loại pizza, đơn hàng được gửi tới nhà hàng (throw event). Sau đó process chờ pizza được giao tới từ nhà hàng (catch event).</p>
+    <img src="images/bpmn-events/example.png" alt="Ví dụ message throw/catch event: gửi đơn đặt pizza rồi chờ nhận pizza" class="article-hero-img is-native">
+
+    <p>(*) Messaging là một chủ đề khá lớn trong BPMN, nên nó được nói kỹ hơn trong khóa <a href="https://academy.camunda.com/bpmn-messages-collaboration/" target="_blank" rel="noopener">BPMN - Messages and Collaboration</a>.</p>
+
+    <h2>Boundary events</h2>
+
+    <div class="article-columns">
+      <img src="images/bpmn-events/what-are-boundary-events.png" alt="Ba loại boundary event: interrupting, non-interrupting, message">
+      <div>
+        <p>Boundary event là intermediate catch event được <strong>gắn lên một task</strong> trong process. Bạn có thể vừa chờ nó, vừa làm việc khác trong process cùng lúc.</p>
+        <p class="mb-0">Boundary event gồm <strong>timer</strong>, <strong>conditional</strong>, và <strong>message</strong> event, và có thể là <strong>interrupting</strong> hoặc <strong>non-interrupting</strong>.</p>
+      </div>
+    </div>
+
+    <h3>Interrupting boundary event</h3>
+    <p>Khi bị trigger, interrupting event sẽ <strong>hủy việc thực thi task mà nó đang gắn vào</strong>. Cùng xem quy trình dưới đây.</p>
+    <img src="images/bpmn-events/interrupting-boundary-event.png" alt="Ví dụ interrupting boundary event trên task xử lý ticket hỗ trợ" class="article-hero-img is-native">
+    <ol>
+      <li>Process bắt đầu khi một support ticket được nhận.</li>
+      <li>Sau đó, cần tìm ra giải pháp cho vấn đề trong vòng dưới 30 phút.</li>
+      <li>Khi tìm ra giải pháp, phản hồi được gửi tới khách hàng.</li>
+      <li>Sau khi gửi phản hồi, ticket được cập nhật.</li>
+      <li>Rồi process kết thúc.</li>
+    </ol>
+    <p>➡️ <strong>Interrupting boundary timer event</strong> xử lý tình huống không tìm ra giải pháp trong 30 phút. Khi đó, task bị hủy, ticket được escalate, ticket được cập nhật, rồi process kết thúc.</p>
+
+    <h3>Non-interrupting boundary event</h3>
+    <p>Trong khi interrupting boundary event hủy việc thực thi task, non-interrupting event lại tạo ra một token mới <strong>chạy song song</strong> với token ban đầu.</p>
+    <img src="images/bpmn-events/non-interrupting-boundary-event.png" alt="Ví dụ non-interrupting boundary event trên task chờ giao pizza" class="article-hero-img is-native">
+    <ol>
+      <li>Process bắt đầu khi cơn đói được nhận ra.</li>
+      <li>Sau đó, pizza được đặt.</li>
+      <li>Khách chờ pizza. Nếu pizza tới trong vòng dưới 60 phút, khách ăn pizza và cơn đói được thỏa mãn.</li>
+    </ol>
+    <p>➡️ <strong>Non-interrupting boundary timer event</strong> xử lý tình huống giao hàng trễ. Nếu đã hơn 60 phút, khách gọi điện tới nhà hàng để hỏi thăm. Việc gọi điện không làm gián đoạn việc chờ pizza, và process này có thể có một hoặc hai end event khả dĩ, tùy vào thời điểm pizza được giao.</p>
+
+    <h2>Event-based gateway</h2>
+    <p>Tương tự exclusive (XOR) gateway dựa trên data, event-based gateway cũng là một cách để thiết kế các nhánh đi khác nhau trong process. Nhưng thay vì dựa vào data, gateway này rẽ nhánh dựa vào <strong>event nào xảy ra tiếp theo</strong>.</p>
+    <img src="images/bpmn-events/what-are-event-based-gateways.png" alt="Ví dụ event-based gateway: chờ pizza tới hoặc gọi điện hỏi thăm sau 60 phút" class="article-hero-img is-native">
+    <ul>
+      <li><strong>Nhánh 1:</strong> sau khi đặt pizza, bạn chờ pizza được giao tới. Khi pizza tới, bạn ăn pizza, và cơn đói được thỏa mãn.</li>
+      <li><strong>Nhánh 2:</strong> nếu đã 60 phút mà pizza chưa tới, bạn gọi điện tới nhà hàng, rồi quay lại gateway thay vì đi tới một end event khác sau khi gọi điện xong.</li>
+    </ul>
+    <p>(*) Không phải intermediate event nào cũng kết hợp được với event-based gateway. Tuy nhiên bạn có thể kết hợp nó với receive task. Tìm hiểu thêm về event-based gateway tại <a href="https://docs.camunda.io/docs/components/modeler/bpmn/event-based-gateways/" target="_blank" rel="noopener">Camunda Documentation</a>.</p>
+
+    <h2>Tóm tắt</h2>
+    <ul>
+      <li>Event dùng để model những điều được cho là sẽ xảy ra trong một process.</li>
+      <li>Event có thể là <strong>catching</strong> (bạn chờ nó xảy ra) hoặc <strong>throwing</strong> (nó được trigger bởi process).</li>
+      <li>Event có thể được gắn lên task - gọi là <strong>boundary event</strong>, và có thể là <strong>interrupting</strong> hoặc <strong>non-interrupting</strong>.</li>
+      <li><strong>Event-based gateway</strong> là lựa chọn tốt khi bạn muốn phản ứng lại theo event đầu tiên xảy ra trong process.</li>
+    </ul>
+
+  </div>
+
+  <!-- Navigation -->
+  <div class="article-nav">
+    <a href="bpmn-task-types.html">← BPMN - Task Types</a>
+    <span></span>
+  </div>
+
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="../shared/site.js"></script>
+</body>
+</html>
