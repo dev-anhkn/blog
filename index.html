@@ -19,6 +19,16 @@
     <p>Chia sẻ kiến thức Java · Spring Boot · Camunda 8, ghi lại từ những gì mình học được. Không hoàn hảo, nhưng kiên trì.</p>
     <a href="camunda/index.html" class="btn">Xem Series Camunda →</a>
     <a href="about.html" class="btn btn-outline">Về mình</a>
+
+    <div class="hero-chips">
+      <span class="hero-chip">Java</span>
+      <span class="hero-chip-dot"></span>
+      <span class="hero-chip">Spring Boot</span>
+      <span class="hero-chip-dot"></span>
+      <span class="hero-chip">Camunda 8</span>
+      <span class="hero-chip-dot"></span>
+      <span class="hero-chip">Docker</span>
+    </div>
   </section>
 
   <!-- Featured Series -->
@@ -27,29 +37,55 @@
       <h2 class="section-title">Series đang viết</h2>
       <p class="section-sub">Ghi chú tích lũy dần theo từng bài học.</p>
 
-      <div class="card-grid">
-
-        <a href="camunda/index.html" class="card">
+      <a href="camunda/index.html" class="spotlight-card">
+        <div class="spotlight-illustration">
+          <svg width="220" height="180" viewBox="0 0 220 180">
+            <line x1="30" y1="90" x2="80" y2="40" stroke="var(--color-border)" stroke-width="2"/>
+            <line x1="30" y1="90" x2="80" y2="140" stroke="var(--color-border)" stroke-width="2"/>
+            <line x1="80" y1="40" x2="150" y2="40" stroke="var(--color-border)" stroke-width="2"/>
+            <line x1="80" y1="140" x2="150" y2="140" stroke="var(--color-border)" stroke-width="2"/>
+            <line x1="150" y1="40" x2="190" y2="90" stroke="var(--color-border)" stroke-width="2"/>
+            <line x1="150" y1="140" x2="190" y2="90" stroke="var(--color-border)" stroke-width="2"/>
+            <circle cx="30" cy="90" r="12" fill="var(--color-surface-2)" stroke="var(--color-amber-light)" stroke-width="2.5"/>
+            <rect x="66" y="26" width="28" height="28" rx="4" transform="rotate(45 80 40)" fill="var(--color-surface-2)" stroke="var(--color-blue)" stroke-width="2.5"/>
+            <rect x="66" y="126" width="28" height="28" rx="4" transform="rotate(45 80 140)" fill="var(--color-surface-2)" stroke="var(--color-teal)" stroke-width="2.5"/>
+            <rect x="132" y="26" width="36" height="28" rx="6" fill="var(--color-surface-2)" stroke="var(--color-blue)" stroke-width="2.5"/>
+            <rect x="132" y="126" width="36" height="28" rx="6" fill="var(--color-surface-2)" stroke="var(--color-teal)" stroke-width="2.5"/>
+            <circle cx="190" cy="90" r="12" fill="var(--color-surface-2)" stroke="var(--color-amber-light)" stroke-width="2.5"/>
+            <circle cx="190" cy="90" r="5" fill="none" stroke="var(--color-amber-light)" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="spotlight-content">
           <span class="card-day">Course notes</span>
           <h3>What I Learned From Course Camunda Academy</h3>
           <p>Ghi chú cá nhân học Camunda 8 Self-managed với Java + Spring Boot. Từ architecture đến production deployment.</p>
-          <div class="card-meta">
-            <span class="tag">Camunda</span>
-            <span class="tag">Spring Boot</span>
-            <span class="tag">Java</span>
+          <div class="spotlight-meta">
+            <span class="spotlight-meta-count">7 bài viết</span>
+            <div class="tag-group">
+              <span class="tag">Camunda</span>
+              <span class="tag">Spring Boot</span>
+              <span class="tag">Java</span>
+            </div>
           </div>
-        </a>
-
-        <!-- Thêm series mới vào đây -->
-        <div class="card" style="border-style: dashed; cursor: default;">
-          <span class="card-day">Sắp có</span>
-          <h3>Series tiếp theo...</h3>
-          <p>Đang lên kế hoạch. Theo dõi để không bỏ lỡ.</p>
         </div>
+      </a>
 
+      <!-- Thêm series mới vào đây -->
+      <div class="series-teaser">
+        <span class="series-teaser-dot"></span>
+        Series tiếp theo đang được lên kế hoạch - theo dõi để không bỏ lỡ.
       </div>
     </div>
   </section>
+
+  <!-- Rhythm break -->
+  <div class="quote-strip">
+    <div class="quote-strip-inner">
+      <svg width="28" height="22" viewBox="0 0 28 22"><path d="M0 22V13.2C0 8.5 1.3 5 3.9 2.7 6.5 0.4 9.4 -0.4 12.6 0.2L11.7 4.4C9.8 4.1 8.2 4.5 6.9 5.6 5.6 6.6 4.9 8.1 4.7 10H10V22H0ZM15.4 22V13.2C15.4 8.5 16.7 5 19.3 2.7 21.9 0.4 24.8 -0.4 28 0.2L27.1 4.4C25.2 4.1 23.6 4.5 22.3 5.6 21 6.6 20.3 8.1 20.1 10H25.4V22H15.4Z" fill="var(--color-amber)"/></svg>
+      <p>"Không hoàn hảo, nhưng kiên trì."</p>
+      <span>Ghi lại từng bài học, một bài một lần.</span>
+    </div>
+  </div>
 
   <!-- Latest Posts -->
   <section class="section bg-surface-2">
@@ -59,13 +95,45 @@
 
       <div class="card-grid">
 
-        <a href="camunda/overview.html" class="card">
+        <a href="camunda/overview.html" class="card" style="--card-accent: var(--color-blue);">
+          <div class="card-accent"></div>
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5Z"/><path d="M3 13l9 5 9-5"/><path d="M3 18l9 5 9-5"/></svg>
+          </div>
           <span class="card-day">Architecture</span>
           <h3>Camunda 8 - Overview</h3>
           <p>Zeebe engine là gì? Tại sao Camunda 8 khác hoàn toàn so với Camunda 7?</p>
           <div class="card-meta">
             <span>10 phút đọc</span>
             <span class="tag">Architecture</span>
+          </div>
+        </a>
+
+        <a href="camunda/bpmn-overview.html" class="card" style="--card-accent: var(--color-teal);">
+          <div class="card-accent"></div>
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="4" cy="12" r="2"/><line x1="6" y1="12" x2="9.5" y2="12"/><rect x="10" y="9" width="6" height="6" rx="1" transform="rotate(45 13 12)"/><line x1="15.5" y1="12" x2="19" y2="12"/><circle cx="20" cy="12" r="2"/></svg>
+          </div>
+          <span class="card-day">BPMN</span>
+          <h3>BPMN - Overview</h3>
+          <p>Các thành phần cơ bản của một BPMN diagram và cách đọc luồng xử lý.</p>
+          <div class="card-meta">
+            <span>12 phút đọc</span>
+            <span class="tag">BPMN</span>
+          </div>
+        </a>
+
+        <a href="camunda/bpmn-task-types.html" class="card" style="--card-accent: var(--color-purple);">
+          <div class="card-accent"></div>
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h2M4 12h2M4 18h2"/><path d="M9 6h11M9 12h11M9 18h11"/></svg>
+          </div>
+          <span class="card-day">Task Types</span>
+          <h3>BPMN - Task Types</h3>
+          <p>Service Task, User Task, Script Task... khi nào dùng loại nào trong quy trình?</p>
+          <div class="card-meta">
+            <span>10 phút đọc</span>
+            <span class="tag">Task Types</span>
           </div>
         </a>
 

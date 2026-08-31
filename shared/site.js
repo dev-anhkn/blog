@@ -92,12 +92,25 @@
       var pct = scrollable > 0 ? Math.min(100, Math.max(0, (scrollTop / scrollable) * 100)) : 0;
       progressBar.style.width = pct + '%';
     };
-    window.addEventListener('scroll', updateProgress, { passive: true });
+    var progressTicking = false;
+    window.addEventListener('scroll', function () {
+      if (progressTicking) return;
+      progressTicking = true;
+      requestAnimationFrame(function () {
+        updateProgress();
+        progressTicking = false;
+      });
+    }, { passive: true });
     updateProgress();
   }
 
   // SCROLL REVEAL - cards and accordion tiles fade/slide in as they enter view
-  var revealTargets = document.querySelectorAll('.card, .task-card, .info-card');
+  // (skip disabled "coming soon" cards - their inline opacity:0.5 would conflict
+  // with the .reveal fade, leaving the transform running but opacity stuck)
+  var revealTargets = Array.prototype.filter.call(
+    document.querySelectorAll('.card, .task-card, .info-card, .spotlight-card'),
+    function (el) { return el.style.pointerEvents !== 'none'; }
+  );
   if (revealTargets.length && 'IntersectionObserver' in window &&
       !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     revealTargets.forEach(function (el) { el.classList.add('reveal'); });
