@@ -19,19 +19,33 @@
     <p class="meta">19/08/2026 · 10 phút đọc · <a href="index.html">← Quay lại series</a></p>
   </div>
 
+  <nav class="toc" aria-label="Mục lục bài viết">
+    <p class="toc-title">Mục lục</p>
+    <ol>
+      <li><a href="#camunda-8-la-gi">Camunda 8 là gì?</a></li>
+      <li><a href="#vai-tro-trong-kien-truc-orchestrator-trung-tam">Vai trò trong kiến trúc: orchestrator trung tâm</a></li>
+      <li><a href="#orchestration-vs-choreography-khi-nao-dung-cai-nao">Orchestration vs Choreography - khi nào dùng cái nào</a></li>
+      <li><a href="#cac-thanh-phan-cot-loi">Các thành phần cốt lõi</a></li>
+      <li><a href="#luong-trien-khai-tong-quat">Luồng triển khai tổng quát</a></li>
+      <li><a href="#saas-camunda-cloud-vs-self-managed">SaaS (Camunda Cloud) vs Self-Managed</a></li>
+      <li><a href="#tools-for-the-process-application-development-lifecycle">Tools for the Process Application Development Lifecycle</a></li>
+      <li><a href="#tom-tat">Tóm tắt</a></li>
+    </ol>
+  </nav>
+
   <div class="article-body">
 
     <blockquote>
       <strong>Mục tiêu:</strong> Hiểu Camunda 8 là gì, nó đứng ở vị trí nào trong kiến trúc hệ thống, các thành phần cốt lõi làm gì, và luồng vận hành tổng quát từ lúc vẽ process đến lúc chạy xong.
     </blockquote>
 
-    <h2>1. Camunda 8 là gì?</h2>
+    <h2 id="camunda-8-la-gi">1. Camunda 8 là gì?</h2>
 
     <p>Camunda 8 là một <strong>distributed workflow & decision orchestration engine</strong> - nói dễ hiểu: bạn vẽ quy trình nghiệp vụ (đặt hàng, duyệt nghỉ phép, xử lý claim bảo hiểm...) dưới dạng sơ đồ <strong>BPMN</strong>, rồi Camunda sẽ "chạy" sơ đồ đó thay vì bạn phải viết logic điều phối bằng tay bằng vô số <code>if/else</code> rải rác trong code.</p>
 
     <p>Khác biệt lớn nhất so với Camunda 7: C7 là <strong>embedded engine</strong> - nhúng thẳng vào JVM app của bạn, chạy chung process với ứng dụng. C8 tách engine ra thành một <strong>hệ thống phân tán độc lập</strong> (Zeebe), giao tiếp với app qua gRPC. Đổi lại sự phức tạp khi phải quản lý thêm một cluster, bạn có khả năng scale ngang và chịu lỗi tốt hơn nhiều.</p>
 
-    <h2>2. Vai trò trong kiến trúc: orchestrator trung tâm</h2>
+    <h2 id="vai-tro-trong-kien-truc-orchestrator-trung-tam">2. Vai trò trong kiến trúc: orchestrator trung tâm</h2>
 
     <p>Ví dụ một hệ thống e-commerce có <code>order-service</code>, <code>payment-service</code>, <code>inventory-service</code>, <code>notification-service</code>. Không có orchestrator, các service này phải tự gọi lẫn nhau: order gọi payment, payment gọi inventory... Logic điều phối bị rải rác khắp nơi, rất khó nhìn ra toàn cảnh quy trình, và càng khó xử lý khi một bước fail giữa chừng.</p>
 
@@ -47,7 +61,7 @@
 
     <p>Zeebe cầm trịch toàn bộ luồng này. Mỗi service không cần biết về các service khác - nó chỉ cần là một <strong>Job Worker</strong> lắng nghe đúng loại job của mình (ví dụ <code>payment-service</code> chỉ quan tâm job <code>process-payment</code>) và trả kết quả về cho Zeebe.</p>
 
-    <h2>3. Orchestration vs Choreography - khi nào dùng cái nào</h2>
+    <h2 id="orchestration-vs-choreography-khi-nao-dung-cai-nao">3. Orchestration vs Choreography - khi nào dùng cái nào</h2>
 
     <table>
       <tr><th></th><th>Orchestration</th><th>Choreography</th></tr>
@@ -59,7 +73,7 @@
 
     <p>Trong thực tế, nhiều hệ thống dùng kết hợp cả hai: Camunda orchestrate luồng nghiệp vụ chính, nhưng bên trong từng service vẫn có thể tự phát event kiểu choreography cho các mục đích phụ như logging hay analytics.</p>
 
-    <h2>4. Các thành phần cốt lõi</h2>
+    <h2 id="cac-thanh-phan-cot-loi">4. Các thành phần cốt lõi</h2>
 
     <table>
       <tr><th>Thành phần</th><th>Vai trò</th></tr>
@@ -73,7 +87,7 @@
       <tr><td><strong>Desktop Modeler</strong></td><td>Bản desktop offline của Modeler - dùng khi không cần cộng tác online.</td></tr>
     </table>
 
-    <h2>5. Luồng triển khai tổng quát</h2>
+    <h2 id="luong-trien-khai-tong-quat">5. Luồng triển khai tổng quát</h2>
 
     <pre>Model (vẽ BPMN) → Deploy process definition → Create instance
         → Worker nhận & xử lý job → Complete / Fail job
@@ -88,7 +102,7 @@
       <li><strong>Operate quan sát</strong>: bất kỳ lúc nào cũng có thể mở Operate để xem instance đang ở bước nào, biến gì, lỗi gì.</li>
     </ul>
 
-    <h2>6. SaaS (Camunda Cloud) vs Self-Managed</h2>
+    <h2 id="saas-camunda-cloud-vs-self-managed">6. SaaS (Camunda Cloud) vs Self-Managed</h2>
 
     <p><strong>SaaS</strong>: Camunda quản lý cluster, network, upgrade - bạn chỉ cần trỏ worker tới một endpoint và tập trung viết logic nghiệp vụ. Không cần lo hạ tầng, nhưng dữ liệu process nằm trên cloud của Camunda và chi phí tính theo usage.</p>
 
@@ -96,7 +110,7 @@
 
     <p>Series này đi theo hướng <strong>Self-managed</strong>, vì đó là lựa chọn phổ biến khi công ty cần kiểm soát hạ tầng và dữ liệu.</p>
 
-    <h2>7. Tools for the Process Application Development Lifecycle</h2>
+    <h2 id="tools-for-the-process-application-development-lifecycle">7. Tools for the Process Application Development Lifecycle</h2>
 
     <p>Phần 4 đã liệt kê từng component làm gì. Ở đây nhìn theo lifecycle chính thức của Camunda Academy - 5 giai đoạn: <strong>Design and implement</strong>, <strong>Test and deploy</strong>, <strong>Automate</strong>, <strong>Improve</strong>, <strong>Manage</strong>. Nhớ theo giai đoạn dễ hơn nhớ một danh sách tên rời rạc - mỗi lần cần làm gì, chỉ cần hỏi "đang ở giai đoạn nào" là biết mở tool nào.</p>
 
@@ -115,7 +129,7 @@
     <h3>Manage</h3>
     <p><strong>Operate</strong> theo dõi/resolve incident, <strong>Tasklist</strong> quản lý human task, <strong>Identity</strong> quản lý user/role/tenant - ba tool này chạy song song suốt vòng đời vận hành, không phải một bước làm xong rồi thôi như 4 giai đoạn trên.</p>
 
-    <h2>Tóm tắt</h2>
+    <h2 id="tom-tat">Tóm tắt</h2>
     <ul>
       <li>Camunda 8 là engine orchestration phân tán, tách rời khỏi app qua gRPC - khác hoàn toàn kiến trúc embedded của C7</li>
       <li>Đóng vai trò "nhạc trưởng" điều phối service, human task, decision - thay vì để các service tự gọi lẫn nhau</li>

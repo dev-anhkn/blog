@@ -19,9 +19,22 @@
     <p class="meta">25/08/2026 · 14 phút đọc · <a href="index.html">← Quay lại series</a></p>
   </div>
 
+  <nav class="toc" aria-label="Mục lục bài viết">
+    <p class="toc-title">Mục lục</p>
+    <ol>
+      <li><a href="#gioi-thieu-ve-dmn">Giới thiệu về DMN</a></li>
+      <li><a href="#cac-use-case-cua-dmn">Các use case của DMN</a></li>
+      <li><a href="#cac-thanh-phan-cua-dmn">Các thành phần của DMN</a></li>
+      <li><a href="#decision-requirements-diagram-drd">Decision Requirements Diagram (DRD)</a></li>
+      <li><a href="#decision-table">Decision table</a></li>
+      <li><a href="#friendly-enough-expression-language-feel">Friendly Enough Expression Language (FEEL)</a></li>
+      <li><a href="#tom-tat">Tóm tắt</a></li>
+    </ol>
+  </nav>
+
   <div class="article-body">
 
-    <h2>Giới thiệu về DMN</h2>
+    <h2 id="gioi-thieu-ve-dmn">Giới thiệu về DMN</h2>
     <p class="lead"><strong>D</strong>ecision <strong>M</strong>odel and <strong>N</strong>otation.</p>
     <p>Ra quyết định rõ ràng và nhất quán là chìa khóa để có quy trình nghiệp vụ hiệu quả. DMN giúp bạn làm điều đó bằng cách cung cấp một cách chuẩn hóa để mô hình hóa decision logic, dễ chia sẻ và dễ hiểu giữa các team.</p>
 
@@ -44,7 +57,7 @@
     <h3>Ai duy trì DMN?</h3>
     <p>DMN được phát triển và duy trì bởi <strong>Object Management Group (OMG)</strong>, một tổ chức tiêu chuẩn hóa toàn cầu. OMG đảm bảo DMN vẫn là một standard được áp dụng rộng rãi và đáng tin cậy trong nhiều ngành.</p>
 
-    <h2>Các use case của DMN</h2>
+    <h2 id="cac-use-case-cua-dmn">Các use case của DMN</h2>
     <p>DMN tập trung vào <strong>operational decisions</strong>, không phải strategic decisions. Dùng DMN cho các quyết định thường nhật mà bạn phải đưa ra lặp lại mỗi ngày.</p>
     <p>Strategic decisions - ví dụ công ty có nên áp dụng BPMN hay DMN - là những quyết định đơn lẻ (unique). Chúng hiếm khi theo một bộ rule cố định, nên mô hình hóa bằng DMN không đáng để đầu tư.</p>
     <p>Dưới đây là các ví dụ điển hình về operational decisions bạn có thể mô hình hóa bằng DMN.</p>
@@ -59,7 +72,7 @@
       <li><strong>Targeting:</strong> ví dụ, xác định sản phẩm hoặc banner quảng cáo có thể khiến một user quan tâm (nhắm tới target group).</li>
     </ul>
 
-    <h2>Các thành phần của DMN</h2>
+    <h2 id="cac-thanh-phan-cua-dmn">Các thành phần của DMN</h2>
 
     <h3>Một decision trong DMN</h3>
     <img src="images/dmn-overview/a-decision-in-dmn.png" alt="Sơ đồ minh họa một decision trong DMN" class="article-hero-img">
@@ -74,7 +87,7 @@
 
     <blockquote>💡 DMN đi kèm với expression language riêng gọi là <strong>FEEL</strong> - viết tắt của Friendly Enough Expression Language. Bạn sẽ dùng FEEL để viết rule trong decision table hoặc literal expression.</blockquote>
 
-    <h2>Decision Requirements Diagram (DRD)</h2>
+    <h2 id="decision-requirements-diagram-drd">Decision Requirements Diagram (DRD)</h2>
     <p>Một DRD bao gồm <strong>decision box</strong> và <strong>input data</strong>.</p>
 
     <h3>Decision box</h3>
@@ -91,7 +104,7 @@
     <p>Các mũi tên giữa input và decision được gọi là <strong>decision requirements</strong>, vì input được nối tới là bắt buộc (required) cho decision đó.</p>
     <img src="images/dmn-overview/decision-requirements-2.png" alt="Mũi tên decision requirements nối input data và decision box" class="article-hero-img">
 
-    <h2>Decision table</h2>
+    <h2 id="decision-table">Decision table</h2>
     <p>Decision table là một cách biểu diễn có cấu trúc của decision logic, dưới dạng bảng.</p>
     <img src="images/dmn-overview/decision-table-1.png" alt="Ví dụ tổng quan một decision table" class="article-hero-img">
 
@@ -147,7 +160,7 @@
 
     <blockquote>💡 Việc cân nhắc hit policy khi định nghĩa rule là rất quan trọng.</blockquote>
 
-    <h2>Friendly Enough Expression Language (FEEL)</h2>
+    <h2 id="friendly-enough-expression-language-feel">Friendly Enough Expression Language (FEEL)</h2>
     <p>FEEL giúp bạn viết expression cho decision table và literal expression. Ngôn ngữ này rõ ràng và dễ hiểu cho cả business professional lẫn developer.</p>
 
     <h3>Ví dụ về FEEL data type</h3>
@@ -157,7 +170,7 @@
       <li><strong>Boolean:</strong> chỉ có hai giá trị true hoặc false.</li>
     </ul>
 
-    <h2>Tóm tắt</h2>
+    <h2 id="tom-tat">Tóm tắt</h2>
     <ul>
       <li>DMN là một notation chuẩn hóa để mô hình hóa business decision một cách trực quan, trực tiếp bên trong BPMN process của bạn.</li>
       <li>DMN phù hợp cho <strong>operational decisions</strong> cần thực thi hằng ngày, không phải cho strategic decisions mang tính đơn lẻ.</li>

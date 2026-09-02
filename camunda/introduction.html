@@ -19,6 +19,18 @@
     <p class="meta">20/08/2026 · 8 phút đọc · <a href="index.html">← Quay lại series</a></p>
   </div>
 
+  <nav class="toc" aria-label="Mục lục bài viết">
+    <p class="toc-title">Mục lục</p>
+    <ol>
+      <li><a href="#camunda-la-gi-va-vi-sao-can-dieu-phoi-quy-trinh">Camunda là gì, và vì sao cần điều phối quy trình</a></li>
+      <li><a href="#boat-boi-canh-nganh-camunda-dang-dat-cuoc-vao">BOAT - bối cảnh ngành Camunda đang đặt cược vào</a></li>
+      <li><a href="#goc-nhin-ky-thuat-vi-sao-can-mot-engine-rieng">Góc nhìn kỹ thuật - vì sao cần một engine riêng</a></li>
+      <li><a href="#rao-can-thuc-te-va-vi-sao-minh-chon-self-managed">Rào cản thực tế, và vì sao mình chọn Self-managed</a></li>
+      <li><a href="#quan-diem-ca-nhan">Quan điểm cá nhân</a></li>
+      <li><a href="#tom-tat">Tóm tắt</a></li>
+    </ol>
+  </nav>
+
   <div class="article-body">
 
     <img src="images/introduction/introduction-hero.jpg" alt="Minh họa điều phối quy trình kinh doanh (business orchestration)" class="article-hero-img">
@@ -27,13 +39,13 @@
       <strong>Mục tiêu:</strong> Hiểu <strong>Camunda</strong> là gì và vì sao điều phối quy trình (<strong>orchestration</strong>) đáng để đầu tư một engine riêng, trước khi đi vào chi tiết kiến trúc <strong>Camunda</strong> 8 ở <a href="overview.html">bài tiếp theo</a>.
     </blockquote>
 
-    <h2>Camunda là gì, và vì sao cần điều phối quy trình</h2>
+    <h2 id="camunda-la-gi-va-vi-sao-can-dieu-phoi-quy-trinh">Camunda là gì, và vì sao cần điều phối quy trình</h2>
 
     <p class="lead"><strong>Camunda</strong> là nền tảng điều phối và tự động hóa quy trình. Nói theo kiểu code: có một quy trình nghiệp vụ nhiều bước, nhiều hệ thống tham gia (duyệt vay, xử lý đơn hàng, onboarding...) - thay vì viết logic điều phối rải rác bằng tay trong service này gọi service kia, bạn mô hình hóa quy trình bằng <strong>BPMN</strong> rồi để engine (<strong>Zeebe</strong>) chạy nó, quản lý luôn trạng thái, thứ tự, và các trường hợp lỗi. Rule nghiệp vụ (ví dụ "đơn dưới 500tr thì auto-approve") tách riêng ra bằng <strong>DMN</strong>, để business chỉnh được mà không cần deploy lại app.</p>
 
     <p>Lý do cần điều phối: <strong>càng nhiều hệ thống tham gia một quy trình, chi phí giữ chúng ăn khớp tăng phi tuyến, không tuyến tính.</strong> Hai service gọi nhau thì dễ debug. Sáu bảy service cùng tham gia một luồng (thanh toán, kho, thông báo, gian lận...) mà không ai giữ bức tranh tổng thể - lỗi giữa luồng gần như không trace được. Điều phối giải quyết đúng việc đó: một chỗ duy nhất biết toàn bộ quy trình đang chạy tới đâu.</p>
 
-    <h2>BOAT - bối cảnh ngành Camunda đang đặt cược vào</h2>
+    <h2 id="boat-boi-canh-nganh-camunda-dang-dat-cuoc-vao">BOAT - bối cảnh ngành Camunda đang đặt cược vào</h2>
 
     <p><strong>Gartner</strong> năm 2024 đặt tên cho một dịch chuyển trong ngành tự động hóa: <strong>BOAT - Business Orchestration and Automation Technologies</strong>. Ba giai đoạn:</p>
 
@@ -45,7 +57,7 @@
 
     <p>Thuật ngữ nghe marketing, nhưng cái nó chỉ ra thì thật: hầu hết công cụ tự động hóa xử lý tác vụ riêng lẻ, rất ít công cụ xử lý được toàn bộ quy trình có trạng thái. Đó là khoảng trống <strong>Zeebe</strong> nhắm tới.</p>
 
-    <h2>Góc nhìn kỹ thuật - vì sao cần một engine riêng</h2>
+    <h2 id="goc-nhin-ky-thuat-vi-sao-can-mot-engine-rieng">Góc nhìn kỹ thuật - vì sao cần một engine riêng</h2>
 
     <h3>Nhiệm vụ đơn lẻ khác quy trình đầu-cuối ở đâu</h3>
 
@@ -65,7 +77,7 @@
 
     <p><strong>Camunda</strong> expose ra ngoài qua gRPC/REST với client library cho nhiều ngôn ngữ (Java, Node, Go, Python...), nên không bị khóa cứng vào JVM. Series này chọn Java + Spring Boot vì đó là stack quen tay, không phải vì <strong>Camunda</strong> ép buộc.</p>
 
-    <h2>Rào cản thực tế, và vì sao mình chọn Self-managed</h2>
+    <h2 id="rao-can-thuc-te-va-vi-sao-minh-chon-self-managed">Rào cản thực tế, và vì sao mình chọn Self-managed</h2>
 
     <h3>Rào cản tự động hóa - vì sao dự án hay bị chặn giữa chừng</h3>
 
@@ -81,13 +93,13 @@
 
     <p>Điều phối "toàn bộ quy trình" nghĩa là dữ liệu quy trình - thông tin khách hàng, quyết định tín dụng - chạy qua engine đó. Cần kiểm soát dữ liệu chặt (compliance, on-premise) thì tự quản lý hạ tầng <strong>orchestration</strong> hợp lý hơn giao cho <strong>SaaS</strong> bên ngoài - đó là lý do series này đi theo <strong>Self-managed</strong>.</p>
 
-    <h2>Quan điểm cá nhân</h2>
+    <h2 id="quan-diem-ca-nhan">Quan điểm cá nhân</h2>
 
     <p>Tài liệu <strong>BOAT</strong> gốc thiên về định vị sản phẩm (đúng vì xuất phát từ <strong>Gartner</strong> + <strong>Camunda</strong> marketing), nhưng điều mình rút ra và thấy áp dụng thật khi ngồi code lại đơn giản hơn nhiều: <strong>đừng tự chế state machine bằng tay cho quy trình nhiều bước, nhiều ngày, nhiều hệ thống.</strong> Mình từng viết kha khá code kiểu đó - vài cột trạng thái trong DB, vài cron dò để "resume", không ai nhìn ra quy trình đang chạy tới đâu. Đúng là nỗi đau <strong>orchestration</strong> engine sinh ra để giải quyết.</p>
 
     <p>Phần "trí tuệ nhúng"/AI <strong>orchestration</strong> trong tài liệu gốc mình dè dặt hơn - đúng xu hướng nhưng chưa kiểm chứng trong series này, tạm gác lại, tập trung nền tảng (<strong>BPMN</strong>, worker, state) trước.</p>
 
-    <h2>Tóm tắt</h2>
+    <h2 id="tom-tat">Tóm tắt</h2>
     <ul>
       <li><strong>Camunda</strong> = điều phối quy trình đầu-cuối bằng <strong>BPMN/DMN</strong>, không chỉ tự động hóa từng tác vụ</li>
       <li><strong>Orchestration</strong> cần thiết vì chi phí giữ nhiều hệ thống ăn khớp tăng phi tuyến theo số service tham gia</li>

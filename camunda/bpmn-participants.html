@@ -19,62 +19,88 @@
     <p class="meta">31/08/2026 · 16 phút đọc · <a href="index.html">← Quay lại series</a></p>
   </div>
 
+  <nav class="toc" aria-label="Mục lục bài viết">
+    <p class="toc-title">Mục lục</p>
+    <ol>
+      <li><a href="#participant-la-gi">Participant là gì?</a></li>
+      <li><a href="#pool-va-lane">Pool và lane thể hiện participant thế nào?</a></li>
+      <li><a href="#pool-la-gi">Pool là gì?</a></li>
+      <li><a href="#lane-la-gi">Lane là gì?</a></li>
+      <li><a href="#strategic-vs-operational">Strategic vs Operational process model</a></li>
+      <li><a href="#tom-tat">Tóm tắt</a></li>
+    </ol>
+  </nav>
+
   <div class="article-body">
 
-    <h2>Participant là gì?</h2>
-    <p class="lead">Một <strong>participant</strong> là thực thể kiểm soát một process, hoặc kiểm soát các task bên trong process đó.</p>
+    <div style="background-color:var(--color-surface-1); border:1px solid var(--color-border); border-radius:var(--radius); padding:1.5rem; text-align:center; margin-bottom:2rem;">
+      <img src="images/bpmn-participants/participants-network-icon.png" alt="Icon minh họa participant - nhiều người kết nối với nhau" style="max-width:160px; width:100%; margin:0 auto;">
+    </div>
+
+    <h2 id="participant-la-gi">Participant là gì?</h2>
+    <p class="definition">Một <strong>participant</strong> là <strong>thực thể kiểm soát một process, hoặc kiểm soát các task bên trong process đó</strong>.</p>
     <p>Participant không nhất thiết phải là một con người. Nó có thể là:</p>
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:1rem; margin:1.5rem 0;">
       <div style="background-color:var(--color-surface-1); border:1px solid var(--color-border); border-radius:var(--radius); padding:1rem; text-align:center;">
         <img src="images/bpmn-participants/person.png" alt="Icon một người" style="width:100%; max-width:96px; margin:0 auto;">
-        <p style="margin:0.75rem 0 0; font-size:0.875rem; color:var(--color-text-muted);">Một người</p>
+        <p style="margin:0.75rem 0 0; font-size:0.875rem;"><strong>Một người</strong>: <span style="color:var(--color-text-muted);">một nhân viên cụ thể.</span></p>
       </div>
       <div style="background-color:var(--color-surface-1); border:1px solid var(--color-border); border-radius:var(--radius); padding:1rem; text-align:center;">
         <img src="images/bpmn-participants/organization.png" alt="Icon một tổ chức" style="width:100%; max-width:96px; margin:0 auto;">
-        <p style="margin:0.75rem 0 0; font-size:0.875rem; color:var(--color-text-muted);">Một tổ chức</p>
+        <p style="margin:0.75rem 0 0; font-size:0.875rem;"><strong>Một tổ chức</strong>: <span style="color:var(--color-text-muted);">cả một công ty.</span></p>
       </div>
       <div style="background-color:var(--color-surface-1); border:1px solid var(--color-border); border-radius:var(--radius); padding:1rem; text-align:center;">
         <img src="images/bpmn-participants/department.png" alt="Icon một phòng ban" style="width:100%; max-width:96px; margin:0 auto;">
-        <p style="margin:0.75rem 0 0; font-size:0.875rem; color:var(--color-text-muted);">Một phòng ban</p>
+        <p style="margin:0.75rem 0 0; font-size:0.875rem;"><strong>Một phòng ban</strong>: <span style="color:var(--color-text-muted);">phòng kế toán.</span></p>
       </div>
       <div style="background-color:var(--color-surface-1); border:1px solid var(--color-border); border-radius:var(--radius); padding:1rem; text-align:center;">
         <img src="images/bpmn-participants/role.png" alt="Icon một vai trò" style="width:100%; max-width:96px; margin:0 auto;">
-        <p style="margin:0.75rem 0 0; font-size:0.875rem; color:var(--color-text-muted);">Một vai trò</p>
+        <p style="margin:0.75rem 0 0; font-size:0.875rem;"><strong>Một vai trò</strong>: <span style="color:var(--color-text-muted);">"người duyệt đơn", bất kể ai đang giữ vai trò đó.</span></p>
       </div>
     </div>
-    <ul>
-      <li><strong>Một người</strong> - ví dụ một nhân viên cụ thể.</li>
-      <li><strong>Một tổ chức</strong> - ví dụ cả một công ty.</li>
-      <li><strong>Một phòng ban</strong> - ví dụ phòng kế toán.</li>
-      <li><strong>Một vai trò</strong> - ví dụ "người duyệt đơn", bất kể ai đang giữ vai trò đó.</li>
-    </ul>
     <p>Trong BPMN, participant được vẽ ra bằng hai loại element: <strong>pool</strong> và <strong>lane</strong> (hay còn gọi là swimlane). Hai loại này giúp diagram trả lời rõ câu hỏi "ai đang sở hữu task nào", và giúp cả strategic model (mô hình mang tính chiến lược, tổng quan) lẫn operational model (mô hình vận hành, chạy thật) đều dễ đọc hơn.</p>
 
-    <h2>Pool và lane thể hiện participant thế nào?</h2>
-    <img src="images/bpmn-participants/pool.png" alt="Pool bao quanh toàn bộ process Roommates: Prepare a Shared Meal" class="article-hero-img is-native">
-    <p><strong>Pool</strong> cho biết ai, hay cái gì, kiểm soát <strong>toàn bộ process</strong>. Ở ví dụ trên, pool được đặt tên "Roommates: Prepare a Shared Meal" - vừa nói rõ ai sở hữu process này (các bạn cùng phòng), vừa nói rõ process đó làm gì (chuẩn bị một bữa ăn chung).</p>
-    <img src="images/bpmn-participants/lanes.png" alt="Ba lane Avery, Maria, Emilia bên trong pool Roommates" class="article-hero-img is-native">
-    <p><strong>Lane</strong> cho biết ai, hay cái gì, chịu trách nhiệm cho từng <strong>task riêng lẻ</strong> bên trong process. Trong pool ở trên, ba lane Avery, Maria và Emilia là ba người chịu trách nhiệm hoàn thành các task để chuẩn bị xong bữa ăn.</p>
+    <h2 id="pool-va-lane">Pool và lane thể hiện participant thế nào?</h2>
+    <p>Cùng một diagram "Roommates: Prepare a Shared Meal" - bấm vào từng tab để xem pool và lane được highlight khác nhau ra sao:</p>
 
-    <h2>Pool là gì?</h2>
+    <div class="flow-tabs">
+
+      <input type="radio" name="pool-lane" id="pl-pool" checked>
+      <label for="pl-pool" class="flow-tab-label">Pool</label>
+
+      <input type="radio" name="pool-lane" id="pl-lane">
+      <label for="pl-lane" class="flow-tab-label">Lane</label>
+
+      <div class="flow-tab-panel" data-tab-panel="pool">
+        <p class="mb-4"><strong>Pool</strong> cho biết ai, hay cái gì, kiểm soát <strong>toàn bộ process</strong>. Trong ví dụ này, pool được đặt tên "Roommates: Prepare a Shared Meal" - vừa nói rõ ai sở hữu process này (các bạn cùng phòng), vừa nói rõ process đó làm gì (chuẩn bị một bữa ăn chung).</p>
+        <img src="images/bpmn-participants/pool.png" alt="Pool bao quanh toàn bộ process Roommates: Prepare a Shared Meal" class="article-hero-img is-native">
+      </div>
+      <div class="flow-tab-panel" data-tab-panel="lane">
+        <p class="mb-4"><strong>Lane</strong> cho biết ai, hay cái gì, chịu trách nhiệm cho từng <strong>task riêng lẻ</strong> bên trong process. Cũng trong ví dụ này, ba lane Avery, Maria và Emilia là ba người chịu trách nhiệm hoàn thành các task để chuẩn bị xong bữa ăn.</p>
+        <img src="images/bpmn-participants/lanes.png" alt="Ba lane Avery, Maria, Emilia bên trong pool Roommates" class="article-hero-img is-native">
+      </div>
+
+    </div>
+
+    <h2 id="pool-la-gi">Pool là gì?</h2>
     <p>Pool đại diện cho participant kiểm soát toàn bộ process - nó <strong>điều phối luồng chạy</strong> và <strong>phân công task</strong> bên trong process đó, giống hệt cách một nhạc trưởng phân công từng đoạn nhạc cho từng nhạc công trong dàn nhạc. Vì lý do này, việc phân công task bên trong một process còn được gọi là <strong>orchestration</strong>.</p>
 
-    <h3>Pool được tạo ra như thế nào?</h3>
+    <h3 id="pool-duoc-tao-ra">Pool được tạo ra như thế nào?</h3>
     <img src="images/bpmn-participants/how-pools-are-created.png" alt="Pool ngầm định (đường viền nét đứt) bao quanh process khi vừa tạo mới" class="article-hero-img is-native">
     <p>Mỗi khi bạn tạo một process diagram mới, một pool luôn được <strong>ngầm định</strong> tồn tại - dù modeler không hiện nó ra ngay từ đầu, pool đó vẫn đứng phía sau làm nền mặc định.</p>
 
-    <h3>Một process = một pool</h3>
+    <h3 id="mot-process-mot-pool">Một process = một pool</h3>
     <img src="images/bpmn-participants/one-process-one-pool.png" alt="Hai process tách biệt, mỗi process nằm trong một pool riêng" class="article-hero-img is-native">
     <p>Một process luôn nằm trọn trong <strong>một</strong> pool, và sequence flow <strong>không được phép đi ra ngoài</strong> biên của pool đó. Vì vậy, nếu muốn thêm một process thứ hai vào diagram, bạn phải đặt process đó vào một pool riêng - tách biệt hoàn toàn với pool đầu tiên.</p>
 
-    <h3>Đặt tên pool sao cho đúng</h3>
+    <h3 id="dat-ten-pool">Đặt tên pool sao cho đúng</h3>
     <p>Vì một pool tương ứng với một process, tên pool nên nói rõ <strong>process đó đang làm gì</strong>, chứ không chỉ nói ai sở hữu nó.</p>
     <img src="images/bpmn-participants/pool-name-before.png" alt="Pool chỉ được đặt tên Camundanzia, chưa rõ process làm gì" class="article-hero-img is-native">
     <p>Ở ví dụ trên, pool chỉ được đặt tên "Camundanzia" - ai cũng biết ai sở hữu process, nhưng chẳng ai đoán được process này đang làm gì.</p>
     <img src="images/bpmn-participants/pool-name-after.png" alt="Pool được đổi tên thành Camundanzia: Hardware Equipment Reimbursement" class="article-hero-img is-native">
     <p>Sau khi đổi tên thành "Camundanzia: Hardware Equipment Reimbursement", mọi thứ rõ ràng hẳn: Camundanzia là participant kiểm soát process hoàn tiền thiết bị phần cứng.</p>
 
-    <h2>Lane là gì?</h2>
+    <h2 id="lane-la-gi">Lane là gì?</h2>
     <img src="images/bpmn-participants/lanes-example-employee-approver.png" alt="Ví dụ lane Employee và Approver trong pool Camundanzia: Hardware Equipment Reimbursement" class="article-hero-img is-native">
     <p>Nếu pool đóng vai trò nhạc trưởng cho cả process, thì lane giống như từng nhạc công - <strong>mỗi lane chịu trách nhiệm cho một phần riêng</strong> của bản nhạc. Ở ví dụ trên, hai lane là "Employee" và "Approver":</p>
     <ul>
@@ -83,7 +109,7 @@
     </ul>
     <p>Mỗi lane định nghĩa ai, hay cái gì, chịu trách nhiệm hoàn thành các task trong process - và mỗi flow object (event, activity, gateway) chỉ được thuộc về <strong>đúng một</strong> lane.</p>
 
-    <h3>Đặt tên lane sao cho đúng</h3>
+    <h3 id="dat-ten-lane">Đặt tên lane sao cho đúng</h3>
     <p>Lane có thể được đặt tên theo vị trí/vai trò trong tổ chức, vai trò chung, phòng ban, hoặc thậm chí theo ứng dụng. Bấm vào từng mục để xem ví dụ:</p>
 
     <div class="info-card-grid">
@@ -134,7 +160,7 @@
 
     </div>
 
-    <h3>⚠️ Nhược điểm của lane</h3>
+    <h3 id="nhuoc-diem-lane">⚠️ Nhược điểm của lane</h3>
     <p>Lane giúp làm rõ ai sở hữu task nào, nhưng đi kèm với đó là một vài đánh đổi. Bấm vào từng mục để xem chi tiết:</p>
 
     <div class="info-card-grid">
@@ -163,7 +189,7 @@
 
     </div>
 
-    <h3>Thay vì dùng lane, có thể làm gì khác?</h3>
+    <h3 id="thay-vi-dung-lane">Thay vì dùng lane, có thể làm gì khác?</h3>
     <p>Để process vẫn dễ đọc và dễ bảo trì, đôi khi tốt nhất là tránh dùng lane hoàn toàn. Bấm vào từng mục để xem ví dụ:</p>
 
     <div class="task-card-grid">
@@ -193,14 +219,14 @@
     </div>
     <p>(*) Dùng nhiều pool riêng kèm collaboration diagram là chủ đề nằm ngoài phạm vi bài này, nhưng bạn có thể tìm hiểu thêm trong khóa <a href="https://academy.camunda.com/bpmn-messages-collaboration" target="_blank" rel="noopener">BPMN Messages and Collaboration</a>.</p>
 
-    <h3>Vậy khi nào nên dùng lane?</h3>
+    <h3 id="khi-nao-dung-lane">Vậy khi nào nên dùng lane?</h3>
     <p>Nếu vẫn muốn dùng lane, chỉ nên dùng trong:</p>
     <ul>
       <li>✅ <strong>Strategic process model</strong> - tập trung vào trách nhiệm và ranh giới giữa chúng.</li>
       <li>✅ <strong>Operational process model</strong> - tập trung vào human workflow.</li>
     </ul>
 
-    <h2>Strategic vs Operational process model</h2>
+    <h2 id="strategic-vs-operational">Strategic vs Operational process model</h2>
     <p>Cùng một quy trình, nhưng có hai cách vẽ hoàn toàn khác mục đích: một bên để bàn bạc ý tưởng, một bên để chạy thật.</p>
     <img src="images/bpmn-participants/strategic-model-overview.png" alt="Strategic process model Company: Report Sick Leave với 3 lane Employee, Back Office, Finance" class="article-hero-img is-native">
     <p>Ví dụ trên là một strategic model - "Company: Report Sick Leave". Nhìn qua là hiểu ngay: nhân viên báo ốm, xin giấy bác sĩ, rồi ba lane cùng xử lý song song. Không có task type nào được định nghĩa, cũng chẳng có exception nào được vẽ ra - đúng tinh thần "bird's eye view".</p>
@@ -245,7 +271,7 @@
     <p>Ngược lại, một operational model đi sâu vào chi tiết vận hành thật - task đã gán type rõ ràng, và thường dùng nhiều pool nối nhau bằng collaboration diagram thay vì lane, như ví dụ xử lý invoice bên dưới:</p>
     <img src="images/bpmn-participants/operational-model-overview.png" alt="Operational process model xử lý invoice với nhiều pool: Mail Room, Invoicer, Team Assistence, Managing director" class="article-hero-img is-native">
 
-    <h3>Best practice cho strategic model</h3>
+    <h3 id="best-practice-strategic">Best practice cho strategic model</h3>
     <p>Khi vẽ một strategic process model, hãy bám theo mấy nguyên tắc sau - tất cả đều được minh họa trên cùng ví dụ "Report Sick Leave" ở trên, chỉ khác nhau ở khía cạnh được nhấn mạnh. Bấm vào từng mục để xem chi tiết:</p>
 
     <div class="info-card-grid">
@@ -312,7 +338,7 @@
 
     </div>
 
-    <h2>Tóm tắt</h2>
+    <h2 id="tom-tat">Tóm tắt</h2>
     <ul>
       <li><strong>BPMN participant</strong> là một thực thể (người, team, tổ chức, hay hệ thống) kiểm soát hoặc chịu trách nhiệm cho một process, hoặc một phần của process.</li>
       <li><strong>Pool</strong> và <strong>lane</strong> là hai element BPMN dùng để định nghĩa và thể hiện participant cùng trách nhiệm của họ trên diagram.</li>

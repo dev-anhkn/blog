@@ -19,9 +19,20 @@
     <p class="meta">25/08/2026 · 12 phút đọc · <a href="index.html">← Quay lại series</a></p>
   </div>
 
+  <nav class="toc" aria-label="Mục lục bài viết">
+    <p class="toc-title">Mục lục</p>
+    <ol>
+      <li><a href="#gioi-thieu-ve-bpmn">Giới thiệu về BPMN</a></li>
+      <li><a href="#cac-thanh-phan-chinh-cua-bpmn">Các thành phần chính của BPMN</a></li>
+      <li><a href="#exclusive-gateway">Exclusive gateway</a></li>
+      <li><a href="#parallel-gateway">Parallel gateway</a></li>
+      <li><a href="#tom-tat">Tóm tắt</a></li>
+    </ol>
+  </nav>
+
   <div class="article-body">
 
-    <h2>Giới thiệu về BPMN</h2>
+    <h2 id="gioi-thieu-ve-bpmn">Giới thiệu về BPMN</h2>
     <p class="lead"><strong>B</strong>usiness <strong>P</strong>rocess <strong>M</strong>odel and <strong>N</strong>otation - một cách vẽ quy trình nghiệp vụ sao cho <strong>ai nhìn vào cũng hiểu</strong>, không riêng gì dân kỹ thuật.</p>
     <p>Nếu bạn từng thấy một sơ đồ đầy ô vuông, hình thoi, mũi tên mô tả "khi khách đặt hàng thì tiếp theo làm gì" - rất có thể đó là một diagram được vẽ bằng BPMN.</p>
 
@@ -104,7 +115,7 @@
     <h3>Ai duy trì BPMN?</h3>
     <p>BPMN được duy trì bởi <strong>The Object Management Group (OMG)</strong> - một tổ chức chuẩn hóa độc lập, không thuộc về Camunda hay bất kỳ vendor nào. Đây cũng là lý do BPMN được dùng rộng rãi: học một lần, áp dụng được ở bất kỳ công cụ hay công ty nào. BPMN là công cụ cốt lõi trong <strong>Business Process Management (BPM)</strong> - lĩnh vực chuyên tối ưu cách công việc được vận hành trong một tổ chức.</p>
 
-    <h2>Các thành phần chính của BPMN</h2>
+    <h2 id="cac-thanh-phan-chinh-cua-bpmn">Các thành phần chính của BPMN</h2>
 
     <h3>Các nhóm element trong BPMN</h3>
     <p>Để không bị rối giữa hàng chục ký hiệu, BPMN gom các graphical element lại thành vài nhóm chính:</p>
@@ -143,7 +154,7 @@
 
     <p>Khi token đi tới một gateway, nó sẽ rẽ theo hướng nào là tùy vào data đang có tại thời điểm đó - đây cũng chính là chủ đề của phần tiếp theo.</p>
 
-    <h2>Exclusive gateway</h2>
+    <h2 id="exclusive-gateway">Exclusive gateway</h2>
     <p>Lấy luôn ví dụ quen thuộc: quy trình xử lý đơn hàng, tới đoạn cần quyết định <strong>"đơn này có cần mua bảo hiểm vận chuyển không?"</strong> Đây chính xác là tình huống dùng <strong>exclusive gateway</strong> - cổng rẽ nhánh mà process chỉ được đi theo <strong>đúng một</strong> hướng, không đi cùng lúc nhiều hướng.</p>
     <ul>
       <li>Còn gọi là <strong>XOR</strong> ("exclusive OR") - nghĩa là: hoặc đi hướng này, hoặc đi hướng kia, không có chuyện đi cả hai.</li>
@@ -208,7 +219,7 @@
       </figure>
     </div>
 
-    <h2>Parallel gateway</h2>
+    <h2 id="parallel-gateway">Parallel gateway</h2>
     <p>Khác với exclusive gateway, parallel gateway không cần trả lời câu hỏi nào cả - nên cũng không cần đặt label. Nó không quan tâm data, chỉ đơn thuần dựa vào số lượng incoming/outgoing flow để quyết định hành vi: <strong>parallelization</strong> (tách chạy song song) hoặc <strong>synchronization</strong> (chờ nhau rồi gộp lại).</p>
 
     <h3>Parallelization - tách chạy song song</h3>
@@ -239,7 +250,7 @@
 
     <blockquote>💡 <strong>Tip:</strong> Đừng ngại dùng nhiều exclusive gateway và parallel gateway trong cùng một diagram - chia nhỏ logic ra từng gateway giúp model dễ đọc hơn nhiều so với việc gộp chung.</blockquote>
 
-    <h2>Tóm tắt</h2>
+    <h2 id="tom-tat">Tóm tắt</h2>
     <ul>
       <li>BPMN là một bộ ký hiệu chuẩn, giúp cả business lẫn kỹ thuật cùng đọc hiểu một diagram theo đúng một nghĩa.</li>
       <li>Năm viên gạch nền tảng: start event, task, gateway, sequence flow, end event - hầu hết diagram nào cũng xoay quanh năm thứ này.</li>

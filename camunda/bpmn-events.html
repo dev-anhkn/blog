@@ -19,9 +19,24 @@
     <p class="meta">30/08/2026 · 14 phút đọc · <a href="index.html">← Quay lại series</a></p>
   </div>
 
+  <nav class="toc" aria-label="Mục lục bài viết">
+    <p class="toc-title">Mục lục</p>
+    <ol>
+      <li><a href="#bpmn-events-la-gi">BPMN events là gì?</a></li>
+      <li><a href="#event-dat-o-dau-trong-process">Event đặt ở đâu trong process?</a></li>
+      <li><a href="#catching-event-throwing-event">Catching event & throwing event</a></li>
+      <li><a href="#timer-events">Timer events</a></li>
+      <li><a href="#conditional-events">Conditional events</a></li>
+      <li><a href="#message-events">Message events</a></li>
+      <li><a href="#boundary-events">Boundary events</a></li>
+      <li><a href="#event-based-gateway">Event-based gateway</a></li>
+      <li><a href="#tom-tat">Tóm tắt</a></li>
+    </ol>
+  </nav>
+
   <div class="article-body">
 
-    <h2>BPMN events là gì?</h2>
+    <h2 id="bpmn-events-la-gi">BPMN events là gì?</h2>
     <p class="definition">Event là một loại flow element trong BPMN - nó đại diện cho <strong>điều gì đó xảy ra</strong>. Bạn dùng event để khiến token dừng lại chờ tại một điểm nào đó, hoặc để cắt ngang tiến trình của token.</p>
     <p>Ngoài event, BPMN còn có hai loại flow element khác mà bài <a href="bpmn-overview.html">BPMN - Overview</a> đã nói qua: task (công việc cần làm) và gateway (điểm rẽ nhánh của flow).</p>
 
@@ -53,7 +68,7 @@
 
     <blockquote>💡 BPMN có rất nhiều loại event. Khóa học này chủ yếu xoay quanh <strong>timer event</strong>, <strong>conditional event</strong>, và <strong>message event</strong> - nhưng bạn có thể tìm hiểu thêm các loại khác tại <a href="https://docs.camunda.io/docs/components/modeler/bpmn/events/" target="_blank" rel="noopener">Camunda Documentation</a>.</blockquote>
 
-    <h2>Event đặt ở đâu trong process?</h2>
+    <h2 id="event-dat-o-dau-trong-process">Event đặt ở đâu trong process?</h2>
     <p>Một event có thể là <strong>start event</strong>, <strong>intermediate event</strong>, hoặc <strong>end event</strong>, tùy vào vị trí nó nằm trong process.</p>
 
     <div class="article-columns">
@@ -80,7 +95,7 @@
 
     <p>(*) Một event cũng có thể được đặt trên một task - gọi là <strong>boundary event</strong>, sẽ nói kỹ hơn ở phần sau bài này.</p>
 
-    <h2>Catching event & throwing event</h2>
+    <h2 id="catching-event-throwing-event">Catching event & throwing event</h2>
 
     <h3>Catching event là gì?</h3>
     <div class="article-columns">
@@ -121,7 +136,7 @@
       <li><strong>Throwing event:</strong> end event được kích hoạt khi process hoàn tất - trong ví dụ này là khi đơn hàng được xử lý xong. <strong>End event luôn luôn là throwing event.</strong></li>
     </ul>
 
-    <h2>Timer events</h2>
+    <h2 id="timer-events">Timer events</h2>
     <p>Timer event là event được trigger bởi một timer đã định nghĩa sẵn. Gồm có <strong>timer start event</strong> và <strong>intermediate timer catch event</strong>.</p>
 
     <h3>Timer start event</h3>
@@ -138,7 +153,7 @@
     <p><strong>Ví dụ:</strong> timer phản ứng theo một thời điểm cụ thể. Ở đây, khi có bài tập cần làm, không có gì xảy ra cho tới một tiếng trước hạn nộp - lúc đó bài tập mới được làm.</p>
     <img src="images/bpmn-events/intermediate-timer-catch-events.png" alt="Ví dụ intermediate timer catch event: 1 tiếng trước hạn nộp thì làm bài" class="article-hero-img is-native">
 
-    <h2>Conditional events</h2>
+    <h2 id="conditional-events">Conditional events</h2>
     <ul>
       <li>Được trigger nếu một điều kiện cho trước được đánh giá là <strong>true</strong>.</li>
       <li>Điều kiện độc lập với process, và gần như bất kỳ thứ gì cũng có thể trở thành điều kiện. Đây cũng là lý do vì sao conditional event (giống timer event) chỉ có thể tồn tại dưới dạng catching event.</li>
@@ -146,7 +161,7 @@
     <p><strong>Ví dụ:</strong> sau khi để rau củ lên vỉ nướng, bạn phải chờ chúng chín mới ăn được. Tùy loại rau, loại lò nướng và nhiều yếu tố khác, việc này có thể mất vài phút hoặc lâu hơn. Bạn không thể dùng timer event vì không biết chính xác cần bao lâu - thay vào đó, bạn chờ điều kiện (rau đã chín) trở thành true.</p>
     <img src="images/bpmn-events/conditional-event.png" alt="Ví dụ conditional event: chờ rau nướng chín rồi mới ăn" class="article-hero-img is-native">
 
-    <h2>Message events</h2>
+    <h2 id="message-events">Message events</h2>
     <p>Message event dùng để <strong>gửi hoặc nhận message</strong>. Có hai loại:</p>
     <ul>
       <li><strong>Message start event</strong></li>
@@ -162,7 +177,7 @@
 
     <p>(*) Messaging là một chủ đề khá lớn trong BPMN, nên nó được nói kỹ hơn trong khóa <a href="https://academy.camunda.com/bpmn-messages-collaboration/" target="_blank" rel="noopener">BPMN - Messages and Collaboration</a>.</p>
 
-    <h2>Boundary events</h2>
+    <h2 id="boundary-events">Boundary events</h2>
 
     <div class="article-columns">
       <img src="images/bpmn-events/what-are-boundary-events.png" alt="Ba loại boundary event: interrupting, non-interrupting, message">
@@ -194,7 +209,7 @@
     </ol>
     <p>➡️ <strong>Non-interrupting boundary timer event</strong> xử lý tình huống giao hàng trễ. Nếu đã hơn 60 phút, khách gọi điện tới nhà hàng để hỏi thăm. Việc gọi điện không làm gián đoạn việc chờ pizza, và process này có thể có một hoặc hai end event khả dĩ, tùy vào thời điểm pizza được giao.</p>
 
-    <h2>Event-based gateway</h2>
+    <h2 id="event-based-gateway">Event-based gateway</h2>
     <p>Tương tự exclusive (XOR) gateway dựa trên data, event-based gateway cũng là một cách để thiết kế các nhánh đi khác nhau trong process. Nhưng thay vì dựa vào data, gateway này rẽ nhánh dựa vào <strong>event nào xảy ra tiếp theo</strong>.</p>
     <img src="images/bpmn-events/what-are-event-based-gateways.png" alt="Ví dụ event-based gateway: chờ pizza tới hoặc gọi điện hỏi thăm sau 60 phút" class="article-hero-img is-native">
     <ul>
@@ -203,7 +218,7 @@
     </ul>
     <p>(*) Không phải intermediate event nào cũng kết hợp được với event-based gateway. Tuy nhiên bạn có thể kết hợp nó với receive task. Tìm hiểu thêm về event-based gateway tại <a href="https://docs.camunda.io/docs/components/modeler/bpmn/event-based-gateways/" target="_blank" rel="noopener">Camunda Documentation</a>.</p>
 
-    <h2>Tóm tắt</h2>
+    <h2 id="tom-tat">Tóm tắt</h2>
     <ul>
       <li>Event dùng để model những điều được cho là sẽ xảy ra trong một process.</li>
       <li>Event có thể là <strong>catching</strong> (bạn chờ nó xảy ra) hoặc <strong>throwing</strong> (nó được trigger bởi process).</li>

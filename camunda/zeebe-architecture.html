@@ -19,13 +19,26 @@
     <p class="meta">21/08/2026 · 12 phút đọc · <a href="index.html">← Quay lại series</a></p>
   </div>
 
+  <nav class="toc" aria-label="Mục lục bài viết">
+    <p class="toc-title">Mục lục</p>
+    <ol>
+      <li><a href="#dieu-gi-lam-nen-su-khac-biet-cua-zeebe">Điều gì làm nên sự khác biệt của Zeebe?</a></li>
+      <li><a href="#cac-thanh-phan-cua-zeebe">Các thành phần của Zeebe</a></li>
+      <li><a href="#zeebe-cluster-clustering-partitioning">Zeebe cluster - clustering & partitioning</a></li>
+      <li><a href="#raft-co-che-dong-thuan-dung-sau-replication">Raft - cơ chế đồng thuận đứng sau replication</a></li>
+      <li><a href="#scale-cluster-backpressure">Scale cluster & backpressure</a></li>
+      <li><a href="#xu-ly-noi-bo-deterministic-log-based">Xử lý nội bộ - deterministic & log-based</a></li>
+      <li><a href="#tom-tat">Tóm tắt</a></li>
+    </ol>
+  </nav>
+
   <div class="article-body">
 
     <blockquote>
       <strong>Mục tiêu:</strong> Đào sâu vào kiến trúc nội bộ của Zeebe - engine đứng sau Camunda 8 - để hiểu vì sao nó scale ngang được, chịu lỗi ra sao, và dữ liệu quy trình thật sự đi đâu khi một process instance chạy.
     </blockquote>
 
-    <h2>1. Điều gì làm nên sự khác biệt của Zeebe?</h2>
+    <h2 id="dieu-gi-lam-nen-su-khac-biet-cua-zeebe">1. Điều gì làm nên sự khác biệt của Zeebe?</h2>
 
     <p>Bài <a href="overview.html">Overview</a> đã liệt kê Zeebe là một trong các thành phần cốt lõi của Camunda 8. Ở bài này, đào sâu riêng vào Zeebe - vì nó là phần quyết định khả năng scale và chịu lỗi của toàn hệ thống.</p>
 
@@ -44,7 +57,7 @@
       💡 Zeebe dùng <strong>phân cụm (clustering)</strong> và <strong>phân vùng (partitioning)</strong> để đạt tính khả dụng cao và mở rộng ngang. <strong>Raft</strong> đảm bảo mỗi partition luôn có một leader sẵn sàng xử lý.
     </blockquote>
 
-    <h2>2. Các thành phần của Zeebe</h2>
+    <h2 id="cac-thanh-phan-cua-zeebe">2. Các thành phần của Zeebe</h2>
 
     <table>
       <tr><th>Thành phần</th><th>Vai trò</th></tr>
@@ -68,7 +81,7 @@
 
     <p><strong>Lưu ý quan trọng về CQRS:</strong> Operate, Optimize, Tasklist <strong>không</strong> query trực tiếp vào broker - chúng đọc dữ liệu đã export. Nghĩa là luôn có một độ trễ nhỏ giữa lúc process thật sự chạy và lúc UI hiển thị được trạng thái đó. Đây không phải bug, mà là đánh đổi có chủ đích để giữ broker tập trung vào việc xử lý (write path), không bị query path làm chậm.</p>
 
-    <h2>3. Zeebe cluster - clustering & partitioning</h2>
+    <h2 id="zeebe-cluster-clustering-partitioning">3. Zeebe cluster - clustering & partitioning</h2>
 
     <p>Zeebe phân phối công việc trên nhiều broker để đạt chịu lỗi và mở rộng ngang, bằng hai cơ chế: tổ chức broker thành <strong>cluster</strong>, và chia dữ liệu thành <strong>partition</strong>.</p>
 
@@ -86,7 +99,7 @@
 
     <p>Mỗi broker vừa là leader của một partition, vừa là follower của hai partition khác - không broker nào là điểm chịu lỗi duy nhất cho toàn cluster.</p>
 
-    <h2>4. Raft - cơ chế đồng thuận đứng sau replication</h2>
+    <h2 id="raft-co-che-dong-thuan-dung-sau-replication">4. Raft - cơ chế đồng thuận đứng sau replication</h2>
 
     <p>Để đảm bảo chịu lỗi, Zeebe replicate dữ liệu giữa các broker bằng giao thức <strong>Raft</strong> (Reliable, Replicated, Redundant, and Fault-Tolerant) - xương sống cho clustering và high availability trong Zeebe.</p>
 
@@ -112,7 +125,7 @@
 
     <p>Khi leader của một partition chết, một follower được <strong>promote</strong> lên làm leader mới ngay - xử lý tiếp tục mà không gián đoạn. Khi broker cũ hồi phục, nó tham gia lại cluster với vai trò follower, không tự động lấy lại vị trí leader.</p>
 
-    <h2>5. Scale cluster & backpressure</h2>
+    <h2 id="scale-cluster-backpressure">5. Scale cluster & backpressure</h2>
 
     <p>Thêm broker và partition giúp Zeebe đạt khả năng mở rộng gần như tuyến tính. Bảng dưới là một lần benchmark thực tế với 3 broker / 3 partition, quan sát điểm CPU bắt đầu bão hòa và backpressure xuất hiện:</p>
 
@@ -133,7 +146,7 @@
 
     <p>Nói cách khác: khi thấy throughput chững lại và exception tăng ở phía client, việc đầu tiên cần kiểm tra không phải là code worker, mà là CPU của broker - rất có thể cluster đang cần thêm broker/partition chứ không phải bug.</p>
 
-    <h2>6. Xử lý nội bộ - deterministic & log-based</h2>
+    <h2 id="xu-ly-noi-bo-deterministic-log-based">6. Xử lý nội bộ - deterministic & log-based</h2>
 
     <p>Bên trong mỗi partition, Zeebe xử lý lệnh theo mô hình <strong>event sourcing</strong>: mọi thay đổi trạng thái là kết quả của việc áp dụng tuần tự các sự kiện trong log, theo đúng thứ tự đã ghi. Vì log là append-only và xử lý có tính <strong>xác định (deterministic)</strong> - cùng input, cùng thứ tự sự kiện luôn cho ra cùng trạng thái - nên khi một follower replay lại log của leader, nó tái tạo được đúng trạng thái đó, không cần đồng bộ theo cách nào khác.</p>
 
@@ -148,7 +161,7 @@
       <li><strong>Phản hồi (Response)</strong> - sau khi mọi bước hoàn tất, broker gửi phản hồi xác nhận về client đã khởi tạo lệnh, chứa kết quả (key, trạng thái mới, hoặc error nếu lệnh bị từ chối).</li>
     </ol>
 
-    <h2>Tóm tắt</h2>
+    <h2 id="tom-tat">Tóm tắt</h2>
     <ul>
       <li>Zeebe là kiến trúc phân tán, dựa trên log, không phụ thuộc central database - ghi trực tiếp vào local disk của broker</li>
       <li>4 thành phần chính: <strong>Gateway</strong> (stateless, entry point), <strong>Broker</strong> (giữ state, thực thi), <strong>Client</strong> (business logic), <strong>Exporter</strong> (CQRS read path)</li>
