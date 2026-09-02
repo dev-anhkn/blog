@@ -12,9 +12,13 @@
 
   var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function getScrollY() { return window.scrollY || document.documentElement.scrollTop; }
-  // Wrap a handler so it runs at most once per animation frame - shared by
-  // every scroll/resize listener below instead of each rolling its own
-  // ticking flag.
+  function getScrollableHeight() {
+    var docEl = document.documentElement;
+    return docEl.scrollHeight - docEl.clientHeight;
+  }
+  // Sections below push per-scroll work here; one shared listener drains it.
+  var scrollCallbacks = [];
+  // Runs fn at most once per animation frame.
   function rafThrottle(fn) {
     var ticking = false;
     return function () {
@@ -27,9 +31,8 @@
     };
   }
 
-  // Animates the scroll position to the top over `duration` ms with easing,
-  // rather than relying on native `behavior: 'smooth'` (inconsistent across
-  // browsers - jumps instantly in some).
+  // Animates scroll to top over `duration` ms - native smooth scroll is
+  // inconsistent across browsers.
   function animateScrollToTop(duration) {
     var start = getScrollY();
     if (start <= 0) return;
@@ -120,12 +123,11 @@
     document.body.insertBefore(progressBar, document.body.firstChild);
 
     var updateProgress = function () {
-      var docEl = document.documentElement;
-      var scrollable = docEl.scrollHeight - docEl.clientHeight;
+      var scrollable = getScrollableHeight();
       var pct = scrollable > 0 ? Math.min(100, Math.max(0, (getScrollY() / scrollable) * 100)) : 0;
       progressBar.style.width = pct + '%';
     };
-    window.addEventListener('scroll', rafThrottle(updateProgress), { passive: true });
+    scrollCallbacks.push(updateProgress);
     updateProgress();
 
     // BACK TO TOP - floating button, article pages only
@@ -150,15 +152,13 @@
         backToTop.style.bottom = 'calc(1.5rem + ' + Math.max(0, footerVisible) + 'px)';
       }
     };
-    var scheduleBackToTopUpdate = rafThrottle(updateBackToTop);
-    window.addEventListener('scroll', scheduleBackToTopUpdate, { passive: true });
-    window.addEventListener('resize', scheduleBackToTopUpdate);
+    scrollCallbacks.push(updateBackToTop);
+    window.addEventListener('resize', rafThrottle(updateBackToTop));
     updateBackToTop();
   }
 
-  // SCROLL REVEAL - cards and accordion tiles fade/slide in as they enter view
-  // (skip disabled "coming soon" cards - their inline opacity:0.5 would conflict
-  // with the .reveal fade, leaving the transform running but opacity stuck)
+  // SCROLL REVEAL - cards fade in as they enter view (skip disabled
+  // "coming soon" cards, whose inline opacity:0.5 would fight the fade).
   var revealTargets = Array.prototype.filter.call(
     document.querySelectorAll('.card, .task-card, .info-card, .spotlight-card'),
     function (el) { return el.style.pointerEvents !== 'none'; }
@@ -176,13 +176,9 @@
     revealTargets.forEach(function (el) { revealObserver.observe(el); });
   }
 
-  // TOC SIDEBAR LAYOUT - group everything that comes after the TOC
-  // (.article-body, .article-nav) under one wrapper, once, at load. This lets
-  // shared/theme.css lay .toc and that wrapper out as two ordinary grid cells
-  // sharing a single row (see main:has(> .toc)), instead of making .toc span
-  // multiple auto-placed rows - a combination with position: sticky that
-  // several browsers get wrong (see the comment there for why that ran the
-  // sidebar straight into the footer).
+  // TOC SIDEBAR LAYOUT - wrap everything after the TOC into one element so
+  // CSS can lay it out as a single grid row with .toc (see main:has(> .toc)
+  // in shared/theme.css).
   var tocEl = document.querySelector('.toc');
   if (tocEl && tocEl.parentNode) {
     var tocContentWrap = document.createElement('div');
@@ -197,8 +193,6 @@
   }
 
   // TOC SCROLLSPY - highlight the current section's link while scrolling.
-  // (Sidebar placement itself is pure CSS now - see main:has(> .toc) in
-  // shared/theme.css - so this is only responsible for the .active class.)
   var tocLinks = document.querySelectorAll('.toc a[href^="#"]');
   if (tocLinks.length && 'IntersectionObserver' in window) {
     var tocLinkById = {};
@@ -220,21 +214,23 @@
     }, { rootMargin: '-96px 0px -70% 0px', threshold: 0 });
     tocHeadings.forEach(function (h) { tocObserver.observe(h); });
 
-    // The -70% bottom margin above means a heading only counts as "active" once
-    // it reaches the top 30% of the viewport - if the last section is short,
-    // the page runs out of room to scroll before that ever happens, so it
-    // never gets highlighted. Force it active once the page is scrolled to
-    // (near) the very bottom.
+    // A short last section may never reach the -70% band above, so it'd
+    // never activate - force it active once scrolled to the bottom instead.
     var lastTocHeading = tocHeadings[tocHeadings.length - 1];
     if (lastTocHeading) {
       var checkTocBottom = function () {
-        var docEl = document.documentElement;
-        if (getScrollY() + window.innerHeight >= docEl.scrollHeight - 2) {
+        if (getScrollY() >= getScrollableHeight() - 2) {
           setActiveTocLink(lastTocHeading.id);
         }
       };
-      window.addEventListener('scroll', rafThrottle(checkTocBottom), { passive: true });
+      scrollCallbacks.push(checkTocBottom);
       checkTocBottom();
     }
+  }
+
+  if (scrollCallbacks.length) {
+    window.addEventListener('scroll', rafThrottle(function () {
+      scrollCallbacks.forEach(function (fn) { fn(); });
+    }), { passive: true });
   }
 })();

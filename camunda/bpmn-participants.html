@@ -5,6 +5,7 @@
   <script>try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light")}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BPMN - Participants | dev.anhkn</title>
+  <meta name="description" content="Pool, lane, strategic vs operational model - ai sở hữu process, ai chịu trách nhiệm task nào.">
   <link rel="stylesheet" href="../shared/theme.css">
 </head>
 <body>
@@ -13,7 +14,7 @@
 
 <main>
 
-  <div class="article-header container">
+  <div class="article-header">
     <span class="article-day">Participants</span>
     <h1>BPMN - Participants</h1>
     <p class="meta">31/08/2026 · 16 phút đọc · <a href="index.html">← Quay lại series</a></p>
@@ -33,29 +34,29 @@
 
   <div class="article-body">
 
-    <div style="background-color:var(--color-surface-1); border:1px solid var(--color-border); border-radius:var(--radius); padding:1.5rem; text-align:center; margin-bottom:2rem;">
-      <img src="images/bpmn-participants/participants-network-icon.png" alt="Icon minh họa participant - nhiều người kết nối với nhau" style="max-width:160px; width:100%; margin:0 auto;">
+    <div class="icon-card-hero">
+      <img src="images/bpmn-participants/participants-network-icon.png" alt="Icon minh họa participant - nhiều người kết nối với nhau">
     </div>
 
     <h2 id="participant-la-gi">Participant là gì?</h2>
     <p class="definition">Một <strong>participant</strong> là <strong>thực thể kiểm soát một process, hoặc kiểm soát các task bên trong process đó</strong>.</p>
     <p>Participant không nhất thiết phải là một con người. Nó có thể là:</p>
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:1rem; margin:1.5rem 0;">
-      <div style="background-color:var(--color-surface-1); border:1px solid var(--color-border); border-radius:var(--radius); padding:1rem; text-align:center;">
-        <img src="images/bpmn-participants/person.png" alt="Icon một người" style="width:100%; max-width:96px; margin:0 auto;">
-        <p style="margin:0.75rem 0 0; font-size:0.875rem;"><strong>Một người</strong>: <span style="color:var(--color-text-muted);">một nhân viên cụ thể.</span></p>
+    <div class="icon-card-grid">
+      <div class="icon-card">
+        <img src="images/bpmn-participants/person.png" alt="Icon một người">
+        <p><strong>Một người</strong>: <span class="text-text-muted">một nhân viên cụ thể.</span></p>
       </div>
-      <div style="background-color:var(--color-surface-1); border:1px solid var(--color-border); border-radius:var(--radius); padding:1rem; text-align:center;">
-        <img src="images/bpmn-participants/organization.png" alt="Icon một tổ chức" style="width:100%; max-width:96px; margin:0 auto;">
-        <p style="margin:0.75rem 0 0; font-size:0.875rem;"><strong>Một tổ chức</strong>: <span style="color:var(--color-text-muted);">cả một công ty.</span></p>
+      <div class="icon-card">
+        <img src="images/bpmn-participants/organization.png" alt="Icon một tổ chức">
+        <p><strong>Một tổ chức</strong>: <span class="text-text-muted">cả một công ty.</span></p>
       </div>
-      <div style="background-color:var(--color-surface-1); border:1px solid var(--color-border); border-radius:var(--radius); padding:1rem; text-align:center;">
-        <img src="images/bpmn-participants/department.png" alt="Icon một phòng ban" style="width:100%; max-width:96px; margin:0 auto;">
-        <p style="margin:0.75rem 0 0; font-size:0.875rem;"><strong>Một phòng ban</strong>: <span style="color:var(--color-text-muted);">phòng kế toán.</span></p>
+      <div class="icon-card">
+        <img src="images/bpmn-participants/department.png" alt="Icon một phòng ban">
+        <p><strong>Một phòng ban</strong>: <span class="text-text-muted">phòng kế toán.</span></p>
       </div>
-      <div style="background-color:var(--color-surface-1); border:1px solid var(--color-border); border-radius:var(--radius); padding:1rem; text-align:center;">
-        <img src="images/bpmn-participants/role.png" alt="Icon một vai trò" style="width:100%; max-width:96px; margin:0 auto;">
-        <p style="margin:0.75rem 0 0; font-size:0.875rem;"><strong>Một vai trò</strong>: <span style="color:var(--color-text-muted);">"người duyệt đơn", bất kể ai đang giữ vai trò đó.</span></p>
+      <div class="icon-card">
+        <img src="images/bpmn-participants/role.png" alt="Icon một vai trò">
+        <p><strong>Một vai trò</strong>: <span class="text-text-muted">"người duyệt đơn", bất kể ai đang giữ vai trò đó.</span></p>
       </div>
     </div>
     <p>Trong BPMN, participant được vẽ ra bằng hai loại element: <strong>pool</strong> và <strong>lane</strong> (hay còn gọi là swimlane). Hai loại này giúp diagram trả lời rõ câu hỏi "ai đang sở hữu task nào", và giúp cả strategic model (mô hình mang tính chiến lược, tổng quan) lẫn operational model (mô hình vận hành, chạy thật) đều dễ đọc hơn.</p>
@@ -352,7 +353,10 @@
 
   <!-- Navigation -->
   <div class="article-nav">
-    <a href="bpmn-events.html">← BPMN - Events</a>
+    <a href="bpmn-events.html" class="prev">
+      <span class="nav-label">← Trước đó</span>
+      <strong>BPMN - Events</strong>
+    </a>
     <span></span>
   </div>
 
