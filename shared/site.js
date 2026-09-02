@@ -138,11 +138,7 @@
     document.body.appendChild(backToTop);
 
     backToTop.addEventListener('click', function () {
-      if (prefersReducedMotion) {
-        window.scrollTo(0, 0);
-      } else {
-        animateScrollToTop(500);
-      }
+      animateScrollToTop(500);
     });
 
     var updateBackToTop = function () {
@@ -180,42 +176,29 @@
     revealTargets.forEach(function (el) { revealObserver.observe(el); });
   }
 
-  // TOC SIDEBAR - place the TOC in the left margin next to the content column,
-  // measured from the actual rendered content box instead of a guessed
-  // viewport calc() (which broke under scrollbars/zoom/rounding)
+  // TOC SIDEBAR LAYOUT - group everything that comes after the TOC
+  // (.article-body, .article-nav) under one wrapper, once, at load. This lets
+  // shared/theme.css lay .toc and that wrapper out as two ordinary grid cells
+  // sharing a single row (see main:has(> .toc)), instead of making .toc span
+  // multiple auto-placed rows - a combination with position: sticky that
+  // several browsers get wrong (see the comment there for why that ran the
+  // sidebar straight into the footer).
   var tocEl = document.querySelector('.toc');
-  var tocAnchor = document.querySelector('.article-body');
-  var tocTopAnchor = document.querySelector('.article-body > div') || tocAnchor;
-  if (tocEl && tocAnchor) {
-    var TOC_WIDTH = 240;
-    var TOC_GAP = 56;
-    var positionToc = function () {
-      // Switch to fixed positioning first so it stops occupying flow space -
-      // otherwise .article-body's measured position still reflects the TOC's
-      // old in-flow height, and the sidebar ends up anchored to a stale spot.
-      tocEl.classList.add('toc-sidebar');
-      var left = tocAnchor.getBoundingClientRect().left - TOC_GAP - TOC_WIDTH;
-      if (left >= 16) {
-        // Use the anchor's absolute position in the document (rect.top + current
-        // scroll), not its current on-screen position - otherwise reloading the
-        // page mid-scroll (browsers restore scroll position before this runs)
-        // reads a wildly negative rect.top and pins the sidebar to the very top.
-        var top = Math.max(16, tocTopAnchor.getBoundingClientRect().top + getScrollY());
-        tocEl.style.left = left + 'px';
-        tocEl.style.top = top + 'px';
-        tocEl.style.maxHeight = Math.max(120, window.innerHeight - top - 16) + 'px';
-      } else {
-        tocEl.classList.remove('toc-sidebar');
-        tocEl.style.left = '';
-        tocEl.style.top = '';
-        tocEl.style.maxHeight = '';
-      }
-    };
-    positionToc();
-    window.addEventListener('resize', rafThrottle(positionToc));
+  if (tocEl && tocEl.parentNode) {
+    var tocContentWrap = document.createElement('div');
+    tocContentWrap.className = 'toc-content-wrap';
+    var tocSibling = tocEl.nextSibling;
+    while (tocSibling) {
+      var nextTocSibling = tocSibling.nextSibling;
+      tocContentWrap.appendChild(tocSibling);
+      tocSibling = nextTocSibling;
+    }
+    tocEl.parentNode.insertBefore(tocContentWrap, tocEl.nextSibling);
   }
 
-  // TOC SCROLLSPY - highlight the current section's link while scrolling
+  // TOC SCROLLSPY - highlight the current section's link while scrolling.
+  // (Sidebar placement itself is pure CSS now - see main:has(> .toc) in
+  // shared/theme.css - so this is only responsible for the .active class.)
   var tocLinks = document.querySelectorAll('.toc a[href^="#"]');
   if (tocLinks.length && 'IntersectionObserver' in window) {
     var tocLinkById = {};
@@ -236,5 +219,22 @@
       });
     }, { rootMargin: '-96px 0px -70% 0px', threshold: 0 });
     tocHeadings.forEach(function (h) { tocObserver.observe(h); });
+
+    // The -70% bottom margin above means a heading only counts as "active" once
+    // it reaches the top 30% of the viewport - if the last section is short,
+    // the page runs out of room to scroll before that ever happens, so it
+    // never gets highlighted. Force it active once the page is scrolled to
+    // (near) the very bottom.
+    var lastTocHeading = tocHeadings[tocHeadings.length - 1];
+    if (lastTocHeading) {
+      var checkTocBottom = function () {
+        var docEl = document.documentElement;
+        if (getScrollY() + window.innerHeight >= docEl.scrollHeight - 2) {
+          setActiveTocLink(lastTocHeading.id);
+        }
+      };
+      window.addEventListener('scroll', rafThrottle(checkTocBottom), { passive: true });
+      checkTocBottom();
+    }
   }
 })();
