@@ -24,7 +24,7 @@
     <p class="toc-title">Mục lục</p>
     <ol>
       <li><a href="#participant-la-gi">Participant là gì?</a></li>
-      <li><a href="#pool-va-lane">Pool và lane thể hiện participant thế nào?</a></li>
+      <li><a href="#cach-thuc-the-hien-participant">Cách thức thể hiện participant</a></li>
       <li><a href="#pool-la-gi">Pool là gì?</a></li>
       <li><a href="#lane-la-gi">Lane là gì?</a></li>
       <li><a href="#strategic-vs-operational">Strategic vs Operational process model</a></li>
@@ -44,24 +44,24 @@
     <div class="icon-card-grid">
       <div class="icon-card">
         <img src="images/bpmn-participants/person.png" alt="Icon một người">
-        <p><strong>Một người</strong>: <span class="text-text-muted">một nhân viên cụ thể.</span></p>
+        <p><strong>Một người</strong></p>
       </div>
       <div class="icon-card">
         <img src="images/bpmn-participants/organization.png" alt="Icon một tổ chức">
-        <p><strong>Một tổ chức</strong>: <span class="text-text-muted">cả một công ty.</span></p>
+        <p><strong>Một tổ chức</strong></p>
       </div>
       <div class="icon-card">
         <img src="images/bpmn-participants/department.png" alt="Icon một phòng ban">
-        <p><strong>Một phòng ban</strong>: <span class="text-text-muted">phòng kế toán.</span></p>
+        <p><strong>Một phòng ban</strong></p>
       </div>
       <div class="icon-card">
         <img src="images/bpmn-participants/role.png" alt="Icon một vai trò">
-        <p><strong>Một vai trò</strong>: <span class="text-text-muted">"người duyệt đơn", bất kể ai đang giữ vai trò đó.</span></p>
+        <p><strong>Một vai trò</strong></p>
       </div>
     </div>
-    <p>Trong BPMN, participant được vẽ ra bằng hai loại element: <strong>pool</strong> và <strong>lane</strong> (hay còn gọi là swimlane). Hai loại này giúp diagram trả lời rõ câu hỏi "ai đang sở hữu task nào", và giúp cả strategic model (mô hình mang tính chiến lược, tổng quan) lẫn operational model (mô hình vận hành, chạy thật) đều dễ đọc hơn.</p>
 
-    <h2 id="pool-va-lane">Pool và lane thể hiện participant thế nào?</h2>
+    <h2 id="cach-thuc-the-hien-participant">Cách thức thể hiện participant</h2>
+    <p>Trong BPMN, participant được thể hiện bằng hai loại element: <strong>pool</strong> (cấp process) và <strong>lane</strong>, hay còn gọi là swimlane (cấp task).</p>
     <p>Cùng một diagram "Roommates: Prepare a Shared Meal" - bấm vào từng tab để xem pool và lane được highlight khác nhau ra sao:</p>
 
     <div class="flow-tabs">
@@ -73,45 +73,93 @@
       <label for="pl-lane" class="flow-tab-label">Lane</label>
 
       <div class="flow-tab-panel" data-tab-panel="pool">
-        <p class="mb-4"><strong>Pool</strong> cho biết ai, hay cái gì, kiểm soát <strong>toàn bộ process</strong>. Trong ví dụ này, pool được đặt tên "Roommates: Prepare a Shared Meal" - vừa nói rõ ai sở hữu process này (các bạn cùng phòng), vừa nói rõ process đó làm gì (chuẩn bị một bữa ăn chung).</p>
+        <p class="mb-4">Trên diagram, <strong>pool</strong> là khung viền lớn nhất, bao quanh toàn bộ process. Pool trong ví dụ này tên "Roommates: Prepare a Shared Meal" - vừa nêu chủ sở hữu (các bạn cùng phòng), vừa nêu process làm gì (chuẩn bị bữa ăn chung).</p>
         <img src="images/bpmn-participants/pool.png" alt="Pool bao quanh toàn bộ process Roommates: Prepare a Shared Meal" class="article-hero-img is-native">
       </div>
       <div class="flow-tab-panel" data-tab-panel="lane">
-        <p class="mb-4"><strong>Lane</strong> cho biết ai, hay cái gì, chịu trách nhiệm cho từng <strong>task riêng lẻ</strong> bên trong process. Cũng trong ví dụ này, ba lane Avery, Maria và Emilia là ba người chịu trách nhiệm hoàn thành các task để chuẩn bị xong bữa ăn.</p>
+        <p class="mb-4"><strong>Lane</strong> là các dải chia nhỏ bên trong pool, mỗi dải gắn một participant. Ba lane Avery, Maria, Emilia chịu trách nhiệm hoàn thành các task để chuẩn bị bữa ăn.</p>
         <img src="images/bpmn-participants/lanes.png" alt="Ba lane Avery, Maria, Emilia bên trong pool Roommates" class="article-hero-img is-native">
       </div>
 
     </div>
 
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Pool</th>
+          <th>Lane</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Cấp độ</td>
+          <td>Cả process</td>
+          <td>Từng task</td>
+        </tr>
+        <tr>
+          <td>Vai trò</td>
+          <td>Điều phối luồng chạy, phân công task (orchestration)</td>
+          <td>Xác định ai/cái gì thực hiện task</td>
+        </tr>
+        <tr>
+          <td>Ràng buộc</td>
+          <td>Sequence flow không được vượt ra ngoài biên pool</td>
+          <td>Mỗi flow object chỉ thuộc đúng một lane</td>
+        </tr>
+        <tr>
+          <td>Số lượng</td>
+          <td>Luôn có ít nhất một (ngầm định); thêm process mới = thêm pool mới</td>
+          <td>Tùy chọn - có thể chia nhiều lane trong một pool, hoặc không dùng lane nào</td>
+        </tr>
+      </tbody>
+    </table>
+
     <h2 id="pool-la-gi">Pool là gì?</h2>
-    <p>Pool đại diện cho participant kiểm soát toàn bộ process - nó <strong>điều phối luồng chạy</strong> và <strong>phân công task</strong> bên trong process đó, giống hệt cách một nhạc trưởng phân công từng đoạn nhạc cho từng nhạc công trong dàn nhạc. Vì lý do này, việc phân công task bên trong một process còn được gọi là <strong>orchestration</strong>.</p>
+    <p class="definition">Pool đại diện cho participant kiểm soát toàn bộ process: <strong>điều phối luồng chạy</strong> và <strong>phân công task</strong>, giống một nhạc trưởng phân công từng đoạn nhạc cho từng nhạc công. Vì vậy, việc phân công task trong một process còn gọi là <strong>orchestration</strong>.</p>
 
     <h3 id="pool-duoc-tao-ra">Pool được tạo ra như thế nào?</h3>
+    <p>Mỗi process diagram mới đều có sẵn một pool <strong>ngầm định</strong> - modeler không hiện nó ra ngay từ đầu, nhưng pool đó vẫn tồn tại làm nền mặc định.</p>
     <img src="images/bpmn-participants/how-pools-are-created.png" alt="Pool ngầm định (đường viền nét đứt) bao quanh process khi vừa tạo mới" class="article-hero-img is-native">
-    <p>Mỗi khi bạn tạo một process diagram mới, một pool luôn được <strong>ngầm định</strong> tồn tại - dù modeler không hiện nó ra ngay từ đầu, pool đó vẫn đứng phía sau làm nền mặc định.</p>
 
-    <h3 id="mot-process-mot-pool">Một process = một pool</h3>
+    <h3 id="one-process-one-pool">One process = one pool</h3>
+    <p>Một process luôn nằm trọn trong <strong>một</strong> pool; sequence flow <strong>không được vượt ra ngoài</strong> biên pool đó. Muốn thêm process thứ hai, phải đặt nó vào một pool riêng, tách biệt hoàn toàn với pool đầu.</p>
     <img src="images/bpmn-participants/one-process-one-pool.png" alt="Hai process tách biệt, mỗi process nằm trong một pool riêng" class="article-hero-img is-native">
-    <p>Một process luôn nằm trọn trong <strong>một</strong> pool, và sequence flow <strong>không được phép đi ra ngoài</strong> biên của pool đó. Vì vậy, nếu muốn thêm một process thứ hai vào diagram, bạn phải đặt process đó vào một pool riêng - tách biệt hoàn toàn với pool đầu tiên.</p>
 
     <h3 id="dat-ten-pool">Đặt tên pool sao cho đúng</h3>
-    <p>Vì một pool tương ứng với một process, tên pool nên nói rõ <strong>process đó đang làm gì</strong>, chứ không chỉ nói ai sở hữu nó.</p>
-    <img src="images/bpmn-participants/pool-name-before.png" alt="Pool chỉ được đặt tên Camundanzia, chưa rõ process làm gì" class="article-hero-img is-native">
-    <p>Ở ví dụ trên, pool chỉ được đặt tên "Camundanzia" - ai cũng biết ai sở hữu process, nhưng chẳng ai đoán được process này đang làm gì.</p>
-    <img src="images/bpmn-participants/pool-name-after.png" alt="Pool được đổi tên thành Camundanzia: Hardware Equipment Reimbursement" class="article-hero-img is-native">
-    <p>Sau khi đổi tên thành "Camundanzia: Hardware Equipment Reimbursement", mọi thứ rõ ràng hẳn: Camundanzia là participant kiểm soát process hoàn tiền thiết bị phần cứng.</p>
+    <p>Vì một pool tương ứng với một process, tên pool nên nói rõ <strong>process đó đang làm gì</strong>, chứ không chỉ nói ai sở hữu nó. Bấm vào từng tab để xem ví dụ trước/sau khi đổi tên:</p>
+
+    <div class="flow-tabs">
+
+      <input type="radio" name="pool-name" id="pn-before" checked>
+      <label for="pn-before" class="flow-tab-label">Trước</label>
+
+      <input type="radio" name="pool-name" id="pn-after">
+      <label for="pn-after" class="flow-tab-label">Sau</label>
+
+      <div class="flow-tab-panel" data-tab-panel="before">
+        <p class="mb-4">Ở đây, pool chỉ tên "Camundanzia" - biết ai sở hữu process, nhưng không đoán được process làm gì.</p>
+        <img src="images/bpmn-participants/pool-name-before.png" alt="Pool chỉ được đặt tên Camundanzia, chưa rõ process làm gì" class="article-hero-img is-native">
+      </div>
+      <div class="flow-tab-panel" data-tab-panel="after">
+        <p class="mb-4">Đổi tên thành "Camundanzia: Hardware Equipment Reimbursement", mọi thứ rõ ràng: Camundanzia là participant kiểm soát process hoàn tiền thiết bị phần cứng.</p>
+        <img src="images/bpmn-participants/pool-name-after.png" alt="Pool được đổi tên thành Camundanzia: Hardware Equipment Reimbursement" class="article-hero-img is-native">
+      </div>
+
+    </div>
 
     <h2 id="lane-la-gi">Lane là gì?</h2>
+    <p class="definition">Nếu pool là nhạc trưởng, lane là từng nhạc công - <strong>mỗi lane chịu trách nhiệm một phần riêng</strong>.</p>
     <img src="images/bpmn-participants/lanes-example-employee-approver.png" alt="Ví dụ lane Employee và Approver trong pool Camundanzia: Hardware Equipment Reimbursement" class="article-hero-img is-native">
-    <p>Nếu pool đóng vai trò nhạc trưởng cho cả process, thì lane giống như từng nhạc công - <strong>mỗi lane chịu trách nhiệm cho một phần riêng</strong> của bản nhạc. Ở ví dụ trên, hai lane là "Employee" và "Approver":</p>
+    <p>Ở ví dụ trên có hai lane: "Employee" và "Approver":</p>
     <ul>
       <li><strong>Employee (lane 1):</strong> sau khi mua thiết bị, Employee chịu trách nhiệm upload hóa đơn.</li>
       <li><strong>Approver (lane 2):</strong> sau khi hóa đơn được upload, Approver kiểm tra yêu cầu rồi quyết định duyệt hay không. Nếu duyệt, Approver kích hoạt thanh toán; nếu không, Approver báo lại cho Employee.</li>
     </ul>
-    <p>Mỗi lane định nghĩa ai, hay cái gì, chịu trách nhiệm hoàn thành các task trong process - và mỗi flow object (event, activity, gateway) chỉ được thuộc về <strong>đúng một</strong> lane.</p>
+    <p>Mỗi lane định nghĩa ai, hay cái gì, chịu trách nhiệm các task trong process; mỗi flow object (event, activity, gateway) chỉ thuộc <strong>đúng một</strong> lane.</p>
 
     <h3 id="dat-ten-lane">Đặt tên lane sao cho đúng</h3>
-    <p>Lane có thể được đặt tên theo vị trí/vai trò trong tổ chức, vai trò chung, phòng ban, hoặc thậm chí theo ứng dụng. Bấm vào từng mục để xem ví dụ:</p>
+    <p>Lane có thể đặt tên theo vị trí/vai trò tổ chức, vai trò chung, phòng ban, hoặc ứng dụng. Bấm vào từng mục để xem ví dụ:</p>
 
     <div class="info-card-grid">
 
@@ -162,7 +210,7 @@
     </div>
 
     <h3 id="nhuoc-diem-lane">⚠️ Nhược điểm của lane</h3>
-    <p>Lane giúp làm rõ ai sở hữu task nào, nhưng đi kèm với đó là một vài đánh đổi. Bấm vào từng mục để xem chi tiết:</p>
+    <p>Lane giúp làm rõ ai sở hữu task nào, nhưng đánh đổi lại một vài điểm. Bấm vào từng mục để xem chi tiết:</p>
 
     <div class="info-card-grid">
 
@@ -173,7 +221,7 @@
           <span class="info-card-toggle" aria-hidden="true"></span>
         </summary>
         <div class="info-card-body">
-          <p>Thêm nhiều lane vào một pool khiến process khó đọc hơn - đi ngược lại nguyên tắc giữ diagram dễ hiểu.</p>
+          <p>Thêm nhiều lane vào một pool khiến process khó đọc hơn. Ví dụ: process tuyển dụng có 6 participant (HR, Hiring Manager, IT, Legal, Finance, Candidate) - vẽ đủ 6 lane sẽ khiến diagram rất cao, phải kéo qua kéo lại mới theo dõi được.</p>
         </div>
       </details>
 
@@ -184,36 +232,36 @@
           <span class="info-card-toggle" aria-hidden="true"></span>
         </summary>
         <div class="info-card-body">
-          <p>Lane khiến việc thay đổi process model về sau khó khăn hơn, làm tăng gánh nặng bảo trì cho process.</p>
+          <p>Lane khiến việc sửa process model về sau khó hơn. Ví dụ: đổi người phụ trách một task (từ Approver sang Manager) phải kéo task sang lane khác và vẽ lại sequence flow liên quan - trong khi không dùng lane chỉ cần sửa label.</p>
         </div>
       </details>
 
     </div>
 
     <h3 id="thay-vi-dung-lane">Thay vì dùng lane, có thể làm gì khác?</h3>
-    <p>Để process vẫn dễ đọc và dễ bảo trì, đôi khi tốt nhất là tránh dùng lane hoàn toàn. Bấm vào từng mục để xem ví dụ:</p>
+    <p>Để process dễ đọc và dễ bảo trì hơn, đôi khi nên tránh dùng lane hoàn toàn. Bấm vào từng mục để xem ví dụ:</p>
 
-    <div class="task-card-grid">
+    <div class="task-card-grid grid-cols-1">
 
       <details class="task-card">
         <summary class="task-card-head">
-          <img src="images/bpmn-participants/alternative-role-in-task-name.png" alt="Ghi tên role ngay trong label của task" class="task-card-icon">
           <h3>✅ Ghi role ngay trong tên task</h3>
           <span class="task-card-toggle" aria-hidden="true"></span>
         </summary>
         <div class="task-card-body">
-          <p>Thay vì tách trách nhiệm bằng lane, bạn có thể ghi thẳng role hay participant chịu trách nhiệm ngay trong label của từng task - ví dụ "Employee: Upload bill". Người đọc vẫn nhận ra ai làm gì, mà diagram không phải cõng thêm độ phức tạp.</p>
+          <img src="images/bpmn-participants/alternative-role-in-task-name.png" alt="Ghi tên role ngay trong label của task" class="article-hero-img is-native">
+          <p>Thay vì tách bằng lane, ghi thẳng role vào label task - ví dụ "Employee: Upload bill". Người đọc vẫn biết ai làm gì mà diagram không phức tạp thêm.</p>
         </div>
       </details>
 
       <details class="task-card">
         <summary class="task-card-head">
-          <img src="images/bpmn-participants/alternative-separate-pools-collaboration.png" alt="Hai participant, mỗi participant một pool riêng, nối nhau bằng message flow" class="task-card-icon">
           <h3>✅ Tách pool riêng + collaboration diagram</h3>
           <span class="task-card-toggle" aria-hidden="true"></span>
         </summary>
         <div class="task-card-body">
-          <p>Một cách khác là mô hình hóa mỗi participant thành một pool riêng, rồi nối chúng lại bằng <strong>collaboration diagram</strong>. Cách này làm rõ ranh giới giữa các process hay tổ chức khác nhau, đặc biệt hữu ích khi việc giao tiếp giữa các process quan trọng - trong đó message flow thể hiện tương tác giữa các pool.</p>
+          <img src="images/bpmn-participants/alternative-separate-pools-collaboration.png" alt="Hai participant, mỗi participant một pool riêng, nối nhau bằng message flow" class="article-hero-img is-native">
+          <p>Hoặc mô hình mỗi participant thành một pool riêng, nối bằng <strong>collaboration diagram</strong> - message flow thể hiện tương tác giữa các pool. Cách này làm rõ ranh giới giữa các process/tổ chức, hữu ích khi giao tiếp giữa chúng quan trọng.</p>
         </div>
       </details>
 
@@ -228,9 +276,27 @@
     </ul>
 
     <h2 id="strategic-vs-operational">Strategic vs Operational process model</h2>
-    <p>Cùng một quy trình, nhưng có hai cách vẽ hoàn toàn khác mục đích: một bên để bàn bạc ý tưởng, một bên để chạy thật.</p>
-    <img src="images/bpmn-participants/strategic-model-overview.png" alt="Strategic process model Company: Report Sick Leave với 3 lane Employee, Back Office, Finance" class="article-hero-img is-native">
-    <p>Ví dụ trên là một strategic model - "Company: Report Sick Leave". Nhìn qua là hiểu ngay: nhân viên báo ốm, xin giấy bác sĩ, rồi ba lane cùng xử lý song song. Không có task type nào được định nghĩa, cũng chẳng có exception nào được vẽ ra - đúng tinh thần "bird's eye view".</p>
+    <p>Cùng một quy trình, nhưng có hai cách vẽ khác hẳn mục đích: một bên để bàn ý tưởng, một bên để chạy thật. Bấm vào từng tab để so sánh:</p>
+
+    <div class="flow-tabs">
+
+      <input type="radio" name="strategic-operational" id="so-strategic" checked>
+      <label for="so-strategic" class="flow-tab-label">Strategic</label>
+
+      <input type="radio" name="strategic-operational" id="so-operational">
+      <label for="so-operational" class="flow-tab-label">Operational</label>
+
+      <div class="flow-tab-panel" data-tab-panel="strategic">
+        <p class="mb-4">Ví dụ strategic model "Company: Report Sick Leave" - nhìn qua hiểu ngay: nhân viên báo ốm, xin giấy bác sĩ, ba lane xử lý song song. Không task type, không exception - đúng tinh thần "bird's eye view".</p>
+        <img src="images/bpmn-participants/strategic-model-overview.png" alt="Strategic process model Company: Report Sick Leave với 3 lane Employee, Back Office, Finance" class="article-hero-img is-native">
+      </div>
+      <div class="flow-tab-panel" data-tab-panel="operational">
+        <p class="mb-4">Operational model đi vào chi tiết vận hành thật: task đã gán type rõ ràng, thường dùng nhiều pool nối bằng collaboration diagram thay vì lane - như ví dụ xử lý invoice dưới đây.</p>
+        <img src="images/bpmn-participants/operational-model-overview.png" alt="Operational process model xử lý invoice với nhiều pool: Mail Room, Invoicer, Team Assistence, Managing director" class="article-hero-img is-native">
+      </div>
+
+    </div>
+
     <table>
       <thead>
         <tr>
@@ -269,82 +335,58 @@
     </table>
     <blockquote>💡 Khuyến nghị chung: chỉ dùng lane trong strategic process model. Với operational model, nên ưu tiên collaboration diagram thay vì lane.</blockquote>
 
-    <p>Ngược lại, một operational model đi sâu vào chi tiết vận hành thật - task đã gán type rõ ràng, và thường dùng nhiều pool nối nhau bằng collaboration diagram thay vì lane, như ví dụ xử lý invoice bên dưới:</p>
-    <img src="images/bpmn-participants/operational-model-overview.png" alt="Operational process model xử lý invoice với nhiều pool: Mail Room, Invoicer, Team Assistence, Managing director" class="article-hero-img is-native">
+    <p>Best practice cho operational model - nhất là cách dùng collaboration diagram thay lane - sẽ có trong loạt bài về BPMN Messages and Collaboration. Phần dưới đây tập trung vào best practice cho strategic model.</p>
 
     <h3 id="best-practice-strategic">Best practice cho strategic model</h3>
-    <p>Khi vẽ một strategic process model, hãy bám theo mấy nguyên tắc sau - tất cả đều được minh họa trên cùng ví dụ "Report Sick Leave" ở trên, chỉ khác nhau ở khía cạnh được nhấn mạnh. Bấm vào từng mục để xem chi tiết:</p>
+    <p>Khi vẽ strategic process model, bám theo các nguyên tắc sau - minh họa trên cùng ví dụ "Report Sick Leave" ở trên. Bấm vào từng tab để xem chi tiết:</p>
 
-    <div class="info-card-grid">
+    <div class="flow-tabs">
 
-      <details class="info-card">
-        <summary class="info-card-head">
-          <span class="info-card-badge">1</span>
-          <h3>Giữ compact</h3>
-          <span class="info-card-toggle" aria-hidden="true"></span>
-        </summary>
-        <div class="info-card-body">
-          <img src="images/bpmn-participants/strategic-keep-it-compact.png" alt="Toàn bộ process Report Sick Leave gọn trong một khung nét đứt, vừa một trang" class="article-hero-img is-native">
-          <p>Process nên gọn trong một trang giấy, hoặc một màn hình chuẩn. Giữ mọi thứ trên một trang giúp người đọc không cần scroll, dễ hiểu hơn hẳn.</p>
-        </div>
-      </details>
+      <input type="radio" name="strategic-best-practice" id="sbp-compact" checked>
+      <label for="sbp-compact" class="flow-tab-label">Giữ compact</label>
 
-      <details class="info-card">
-        <summary class="info-card-head">
-          <span class="info-card-badge">2</span>
-          <h3>Chỉ dùng một pool</h3>
-          <span class="info-card-toggle" aria-hidden="true"></span>
-        </summary>
-        <div class="info-card-body">
-          <img src="images/bpmn-participants/strategic-use-single-pool.png" alt="Process Report Sick Leave chỉ dùng đúng một pool duy nhất" class="article-hero-img is-native">
-          <p>Tránh dùng nhiều pool - nhiều pool kéo theo việc phải vẽ thêm giao tiếp giữa chúng, làm rối mắt một cách không cần thiết.</p>
-        </div>
-      </details>
+      <input type="radio" name="strategic-best-practice" id="sbp-single-pool">
+      <label for="sbp-single-pool" class="flow-tab-label">Single pool</label>
 
-      <details class="info-card">
-        <summary class="info-card-head">
-          <span class="info-card-badge">3</span>
-          <h3>Dùng undefined task</h3>
-          <span class="info-card-toggle" aria-hidden="true"></span>
-        </summary>
-        <div class="info-card-body">
-          <img src="images/bpmn-participants/strategic-use-undefined-tasks.png" alt="Tất cả task trong process Report Sick Leave đều để undefined, không gán type" class="article-hero-img is-native">
-          <p>Không cần định nghĩa type cho task, vì strategic model không nhằm mục đích thực thi. Giữ task ở dạng undefined giúp diagram gọn hơn, và người chưa quen BPMN cũng dễ đọc hơn.</p>
-        </div>
-      </details>
+      <input type="radio" name="strategic-best-practice" id="sbp-undefined-task">
+      <label for="sbp-undefined-task" class="flow-tab-label">Undefined task</label>
 
-      <details class="info-card">
-        <summary class="info-card-head">
-          <span class="info-card-badge">4</span>
-          <h3>Chỉ vẽ happy path</h3>
-          <span class="info-card-toggle" aria-hidden="true"></span>
-        </summary>
-        <div class="info-card-body">
-          <img src="images/bpmn-participants/strategic-show-happy-path.png" alt="Process Report Sick Leave chỉ vẽ luồng chạy thuận lợi, không có nhánh ngoại lệ" class="article-hero-img is-native">
-          <p>Chỉ thể hiện luồng chạy thuận lợi nhất. Đừng đưa vào các trường hợp ngoại lệ có thể xảy ra lúc thực thi.</p>
-        </div>
-      </details>
+      <input type="radio" name="strategic-best-practice" id="sbp-happy-path">
+      <label for="sbp-happy-path" class="flow-tab-label">Happy path</label>
 
-      <details class="info-card">
-        <summary class="info-card-head">
-          <span class="info-card-badge">5</span>
-          <h3>Tránh đi vào chi tiết</h3>
-          <span class="info-card-toggle" aria-hidden="true"></span>
-        </summary>
-        <div class="info-card-body">
-          <img src="images/bpmn-participants/strategic-avoid-detail.png" alt="Process Report Sick Leave giữ ở mức đơn giản, không đi sâu vào chi tiết vận hành" class="article-hero-img is-native">
-          <p>Không cần giải thích process vận hành ra sao ở mức chi tiết. Strategic model chỉ cần đủ đơn giản để ai đọc cũng hiểu process đang nói về điều gì.</p>
-        </div>
-      </details>
+      <input type="radio" name="strategic-best-practice" id="sbp-avoid-detail">
+      <label for="sbp-avoid-detail" class="flow-tab-label">Tránh chi tiết</label>
+
+      <div class="flow-tab-panel" data-tab-panel="compact">
+        <p class="mb-4">Process nên gọn trong một trang giấy hoặc một màn hình chuẩn - không cần scroll, dễ hiểu hơn hẳn.</p>
+        <img src="images/bpmn-participants/strategic-keep-it-compact.png" alt="Toàn bộ process Report Sick Leave gọn trong một khung nét đứt, vừa một trang" class="article-hero-img is-native">
+      </div>
+      <div class="flow-tab-panel" data-tab-panel="single-pool">
+        <p class="mb-4">Tránh dùng nhiều pool - vẽ thêm giao tiếp giữa các pool chỉ làm rối mắt không cần thiết.</p>
+        <img src="images/bpmn-participants/strategic-use-single-pool.png" alt="Process Report Sick Leave chỉ dùng đúng một pool duy nhất" class="article-hero-img is-native">
+      </div>
+      <div class="flow-tab-panel" data-tab-panel="undefined-task">
+        <p class="mb-4">Không cần định nghĩa type cho task vì strategic model không nhằm thực thi - giữ task undefined giúp diagram gọn hơn và dễ đọc hơn với người chưa quen BPMN.</p>
+        <img src="images/bpmn-participants/strategic-use-undefined-tasks.png" alt="Tất cả task trong process Report Sick Leave đều để undefined, không gán type" class="article-hero-img is-native">
+      </div>
+      <div class="flow-tab-panel" data-tab-panel="happy-path">
+        <p class="mb-4">Chỉ thể hiện luồng chạy thuận lợi nhất, không đưa vào các ngoại lệ có thể xảy ra lúc thực thi.</p>
+        <img src="images/bpmn-participants/strategic-show-happy-path.png" alt="Process Report Sick Leave chỉ vẽ luồng chạy thuận lợi, không có nhánh ngoại lệ" class="article-hero-img is-native">
+      </div>
+      <div class="flow-tab-panel" data-tab-panel="avoid-detail">
+        <p class="mb-4">Không cần đi vào chi tiết vận hành - strategic model chỉ cần đủ đơn giản để ai đọc cũng hiểu process nói về điều gì.</p>
+        <img src="images/bpmn-participants/strategic-avoid-detail.png" alt="Process Report Sick Leave giữ ở mức đơn giản, không đi sâu vào chi tiết vận hành" class="article-hero-img is-native">
+      </div>
 
     </div>
 
     <h2 id="tom-tat">Tóm tắt</h2>
     <ul>
-      <li><strong>BPMN participant</strong> là một thực thể (người, team, tổ chức, hay hệ thống) kiểm soát hoặc chịu trách nhiệm cho một process, hoặc một phần của process.</li>
-      <li><strong>Pool</strong> và <strong>lane</strong> là hai element BPMN dùng để định nghĩa và thể hiện participant cùng trách nhiệm của họ trên diagram.</li>
-      <li>Một <strong>pool</strong> tương ứng với một process, và đóng vai trò biên orchestration - sequence flow không thể vượt ra ngoài biên của pool.</li>
-      <li><strong>Lane</strong> bên trong pool giúp làm rõ ai chịu trách nhiệm cho task nào, nhưng cũng có thể khiến diagram phức tạp hơn - hữu ích nhất trong các mô hình tổng quan mang tính chiến lược, hoặc process tập trung vào human workflow.</li>
+      <li><strong>BPMN participant</strong> là thực thể (người, team, tổ chức, hay hệ thống) kiểm soát hoặc chịu trách nhiệm cho một process, hay một phần process.</li>
+      <li><strong>Pool</strong> và <strong>lane</strong> là hai element BPMN thể hiện participant và trách nhiệm của họ trên diagram.</li>
+      <li>Một <strong>pool</strong> tương ứng một process, đóng vai trò biên orchestration - sequence flow không vượt ra ngoài biên pool.</li>
+      <li><strong>Lane</strong> trong pool làm rõ ai chịu trách nhiệm task nào, nhưng có thể khiến diagram phức tạp hơn - hữu ích nhất trong strategic model, hoặc process tập trung vào human workflow.</li>
+      <li>Nếu lane khiến diagram khó đọc hoặc khó bảo trì, có thể thay bằng cách <strong>ghi role ngay trong tên task</strong>, hoặc <strong>tách mỗi participant thành một pool riêng</strong> rồi nối bằng collaboration diagram.</li>
       <li><strong>Strategic process model</strong> ở mức tổng quan, logic trừu tượng, và không nhằm mục đích thực thi.</li>
       <li><strong>Operational process model</strong> ở mức chi tiết, logic cụ thể, và tập trung vào automation.</li>
     </ul>
