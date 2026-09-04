@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <script>try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light")}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BPMN - Subprocesses | dev.anhkn</title>
+  <meta name="description" content="Embedded subprocess, call activity, collapsed/expanded view, boundary event trên subprocess - khi nào gom logic vào trong, khi nào tách ra dùng lại.">
+  <link rel="stylesheet" href="../shared/theme.css">
+</head>
+<body>
+
+<header id="site-header"></header>
+
+<main>
+
+  <div class="article-header">
+    <span class="article-day">Subprocesses</span>
+    <h1>BPMN - Subprocesses</h1>
+    <p class="meta">04/09/2026 · 15 phút đọc · <a href="index.html">← Quay lại series</a></p>
+  </div>
+
+  <nav class="toc" aria-label="Mục lục bài viết">
+    <p class="toc-title">Mục lục</p>
+    <ol>
+      <li><a href="#vi-sao-can-subprocess">Vì sao cần subprocess?</a></li>
+      <li><a href="#embedded-subprocess-la-gi">Embedded subprocess là gì?</a></li>
+      <li><a href="#collapsed-va-expanded-view">Collapsed và Expanded view</a></li>
+      <li><a href="#boundary-event-tren-embedded-subprocess">Boundary event trên embedded subprocess</a></li>
+      <li><a href="#call-activity-la-gi">Call activity là gì?</a></li>
+      <li><a href="#embedded-subprocess-vs-call-activity">Embedded subprocess vs Call activity</a></li>
+      <li><a href="#thuc-hanh-ticket-support-process">Thực hành: Ticket support process</a></li>
+      <li><a href="#thuc-hanh-inventory-process">Thực hành: Inventory process</a></li>
+      <li><a href="#tom-tat">Tóm tắt</a></li>
+    </ol>
+  </nav>
+
+  <div class="article-body">
+
+    <div class="icon-card-hero">
+      <img src="images/bpmn-subprocesses/subprocess-flow-icon.svg" alt="Icon minh họa subprocess: start event nối vào subprocess có dấu cộng và boundary event, rồi tới end event; bên dưới là một process khác được liên kết tới, đại diện cho call activity">
+    </div>
+
+    <h2 id="vi-sao-can-subprocess">Vì sao cần subprocess?</h2>
+    <p>Process chạy tốt lúc còn 6 bước. Đến khi có 22 bước, thêm vài nhánh exception do đồng nghiệp vẽ thêm, không ai còn thống nhất được đoạn nào bắt đầu, đoạn nào kết thúc. <strong>Subprocess</strong> giải quyết đúng vấn đề này: gom một nhóm bước liên quan vào một vùng riêng trong model, thay vì rải chúng khắp process cha.</p>
+    <p>Dùng subprocess giúp:</p>
+    <ul>
+      <li>Đơn giản hóa process cha - nhìn tổng thể gọn hơn nhiều.</li>
+      <li>Tạo ranh giới rõ ràng cho một nhóm bước liên quan.</li>
+      <li>Thể hiện rõ đoạn công việc đó bắt đầu và kết thúc ở đâu.</li>
+      <li>Tạo ra một <strong>scope</strong> hữu ích để xử lý event xoay quanh nhóm công việc đó (xem phần <a href="#boundary-event-tren-embedded-subprocess">boundary event</a> bên dưới).</li>
+    </ul>
+    <p class="definition">Một <strong>subprocess</strong> là một nhóm flow node (child process) nằm bên trong một process lớn hơn (parent process). Trên diagram, subprocess được vẽ như một hình chữ nhật bo góc, tương tự task.</p>
+    <img src="images/bpmn-subprocesses/what-is-a-subprocess.png" alt="Process cha chứa một task và một subprocess mở rộng (expanded), bên trong subprocess có Task 1 nối tới Task 2" class="article-hero-img is-native">
+    <p>Bài này tập trung vào hai loại subprocess: <strong>embedded subprocess</strong> và <strong>call activity</strong>.</p>
+
+    <h2 id="embedded-subprocess-la-gi">Embedded subprocess là gì?</h2>
+    <p class="definition">Một <strong>embedded subprocess</strong> gom các element của process cha vào một vùng riêng, nhưng vẫn nằm <strong>bên trong</strong> process đó - không tách thành process riêng biệt.</p>
+    <p>Dùng embedded subprocess khi logic đó chỉ thuộc về process cha và không cần tái sử dụng ở nơi khác. Vài đặc điểm cần nhớ:</p>
+    <ul>
+      <li><strong>Nằm trong process cha:</strong> đây là một phần của process lớn hơn, không phải process độc lập.</li>
+      <li><strong>Bắt đầu khi flow chạy tới:</strong> subprocess kích hoạt khi token trong process cha đi vào vùng gom nhóm này.</li>
+      <li><strong>Kết thúc sau bước cuối cùng bên trong:</strong> subprocess hoàn tất khi element cuối cùng bên trong nó hoàn tất, rồi sequence flow đi ra được tiếp tục.</li>
+      <li><strong>Chỉ có đúng một none start event</strong> - không được dùng loại start event nào khác.</li>
+    </ul>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Nên dùng</th>
+          <th>Nên tránh</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Điều kiện</td>
+          <td>Logic chỉ thuộc process này, các bước liên kết chặt với nhau</td>
+          <td>Cùng một nhóm logic cần dùng lại ở nhiều process khác nhau</td>
+        </tr>
+        <tr>
+          <td>Mục tiêu chính</td>
+          <td>Gom nhóm, làm gọn model</td>
+          <td>Tái sử dụng - đây là dấu hiệu nên chuyển sang call activity</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 id="collapsed-va-expanded-view">Collapsed và Expanded view</h2>
+    <p>Collapsed và expanded chỉ là <strong>cách hiển thị</strong> subprocess trên diagram - không ảnh hưởng gì đến cách nó chạy.</p>
+
+    <div class="flow-tabs">
+
+      <input type="radio" name="collapsed-expanded" id="ce-collapsed" checked>
+      <label for="ce-collapsed" class="flow-tab-label">Collapsed</label>
+
+      <input type="radio" name="collapsed-expanded" id="ce-expanded">
+      <label for="ce-expanded" class="flow-tab-label">Expanded</label>
+
+      <div class="flow-tab-panel" data-tab-panel="collapsed">
+        <p class="mb-4">Thu gọn subprocess lại thành một khối duy nhất (dấu <code>+</code>), ẩn logic bên trong. Dùng khi muốn diagram cha gọn, sạch, và chưa cần quan tâm chi tiết bên trong ngay lúc đó. Muốn xem logic bên trong, drill-down vào subprocess rồi quay lại process cha khi cần góc nhìn tổng thể.</p>
+        <img src="images/bpmn-subprocesses/collapsed-view-example.png" alt="Subprocess Check invoice ở chế độ collapsed - thu gọn thành một khối duy nhất với dấu cộng, ẩn logic bên trong" class="article-hero-img is-native">
+      </div>
+      <div class="flow-tab-panel" data-tab-panel="expanded">
+        <p class="mb-4">Hiện toàn bộ các bước bên trong ngay trên diagram cha. Dùng khi logic bên trong quan trọng và người đọc cần thấy chuyện gì xảy ra bên trong subprocess mà không cần drill-down.</p>
+        <img src="images/bpmn-subprocesses/what-is-a-subprocess.png" alt="Subprocess ở chế độ expanded - toàn bộ Task 1 nối tới Task 2 bên trong được hiện ngay trên diagram cha" class="article-hero-img is-native">
+      </div>
+
+    </div>
+    <blockquote>💡 Chuyển qua lại giữa hai view chỉ là thao tác hiển thị trên tool modeling - không phải thay đổi hành vi runtime. Đừng nhầm việc đổi view với việc sửa logic process.</blockquote>
+
+    <h2 id="boundary-event-tren-embedded-subprocess">Boundary event trên embedded subprocess</h2>
+    <p>Một team đang điều tra major issue. Giữa chừng cần thêm thông tin gấp từ khách hàng - không muốn vẽ lại cả process, chỉ cần process phản ứng đúng với chuyện xảy ra ở "biên" của nhóm công việc đó. Đây là lúc <strong>boundary event</strong> phát huy tác dụng: subprocess cho công việc một scope rõ ràng, boundary event cho scope đó một đường phản ứng rõ ràng.</p>
+    <p class="definition">Boundary event gắn trên subprocess có hai loại: <strong>interrupting</strong> và <strong>non-interrupting</strong>. Khi interrupting boundary event kích hoạt, subprocess và toàn bộ instance đang tạo ra bị chấm dứt. Khi non-interrupting boundary event kích hoạt, instance đó không bị ảnh hưởng - vẫn tiếp tục chạy song song.</p>
+    <p>Ví dụ thực tế trên process "Check invoice" - bấm vào từng tab để so sánh:</p>
+
+    <div class="flow-tabs">
+
+      <input type="radio" name="boundary-event-type" id="bet-non-interrupting" checked>
+      <label for="bet-non-interrupting" class="flow-tab-label">Non-interrupting</label>
+
+      <input type="radio" name="boundary-event-type" id="bet-interrupting">
+      <label for="bet-interrupting" class="flow-tab-label">Interrupting</label>
+
+      <div class="flow-tab-panel" data-tab-panel="non-interrupting">
+        <p class="mb-4"><strong>Nhắc nhở sau 3 ngày:</strong> timer boundary event kích hoạt nếu subprocess "Check invoice" chưa hoàn tất trong 3 ngày, gửi thông báo cho manager - subprocess vẫn tiếp tục chạy bình thường song song.</p>
+        <img src="images/bpmn-subprocesses/boundary-event-reminder-3-days.png" alt="Non-interrupting timer boundary event sau 3 ngày trên subprocess Check invoice, gửi thông báo cho manager mà không dừng subprocess" class="article-hero-img is-native">
+      </div>
+      <div class="flow-tab-panel" data-tab-panel="interrupting">
+        <p class="mb-4"><strong>Ngắt khi đổi policy:</strong> khi công ty đổi chính sách hóa đơn, interrupting boundary event hủy subprocess "Check invoice" đang chạy và restart lại từ đầu - các invoice đã check xong trước đó không bị ảnh hưởng.</p>
+        <img src="images/bpmn-subprocesses/boundary-event-interrupting.png" alt="Interrupting boundary event Invoice policy reworked hủy subprocess Check invoice và restart lại từ đầu" class="article-hero-img is-native">
+      </div>
+
+    </div>
+    <p>Chỉ dùng boundary event khi giải thích được rõ ràng điều gì kích hoạt nhánh thay thế, và vì sao phản ứng đó nên đặt ở biên subprocess - nếu không giải thích được, đừng thêm boundary event chỉ vì "có thể cần".</p>
+
+    <h2 id="call-activity-la-gi">Call activity là gì?</h2>
+    <p class="definition">Một <strong>call activity</strong> (hay reusable subprocess) gọi và chạy một process khác như một phần của process hiện tại. Khác với embedded subprocess, process được gọi ở đây <strong>lưu trữ tách biệt</strong> (thành BPMN file riêng) và có thể được gọi bởi nhiều process khác nhau.</p>
+    <p>Khi call activity bắt đầu chạy, Camunda tạo một <strong>process instance mới</strong> cho process được tham chiếu. Điều này tách biệt rõ ràng process cha (gọi logic) và process con (chạy logic tái sử dụng được).</p>
+    <img src="images/bpmn-subprocesses/call-activity-notation-example.png" alt="Call activity Order Software Licenses trong process Onboard New Employee - viền đậm phân biệt với embedded subprocess" class="article-hero-img is-native">
+    <p>Trên diagram, call activity dùng chung ký hiệu dấu <code>+</code> như embedded subprocess collapsed, nhưng viền được vẽ <strong>đậm hơn</strong> để phân biệt hai loại.</p>
+    <blockquote>💡 <strong>Lưu ý quan trọng:</strong> link call activity tới process khác chỉ thiết lập tham chiếu - việc deploy là hoàn toàn tách biệt. Deploy diagram cha <strong>không</strong> tự động deploy diagram được link.</blockquote>
+
+    <h2 id="embedded-subprocess-vs-call-activity">Embedded subprocess vs Call activity</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nếu cần...</th>
+          <th>Nên chọn</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Gom logic bên trong một process</td>
+          <td>Embedded subprocess</td>
+        </tr>
+        <tr>
+          <td>Dùng lại cùng một logic ở nhiều process</td>
+          <td>Call activity</td>
+        </tr>
+        <tr>
+          <td>Hiện các bước bên trong ngay trên view process cha</td>
+          <td>Embedded subprocess</td>
+        </tr>
+        <tr>
+          <td>Quản lý logic được gọi như một process độc lập</td>
+          <td>Call activity</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Quy tắc quyết định gọn lại trong hai câu hỏi:</p>
+    <ol>
+      <li>Logic này có <strong>chỉ thuộc về</strong> process này không?</li>
+      <li>Hay nó cần được <strong>dùng lại</strong> và quản lý tách biệt?</li>
+    </ol>
+    <p>Chỉ thuộc process này → cân nhắc embedded subprocess. Cần dùng lại ở nơi khác → cân nhắc call activity. Bấm vào từng tình huống dưới đây để tự kiểm tra:</p>
+
+    <div class="info-card-grid">
+
+      <details class="info-card">
+        <summary class="info-card-head">
+          <span class="info-card-badge">1</span>
+          <h3>Support escalation chỉ tồn tại trong một service process</h3>
+          <span class="info-card-toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="info-card-body">
+          <p><strong>Chọn embedded subprocess.</strong> Logic này chỉ thuộc về đúng một process, không có tín hiệu nào cho thấy cần tái sử dụng liên-process.</p>
+        </div>
+      </details>
+
+      <details class="info-card">
+        <summary class="info-card-head">
+          <span class="info-card-badge">2</span>
+          <h3>Onboarding approval flow được HR, IT, và facilities cùng dùng</h3>
+          <span class="info-card-toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="info-card-body">
+          <p><strong>Chọn call activity.</strong> Được dùng lại ở nhiều process khác nhau là tín hiệu mạnh nhất cho call activity - embedded subprocess sẽ khiến logic này bị "khóa" vào một process cha duy nhất.</p>
+        </div>
+      </details>
+
+      <details class="info-card">
+        <summary class="info-card-head">
+          <span class="info-card-badge">3</span>
+          <h3>Muốn ẩn chi tiết, nhưng logic vẫn chỉ thuộc process này</h3>
+          <span class="info-card-toggle" aria-hidden="true"></span>
+        </summary>
+        <div class="info-card-body">
+          <p><strong>Chọn embedded subprocess ở chế độ collapsed.</strong> Giữ logic trong cùng process, chỉ đơn giản hóa cách hiển thị. Đừng nhầm bài toán "hiển thị" với bài toán "tái sử dụng" - hai chuyện tách biệt.</p>
+        </div>
+      </details>
+
+    </div>
+    <blockquote>💡 Quyết định theo đúng thứ tự: chốt <strong>reuse và scope</strong> trước, rồi mới chọn <strong>view</strong> giúp diagram dễ đọc nhất.</blockquote>
+
+    <h2 id="thuc-hanh-ticket-support-process">Thực hành: Ticket support process</h2>
+    <p>Bài tập mô hình hóa process xử lý ticket hỗ trợ, gồm hai nhánh:</p>
+    <ul>
+      <li><strong>Non-major issue:</strong> customer team tự xử lý và đóng ticket.</li>
+      <li><strong>Major issue:</strong> chuyển cho phòng ban liên quan (IT, finance...) điều tra kỹ trước khi đóng ticket.</li>
+    </ul>
+    <p>Nhiệm vụ: mô hình hóa phần xử lý major issue thành một <strong>embedded subprocess</strong> - vì logic điều tra này chỉ thuộc về process ticket support, không cần tái sử dụng ở process khác. Bên trong subprocess "Resolve major issue": xác định major issue → điều tra → nếu cần, trao đổi thêm với khách hàng → xử lý xong → đóng ticket. Có thể để subprocess ở chế độ collapsed để process cha gọn hơn.</p>
+
+    <div class="flow-tabs">
+
+      <input type="radio" name="ticket-support-solution" id="tss-parent" checked>
+      <label for="tss-parent" class="flow-tab-label">Process cha</label>
+
+      <input type="radio" name="ticket-support-solution" id="tss-subprocess">
+      <label for="tss-subprocess" class="flow-tab-label">Subprocess</label>
+
+      <div class="flow-tab-panel" data-tab-panel="parent">
+        <p class="mb-4">Process cha: đánh giá ticket, rẽ nhánh minor/major issue, rồi gộp lại trước khi đóng ticket. Nhánh major issue được gom vào subprocess "Resolve major issue" (dấu <code>+</code> - đang ở chế độ collapsed).</p>
+        <img src="images/bpmn-subprocesses/ticket-support-parent-process.png" alt="Sample solution process cha Ticket support: Evaluate ticket, rẽ nhánh minor/major issue, subprocess Resolve major issue ở chế độ collapsed, rồi Close ticket" class="article-hero-img is-native">
+      </div>
+      <div class="flow-tab-panel" data-tab-panel="subprocess">
+        <p class="mb-4">Bên trong subprocess "Resolve major issue": điều tra major issue, rẽ nhánh nếu cần trao đổi thêm với khách hàng, rồi resolve.</p>
+        <img src="images/bpmn-subprocesses/ticket-support-resolve-major-issue-subprocess.png" alt="Bên trong subprocess Resolve major issue: Investigate major issue, rẽ nhánh Customer feedback needed, Communicate with customer, rồi Resolve major issue" class="article-hero-img is-native">
+      </div>
+
+    </div>
+
+    <video controls preload="metadata" class="article-hero-img is-native">
+      <source src="video/bpmn-subprocesses/ticket-support-demo.mp4" type="video/mp4">
+    </video>
+
+    <h2 id="thuc-hanh-inventory-process">Thực hành: Inventory process</h2>
+    <p>Một công ty bán lẻ cần logic tái sử dụng để định nghĩa category sản phẩm mới, vì nhiều process liên quan đến inventory khác nhau đều có thể cần tới logic này sau này.</p>
+    <ul>
+      <li><strong>Cập nhật inventory tiêu chuẩn:</strong> sản phẩm mới về kho, nếu category đã tồn tại thì inventory team cập nhật số lượng ngay trong workflow hiện tại.</li>
+      <li><strong>Phân loại cho sản phẩm hoàn toàn mới:</strong> nếu category chưa tồn tại, một process phân loại riêng được kích hoạt - team chuyên trách review chi tiết sản phẩm, có thể phối hợp thêm với phòng ban khác trước khi tạo category mới.</li>
+      <li><strong>Tái sử dụng:</strong> process phân loại category này được thiết kế để nhiều workflow inventory khác nhau có thể gọi tới, chứ không chỉ riêng process này.</li>
+    </ul>
+    <p>Vì logic phân loại category cần dùng lại ở nhiều process, đây là lúc chọn <strong>call activity</strong> thay vì embedded subprocess: tách "Define new category" thành một process riêng, rồi link call activity trong process cha tới nó.</p>
+
+    <div class="flow-tabs">
+
+      <input type="radio" name="inventory-solution" id="is-parent" checked>
+      <label for="is-parent" class="flow-tab-label">Process cha</label>
+
+      <input type="radio" name="inventory-solution" id="is-call-activity">
+      <label for="is-call-activity" class="flow-tab-label">Call activity</label>
+
+      <div class="flow-tab-panel" data-tab-panel="parent">
+        <p class="mb-4">Process cha: kiểm tra product data, nếu cần category mới thì gọi tới call activity "Define new category" (viền đậm - ký hiệu call activity), sau đó gán category và thêm vào inventory.</p>
+        <img src="images/bpmn-subprocesses/inventory-process-parent.png" alt="Sample solution process cha Inventory: Check product data, rẽ nhánh New category required, call activity Define new category (viền đậm), Assign product to category, Add product to inventory" class="article-hero-img is-native">
+      </div>
+      <div class="flow-tab-panel" data-tab-panel="call-activity">
+        <p class="mb-4">Process "Define new category" được lưu tách biệt: review chi tiết sản phẩm, liên hệ phòng ban liên quan nếu cần thêm thông tin, rồi tạo category mới. Process này có thể được nhiều workflow inventory khác gọi tới.</p>
+        <img src="images/bpmn-subprocesses/inventory-define-new-category.png" alt="Process Define new category được gọi qua call activity: Review product details, rẽ nhánh Need additional information, Contact the related department, rồi Create new category" class="article-hero-img is-native">
+      </div>
+
+    </div>
+
+    <video controls preload="metadata" class="article-hero-img is-native">
+      <source src="video/bpmn-subprocesses/inventory-process-demo.mp4" type="video/mp4">
+    </video>
+
+    <h2 id="tom-tat">Tóm tắt</h2>
+    <ul>
+      <li><strong>Subprocess</strong> là một nhóm flow node (child process) nằm bên trong một process lớn hơn (parent process), giúp process cha rõ ràng và dễ bảo trì hơn.</li>
+      <li><strong>Embedded subprocess</strong> nằm bên trong process cha, không tái sử dụng được ở process khác, chỉ có đúng một none start event, và kế thừa thông tin từ process cha.</li>
+      <li><strong>Call activity</strong> lưu trữ tách biệt, tái sử dụng được ở nhiều process, tạo process instance riêng khi chạy, và phải được process cha gọi để nhận data.</li>
+      <li><strong>Collapsed/expanded</strong> chỉ là cách hiển thị - không đổi hành vi runtime.</li>
+      <li><strong>Boundary event</strong> gắn trên embedded subprocess giúp phản ứng với delay, error, hoặc exception mà không cần đưa logic đó vào main path; interrupting sẽ chấm dứt subprocess, non-interrupting thì không.</li>
+      <li>Quy tắc chọn nhanh: chỉ thuộc process này → <strong>embedded subprocess</strong>; cần dùng lại ở process khác → <strong>call activity</strong>. Quyết định reuse/scope trước, chọn view sau.</li>
+    </ul>
+
+  </div>
+
+  <!-- Navigation -->
+  <div class="article-nav">
+    <a href="bpmn-participants.html" class="prev">
+      <span class="nav-label">← Trước đó</span>
+      <strong>BPMN - Participants</strong>
+    </a>
+    <span></span>
+  </div>
+
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="../shared/site.js"></script>
+</body>
+</html>
